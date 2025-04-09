@@ -1,0 +1,118 @@
+[gd_scene load_steps=3 format=3 uid="uid://bghxnpywucjso"]
+
+[ext_resource type="Script" path="res://scripts/maps/main_menu.gd" id="1_5y8n7"]
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="2_37w8h"]
+
+[node name="Main Menu" type="Node"]
+script = ExtResource("1_5y8n7")
+bounds = Array[Vector2]([])
+loop = "None"
+dreaming = false
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+scale = Vector2(2, 2)
+transform = Transform2D(2, 0, 0, 2, 0, 0)
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("2_37w8h")
+
+[node name="MenuContainer" type="PanelContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -36.0
+offset_top = 52.0
+offset_right = 36.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ButtonContainer" type="VBoxContainer" parent="CanvasLayer/Control/MenuContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="PlayButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../QuitButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../ContinueButton")
+focus_next = NodePath("../ContinueButton")
+focus_previous = NodePath("../QuitButton")
+text = "Play
+"
+
+[node name="ContinueButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../PlayButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../SettingsButton")
+focus_next = NodePath("../SettingsButton")
+focus_previous = NodePath("../PlayButton")
+disabled = true
+text = "Continue"
+
+[node name="SettingsButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../ContinueButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../QuitButton")
+focus_next = NodePath("../QuitButton")
+focus_previous = NodePath("../ContinueButton")
+text = "Settings"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../SettingsButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../PlayButton")
+focus_next = NodePath("../PlayButton")
+focus_previous = NodePath("../SettingsButton")
+text = "Quit
+"
+
+[node name="GameLabel" type="Label" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -56.0
+offset_right = 33.0
+offset_bottom = -44.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Libre Nikki"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VersionLabel" type="Label" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -16.0
+offset_right = 34.0
+grow_vertical = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="CanvasLayer/Control/MenuContainer/ButtonContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/MenuContainer/ButtonContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/MenuContainer/ButtonContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/MenuContainer/ButtonContainer/QuitButton" to="." method="_on_quit_button_pressed"]

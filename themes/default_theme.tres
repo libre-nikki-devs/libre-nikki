@@ -1,0 +1,65 @@
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://dudh2k1jjvgdk"]
+
+[ext_resource type="Texture2D" uid="uid://d1lfuju4qxxc5" path="res://themes/images/default.png" id="1_xbnye"]
+[ext_resource type="StyleBox" uid="uid://db1836yw6vlr" path="res://themes/new_style_box_texture.tres" id="2_wrsb0"]
+[ext_resource type="FontFile" uid="uid://b0qlr2tc8xin1" path="res://spritesheets/images/font.png" id="3_08d2i"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fijtp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_viw0k"]
+atlas = ExtResource("1_xbnye")
+region = Rect2(96, 2, 32, 28)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xvwho"]
+texture = SubResource("AtlasTexture_viw0k")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6fqmu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xkc1l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h5e6a"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8t5h1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rs5cc"]
+
+[resource]
+default_font = ExtResource("3_08d2i")
+default_font_size = 12
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+Button/colors/icon_focus_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
+Button/constants/align_to_largest_stylebox = 0
+Button/constants/h_separation = 4
+Button/constants/icon_max_width = 0
+Button/constants/outline_size = 0
+Button/styles/disabled = SubResource("StyleBoxEmpty_fijtp")
+Button/styles/focus = SubResource("StyleBoxTexture_xvwho")
+Button/styles/hover = SubResource("StyleBoxEmpty_6fqmu")
+Button/styles/normal = SubResource("StyleBoxEmpty_xkc1l")
+Button/styles/pressed = SubResource("StyleBoxEmpty_h5e6a")
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/styles/normal = SubResource("StyleBoxEmpty_8t5h1")
+MarginContainer/constants/margin_bottom = 4
+MarginContainer/constants/margin_left = 4
+MarginContainer/constants/margin_right = 4
+MarginContainer/constants/margin_top = 4
+Panel/styles/panel = ExtResource("2_wrsb0")
+PanelContainer/styles/panel = ExtResource("2_wrsb0")
+VScrollBar/styles/scroll = SubResource("StyleBoxEmpty_rs5cc")

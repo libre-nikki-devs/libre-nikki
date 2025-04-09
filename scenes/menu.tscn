@@ -1,0 +1,201 @@
+[gd_scene load_steps=5 format=3 uid="uid://f47u5spls1q4"]
+
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_epw84"]
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_r1l5h"]
+[ext_resource type="Texture2D" uid="uid://rcvhyw1t0f3e" path="res://themes/images/frame.png" id="2_qxgd1"]
+[ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="3_vw2lq"]
+
+[node name="Menu" type="Control" node_paths=PackedStringArray("side_menu")]
+layout_mode = 3
+anchor_right = 0.5
+anchor_bottom = 0.5
+theme = ExtResource("1_epw84")
+script = ExtResource("1_r1l5h")
+side_menu = NodePath("SidePanelContainer/VBoxContainer")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MainPanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -232.0
+offset_bottom = 216.0
+grow_horizontal = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanelContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainPanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_qxgd1")
+stretch_mode = 1
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MainPanelContainer/VBoxContainer/HBoxContainer/TextureRect"]
+position = Vector2(24, 24)
+sprite_frames = ExtResource("3_vw2lq")
+animation = &"down"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="PlayerLabel" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Sakutsuki"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="EffectsLabel" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "FX: 0/1"
+
+[node name="HealthLabel" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "HP: 0"
+
+[node name="Label2" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "PLACEHOLDER"
+
+[node name="ActionsGridContainer" type="GridContainer" parent="MainPanelContainer"]
+visible = false
+layout_mode = 2
+columns = 2
+
+[node name="PinchCheekButton" type="Button" parent="MainPanelContainer/ActionsGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+focus_next = NodePath(".")
+focus_previous = NodePath(".")
+text = "Pinch Cheek"
+
+[node name="EffectsGridContainer" type="GridContainer" parent="MainPanelContainer"]
+visible = false
+layout_mode = 2
+columns = 2
+
+[node name="SidePanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 88.0
+offset_bottom = 72.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SidePanelContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="EffectsButton" type="Button" parent="SidePanelContainer/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../QuitButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../ActionsButton")
+focus_next = NodePath("../ActionsButton")
+focus_previous = NodePath("../QuitButton")
+text = "Effects"
+
+[node name="ActionsButton" type="Button" parent="SidePanelContainer/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../EffectsButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../SettingsButton")
+focus_next = NodePath("../SettingsButton")
+focus_previous = NodePath("../EffectsButton")
+text = "Actions"
+
+[node name="SettingsButton" type="Button" parent="SidePanelContainer/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../ActionsButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../QuitButton")
+focus_next = NodePath("../QuitButton")
+focus_previous = NodePath("../ActionsButton")
+text = "Settings"
+
+[node name="QuitButton" type="Button" parent="SidePanelContainer/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../SettingsButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../EffectsButton")
+focus_next = NodePath("../EffectsButton")
+focus_previous = NodePath("../SettingsButton")
+text = "Quit
+"
+
+[node name="MoneyPanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -88.0
+offset_top = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MoneyLabel" type="Label" parent="MoneyPanelContainer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="WorldHFlowContainer" type="HFlowContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -24.0
+offset_right = 232.0
+grow_vertical = 0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+
+[node name="PanelContainer2" type="PanelContainer" parent="WorldHFlowContainer"]
+custom_minimum_size = Vector2(64, 24)
+layout_mode = 2
+
+[node name="WorldLabel" type="Label" parent="WorldHFlowContainer/PanelContainer2"]
+layout_mode = 2
+text = "World"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer4" type="PanelContainer" parent="WorldHFlowContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+tooltip_text = "Depth. A distance between the current world and the Nexus."
+
+[node name="DepthLabel" type="Label" parent="WorldHFlowContainer/PanelContainer4"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="MainPanelContainer/ActionsGridContainer/PinchCheekButton" to="." method="_on_pinch_cheek_button_pressed"]
+[connection signal="pressed" from="SidePanelContainer/VBoxContainer/EffectsButton" to="." method="_on_effects_button_pressed"]
+[connection signal="pressed" from="SidePanelContainer/VBoxContainer/ActionsButton" to="." method="_on_actions_button_pressed"]
+[connection signal="pressed" from="SidePanelContainer/VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="SidePanelContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

@@ -1,0 +1,91 @@
+[gd_scene load_steps=7 format=3 uid="uid://dbxu26iv75w0g"]
+
+[ext_resource type="SpriteFrames" uid="uid://c8tpox8emqptq" path="res://spritesheets/door.tres" id="3_v2hfd"]
+
+[sub_resource type="Resource" id="Resource_oyflu"]
+metadata/__load_path__ = "res://scripts/door.gd"
+
+[sub_resource type="Animation" id="Animation_27k8f"]
+length = 0.001
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_5dlti"]
+resource_name = "open"
+length = 0.375
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"open"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_open_sound"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1h815"]
+_data = {
+"RESET": SubResource("Animation_27k8f"),
+"open": SubResource("Animation_5dlti")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t5t3n"]
+size = Vector2(16, 16)
+
+[node name="Connector" type="CharacterBody2D"]
+script = SubResource("Resource_oyflu")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../AnimatedSprite2D")
+libraries = {
+"": SubResource("AnimationLibrary_1h815")
+}
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("3_v2hfd")
+animation = &"open"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_t5t3n")

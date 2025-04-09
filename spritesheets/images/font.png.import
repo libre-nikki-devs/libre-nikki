@@ -1,0 +1,24 @@
+[remap]
+
+importer="font_data_image"
+type="FontFile"
+uid="uid://b0qlr2tc8xin1"
+valid=false
+
+[deps]
+
+source_file="res://spritesheets/images/font.png"
+
+[params]
+
+character_ranges=PackedStringArray("0-127")
+kerning_pairs=PackedStringArray()
+columns=16
+rows=8
+image_margin=Rect2i(0, 0, 0, 0)
+character_margin=Rect2i(0, 0, 0, 0)
+ascent=0
+descent=0
+fallbacks=[]
+compress=true
+scaling_mode=1

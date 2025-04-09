@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhnn80wdox05k"]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_w2k2j"]
+
+[node name="Game" type="Node"]
+process_mode = 3
+script = ExtResource("1_w2k2j")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -40.0
+max_polyphony = 2
+bus = &"Music"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 100
+scale = Vector2(2, 2)
+transform = Transform2D(2, 0, 0, 2, 0, 0)
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+z_index = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="AcceptTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="CancelTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="AcceptTimer" to="." method="_on_accept_timer_timeout"]
+[connection signal="timeout" from="CancelTimer" to="." method="_on_cancel_timer_timeout"]

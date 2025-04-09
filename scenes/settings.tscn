@@ -1,0 +1,77 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7ow23cauvtl8"]
+
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_k4crg"]
+[ext_resource type="Script" path="res://scripts/settings.gd" id="2_maqld"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_k4crg")
+script = ExtResource("2_maqld")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MainPanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -232.0
+offset_bottom = 240.0
+grow_horizontal = 0
+
+[node name="LicensesVBoxContainer" type="VBoxContainer" parent="MainPanelContainer"]
+visible = false
+layout_mode = 2
+
+[node name="SidePanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 88.0
+offset_bottom = 24.0
+
+[node name="SideVBoxContainer" type="VBoxContainer" parent="SidePanelContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="LicensesButton" type="Button" parent="SidePanelContainer/SideVBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_right = NodePath(".")
+text = "Licenses"
+
+[node name="LicensePanelContainer" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 316.0
+offset_bottom = 236.0
+horizontal_scroll_mode = 0
+
+[node name="LicenseLabel" type="Label" parent="ScrollContainer"]
+custom_minimum_size = Vector2(312, 232)
+layout_mode = 2
+size_flags_vertical = 1
+focus_mode = 2
+autowrap_mode = 3
+
+[connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/LicensesButton" to="." method="_on_licenses_button_pressed"]

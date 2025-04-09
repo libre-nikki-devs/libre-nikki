@@ -1,0 +1,160 @@
+[gd_scene load_steps=21 format=4 uid="uid://cr7mqfgt2kyj0"]
+
+[ext_resource type="Script" path="res://scripts/maps/sakutsuki's_dream_room.gd" id="1_s0krk"]
+[ext_resource type="Script" path="res://scripts/door.gd" id="3_5x7el"]
+[ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/sakutsuki.tscn" id="3_yakrm"]
+[ext_resource type="Script" path="res://scripts/classes/yume_interactable.gd" id="4_0rbuj"]
+[ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="5_28sca"]
+[ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="7_pl1j4"]
+[ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://spritesheets/images/test.png" id="7_sd8ya"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p2vj6"]
+texture = ExtResource("5_28sca")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_e3vec"]
+physics_layer_0/collision_layer = 1
+custom_data_layer_0/name = "surface"
+custom_data_layer_0/type = 2
+custom_data_layer_1/name = "stair"
+custom_data_layer_1/type = 2
+sources/0 = SubResource("TileSetAtlasSource_p2vj6")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nmfb5"]
+atlas = ExtResource("7_sd8ya")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yi85p"]
+atlas = ExtResource("7_sd8ya")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f8au5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nmfb5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yi85p")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t21p4"]
+size = Vector2(16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_51wel"]
+atlas = ExtResource("7_sd8ya")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ogmwe"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_51wel")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0pgd7"]
+atlas = ExtResource("7_pl1j4")
+region = Rect2(0, 0, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ule8b"]
+atlas = ExtResource("7_pl1j4")
+region = Rect2(0, 32, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f8wv6"]
+atlas = ExtResource("7_pl1j4")
+region = Rect2(0, 64, 24, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w814h"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0pgd7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ule8b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f8wv6")
+}],
+"loop": false,
+"name": &"open",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6lxew"]
+size = Vector2(16, 16)
+
+[node name="Sakutsuki\'s Dream Room" type="Node" node_paths=PackedStringArray("player")]
+script = ExtResource("1_s0krk")
+bounds = Array[Vector2]([])
+loop = "None"
+player = NodePath("CanvasLayer/CanvasGroup/Sakutsuki")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="Camera2D" type="Camera2D" parent="CanvasLayer"]
+position = Vector2(-8, 16)
+zoom = Vector2(2, 2)
+
+[node name="CanvasGroup" type="CanvasGroup" parent="CanvasLayer"]
+y_sort_enabled = true
+position = Vector2(-8, 8)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="CanvasLayer/CanvasGroup"]
+tile_map_data = PackedByteArray("AAD7/wAAAAAAAAAAAAD7/wEAAAAAAAAAAAD7/wIAAAAAAAAAAAD8//3/AAAAAAAAAAD8//7/AAAAAAAAAAD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAAAAAD9//3/AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD+//3/AAAAAAAAAAD+//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD+/wIAAAAAAAAAAAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAACAP3/AAAAAAAAAAACAP7/AAAAAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAADAP3/AAAAAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/AAAAAAAAAAD7////AAAAAAAAAAD8//z/AAAAAAAAAAD9//z/AAAAAAAAAAD+//z/AAAAAAAAAAD///z/AAAAAAAAAAAAAP7/AAAAAAAAAAABAP7/AAAAAAAAAAACAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAA=")
+tile_set = SubResource("TileSet_e3vec")
+
+[node name="Sakutsuki" parent="CanvasLayer/CanvasGroup" instance=ExtResource("3_yakrm")]
+z_index = 1
+position = Vector2(-40, -24)
+can_move_in_vacuum = false
+
+[node name="Desk" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup"]
+z_index = 1
+y_sort_enabled = true
+position = Vector2(-72, 8)
+script = ExtResource("4_0rbuj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Desk"]
+sprite_frames = SubResource("SpriteFrames_f8au5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Desk"]
+shape = SubResource("RectangleShape2D_t21p4")
+
+[node name="Bed" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup"]
+z_index = 1
+y_sort_enabled = true
+position = Vector2(-40, -40)
+script = ExtResource("4_0rbuj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Bed"]
+sprite_frames = SubResource("SpriteFrames_ogmwe")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Bed"]
+shape = SubResource("RectangleShape2D_t21p4")
+
+[node name="Door" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup" node_paths=PackedStringArray("animated_sprite")]
+z_index = 1
+position = Vector2(56, -72)
+script = ExtResource("3_5x7el")
+animated_sprite = NodePath("AnimatedSprite2D")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Door"]
+position = Vector2(0, -8)
+sprite_frames = SubResource("SpriteFrames_w814h")
+animation = &"open"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Door"]
+shape = SubResource("RectangleShape2D_6lxew")
+
+[connection signal="opened" from="CanvasLayer/CanvasGroup/Door" to="." method="_on_door_opened"]
