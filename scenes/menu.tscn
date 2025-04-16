@@ -59,7 +59,7 @@ text = "Sakutsuki"
 [node name="HBoxContainer" type="HBoxContainer" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="EffectsLabel" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="PlayerEffectsLabel" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
 text = "FX: 0/1"
@@ -87,7 +87,18 @@ focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath(".")
 focus_next = NodePath(".")
 focus_previous = NodePath(".")
+text = " "
+
+[node name="PinchCheekLabel" type="Label" parent="MainPanelContainer/ActionsGridContainer/PinchCheekButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Pinch Cheek"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="EffectsGridContainer" type="GridContainer" parent="MainPanelContainer"]
 visible = false
@@ -111,7 +122,18 @@ focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../ActionsButton")
 focus_next = NodePath("../ActionsButton")
 focus_previous = NodePath("../QuitButton")
+text = " "
+
+[node name="EffectsLabel" type="Label" parent="SidePanelContainer/VBoxContainer/EffectsButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Effects"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ActionsButton" type="Button" parent="SidePanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -121,7 +143,18 @@ focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../SettingsButton")
 focus_next = NodePath("../SettingsButton")
 focus_previous = NodePath("../EffectsButton")
+text = " "
+
+[node name="ActionsLabel" type="Label" parent="SidePanelContainer/VBoxContainer/ActionsButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Actions"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SettingsButton" type="Button" parent="SidePanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -131,7 +164,18 @@ focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../QuitButton")
 focus_next = NodePath("../QuitButton")
 focus_previous = NodePath("../ActionsButton")
+text = " "
+
+[node name="SettingsLabel" type="Label" parent="SidePanelContainer/VBoxContainer/SettingsButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="QuitButton" type="Button" parent="SidePanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -141,8 +185,18 @@ focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../EffectsButton")
 focus_next = NodePath("../EffectsButton")
 focus_previous = NodePath("../SettingsButton")
-text = "Quit
-"
+text = " "
+
+[node name="QuitLabel" type="Label" parent="SidePanelContainer/VBoxContainer/QuitButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Quit"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="MoneyPanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1

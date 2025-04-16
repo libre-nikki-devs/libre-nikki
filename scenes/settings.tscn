@@ -47,7 +47,18 @@ alignment = 1
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_right = NodePath(".")
+text = " "
+
+[node name="LicensesLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/LicensesButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Licenses"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="LicensePanelContainer" type="PanelContainer" parent="."]
 visible = false

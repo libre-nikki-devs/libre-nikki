@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bghxnpywucjso"]
+[gd_scene load_steps=4 format=3 uid="uid://bghxnpywucjso"]
 
 [ext_resource type="Script" path="res://scripts/maps/main_menu.gd" id="1_5y8n7"]
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="2_37w8h"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l7rpt"]
 
 [node name="Main Menu" type="Node"]
 script = ExtResource("1_5y8n7")
@@ -38,6 +40,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ButtonContainer" type="VBoxContainer" parent="CanvasLayer/Control/MenuContainer"]
+material = SubResource("ShaderMaterial_l7rpt")
 layout_mode = 2
 alignment = 1
 
@@ -49,8 +52,18 @@ focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../ContinueButton")
 focus_next = NodePath("../ContinueButton")
 focus_previous = NodePath("../QuitButton")
-text = "Play
-"
+text = " "
+
+[node name="PlayLabel" type="Label" parent="CanvasLayer/Control/MenuContainer/ButtonContainer/PlayButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Play"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ContinueButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
 layout_mode = 2
@@ -61,7 +74,18 @@ focus_neighbor_bottom = NodePath("../SettingsButton")
 focus_next = NodePath("../SettingsButton")
 focus_previous = NodePath("../PlayButton")
 disabled = true
+text = " "
+
+[node name="ContinueLabel" type="Label" parent="CanvasLayer/Control/MenuContainer/ButtonContainer/ContinueButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Continue"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SettingsButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
 layout_mode = 2
@@ -71,7 +95,18 @@ focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../QuitButton")
 focus_next = NodePath("../QuitButton")
 focus_previous = NodePath("../ContinueButton")
+text = " "
+
+[node name="SettingsLabel" type="Label" parent="CanvasLayer/Control/MenuContainer/ButtonContainer/SettingsButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="QuitButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
 layout_mode = 2
@@ -81,8 +116,18 @@ focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../PlayButton")
 focus_next = NodePath("../PlayButton")
 focus_previous = NodePath("../SettingsButton")
-text = "Quit
-"
+text = " "
+
+[node name="QuitLabel" type="Label" parent="CanvasLayer/Control/MenuContainer/ButtonContainer/QuitButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Quit"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="GameLabel" type="Label" parent="CanvasLayer/Control"]
 layout_mode = 1

@@ -35,8 +35,15 @@ func _ready() -> void:
 		while license != "":
 			if not license_directory.current_is_dir():
 				var button = Button.new()
-				button.text = license
+				# button.text = license
+				button.text = " "
 				button.size_flags_horizontal = 3
+				var label = Label.new()
+				label.text = license
+				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+				label.set_anchors_preset(Control.PRESET_FULL_RECT)
+				button.add_child(label)
 				button.pressed.connect(_on_license_pressed.bind(license))
 				licenses_menu.add_child(button)
 			license = license_directory.get_next()

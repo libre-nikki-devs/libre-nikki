@@ -3,6 +3,7 @@ extends YumeWorld
 @onready var menu_container: Container = get_node("CanvasLayer/Control/MenuContainer")
 @onready var play_button: Button = get_node("CanvasLayer/Control/MenuContainer/ButtonContainer/PlayButton")
 @onready var continue_button: Button = get_node("CanvasLayer/Control/MenuContainer/ButtonContainer/ContinueButton")
+@onready var continue_label: Label = get_node("CanvasLayer/Control/MenuContainer/ButtonContainer/ContinueButton/ContinueLabel")
 @onready var settings_button: Button = get_node("CanvasLayer/Control/MenuContainer/ButtonContainer/SettingsButton")
 @onready var quit_button: Button = get_node("CanvasLayer/Control/MenuContainer/ButtonContainer/QuitButton")
 @onready var version_label: Label = get_node("CanvasLayer/Control/VersionLabel")
@@ -35,9 +36,11 @@ func _ready() -> void:
 
 	if FileAccess.file_exists("user://save01.libki"):
 		continue_button.disabled = false
+		continue_label.modulate.a = 1.0
 		continue_button.grab_focus()
 	else:
 		continue_button.disabled = true
+		continue_label.modulate.a = 0.5
 		play_button.grab_focus()
 
 func _on_button_pressed(button: Button) -> void:
