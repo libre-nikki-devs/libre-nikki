@@ -3,18 +3,19 @@
 importer="font_data_image"
 type="FontFile"
 uid="uid://b0qlr2tc8xin1"
-valid=false
+path="res://.godot/imported/font.png-cfaea40bc558dba7cd334b04dcf8f0c9.fontdata"
 
 [deps]
 
 source_file="res://spritesheets/images/font.png"
+dest_files=["res://.godot/imported/font.png-cfaea40bc558dba7cd334b04dcf8f0c9.fontdata"]
 
 [params]
 
-character_ranges=PackedStringArray("0-127")
+character_ranges=PackedStringArray("32-127")
 kerning_pairs=PackedStringArray()
 columns=16
-rows=8
+rows=6
 image_margin=Rect2i(0, 0, 0, 0)
 character_margin=Rect2i(0, 0, 0, 0)
 ascent=0
