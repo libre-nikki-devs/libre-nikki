@@ -16,7 +16,8 @@ config/version="0.0.0"
 run/main_scene="res://scenes/maps/main_menu.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="libre_nikki"
-config/features=PackedStringArray("4.3", "Mobile")
+config/features=PackedStringArray("4.4", "Mobile")
+run/max_fps=60
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 
@@ -201,9 +202,6 @@ cancel={
 
 2d/run_on_separate_thread=true
 3d/run_on_separate_thread=true
-common/physics_ticks_per_second=256
-common/max_physics_steps_per_frame=24
-common/physics_jitter_fix=0.0
 
 [rendering]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=55 format=3 uid="uid://8wulc2ysaubr"]
 
-[ext_resource type="Script" path="res://scripts/sakutsuki.gd" id="1_5uo7l"]
+[ext_resource type="Script" uid="uid://bwl57hfy2vtfs" path="res://scripts/sakutsuki.gd" id="1_5uo7l"]
 [ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="3_l5dwh"]
 
 [sub_resource type="Animation" id="Animation_ptolu"]
@@ -32,7 +32,7 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7yjcr"]
 _data = {
-"RESET": SubResource("Animation_ptolu")
+&"RESET": SubResource("Animation_ptolu")
 }
 
 [sub_resource type="Animation" id="Animation_jyngd"]
@@ -410,15 +410,15 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_i4sdh"]
 _data = {
-"down": SubResource("Animation_jyngd"),
-"down2": SubResource("Animation_woo3g"),
-"downPinch": SubResource("Animation_3au6t"),
-"left": SubResource("Animation_wmqkp"),
-"left2": SubResource("Animation_4nr4q"),
-"right": SubResource("Animation_7t6dy"),
-"right2": SubResource("Animation_u8lly"),
-"up": SubResource("Animation_65ym1"),
-"up2": SubResource("Animation_2oixe")
+&"down": SubResource("Animation_jyngd"),
+&"down2": SubResource("Animation_woo3g"),
+&"downPinch": SubResource("Animation_3au6t"),
+&"left": SubResource("Animation_wmqkp"),
+&"left2": SubResource("Animation_4nr4q"),
+&"right": SubResource("Animation_7t6dy"),
+&"right2": SubResource("Animation_u8lly"),
+&"up": SubResource("Animation_65ym1"),
+&"up2": SubResource("Animation_2oixe")
 }
 
 [sub_resource type="Animation" id="Animation_qqr8a"]
@@ -1615,44 +1615,44 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fjxp4"]
 _data = {
-"RESET": SubResource("Animation_qqr8a"),
-"down": SubResource("Animation_0yd0n"),
-"down2": SubResource("Animation_7xpk7"),
-"downAction": SubResource("Animation_flpj3"),
-"downAction2": SubResource("Animation_7bteq"),
-"downPinch": SubResource("Animation_25kjj"),
-"downSit": SubResource("Animation_bs372"),
-"downSitLookDown": SubResource("Animation_mh0j6"),
-"downSitLookLeft": SubResource("Animation_16kjs"),
-"downSitLookRight": SubResource("Animation_bxsa3"),
-"downSitLookUp": SubResource("Animation_786xw"),
-"left": SubResource("Animation_67sro"),
-"left2": SubResource("Animation_vkup3"),
-"leftAction": SubResource("Animation_stej6"),
-"leftAction2": SubResource("Animation_kqbph"),
-"leftSit": SubResource("Animation_db677"),
-"leftSitLookDown": SubResource("Animation_ii888"),
-"leftSitLookLeft": SubResource("Animation_sdsyv"),
-"leftSitLookRight": SubResource("Animation_14gte"),
-"leftSitLookUp": SubResource("Animation_ehx8x"),
-"right": SubResource("Animation_8pexl"),
-"right2": SubResource("Animation_wm11l"),
-"rightAction": SubResource("Animation_u4l5y"),
-"rightAction2": SubResource("Animation_8arfv"),
-"rightSit": SubResource("Animation_1gsss"),
-"rightSitLookDown": SubResource("Animation_e2i70"),
-"rightSitLookLeft": SubResource("Animation_fyy4u"),
-"rightSitLookRight": SubResource("Animation_m678k"),
-"rightSitLookUp": SubResource("Animation_kxr8k"),
-"up": SubResource("Animation_0bs2s"),
-"up2": SubResource("Animation_d3383"),
-"upAction": SubResource("Animation_isdf5"),
-"upAction2": SubResource("Animation_ju0qu"),
-"upSit": SubResource("Animation_jqv7k"),
-"upSitLookDown": SubResource("Animation_414kl"),
-"upSitLookLeft": SubResource("Animation_w4n7j"),
-"upSitLookRight": SubResource("Animation_0g75g"),
-"upSitLookUp": SubResource("Animation_cudb8")
+&"RESET": SubResource("Animation_qqr8a"),
+&"down": SubResource("Animation_0yd0n"),
+&"down2": SubResource("Animation_7xpk7"),
+&"downAction": SubResource("Animation_flpj3"),
+&"downAction2": SubResource("Animation_7bteq"),
+&"downPinch": SubResource("Animation_25kjj"),
+&"downSit": SubResource("Animation_bs372"),
+&"downSitLookDown": SubResource("Animation_mh0j6"),
+&"downSitLookLeft": SubResource("Animation_16kjs"),
+&"downSitLookRight": SubResource("Animation_bxsa3"),
+&"downSitLookUp": SubResource("Animation_786xw"),
+&"left": SubResource("Animation_67sro"),
+&"left2": SubResource("Animation_vkup3"),
+&"leftAction": SubResource("Animation_stej6"),
+&"leftAction2": SubResource("Animation_kqbph"),
+&"leftSit": SubResource("Animation_db677"),
+&"leftSitLookDown": SubResource("Animation_ii888"),
+&"leftSitLookLeft": SubResource("Animation_sdsyv"),
+&"leftSitLookRight": SubResource("Animation_14gte"),
+&"leftSitLookUp": SubResource("Animation_ehx8x"),
+&"right": SubResource("Animation_8pexl"),
+&"right2": SubResource("Animation_wm11l"),
+&"rightAction": SubResource("Animation_u4l5y"),
+&"rightAction2": SubResource("Animation_8arfv"),
+&"rightSit": SubResource("Animation_1gsss"),
+&"rightSitLookDown": SubResource("Animation_e2i70"),
+&"rightSitLookLeft": SubResource("Animation_fyy4u"),
+&"rightSitLookRight": SubResource("Animation_m678k"),
+&"rightSitLookUp": SubResource("Animation_kxr8k"),
+&"up": SubResource("Animation_0bs2s"),
+&"up2": SubResource("Animation_d3383"),
+&"upAction": SubResource("Animation_isdf5"),
+&"upAction2": SubResource("Animation_ju0qu"),
+&"upSit": SubResource("Animation_jqv7k"),
+&"upSitLookDown": SubResource("Animation_414kl"),
+&"upSitLookLeft": SubResource("Animation_w4n7j"),
+&"upSitLookRight": SubResource("Animation_0g75g"),
+&"upSitLookUp": SubResource("Animation_cudb8")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qhyl"]

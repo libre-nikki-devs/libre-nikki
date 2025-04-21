@@ -1,10 +1,10 @@
 [gd_scene load_steps=21 format=4 uid="uid://cn6ng1ouyn1oa"]
 
-[ext_resource type="Script" path="res://scripts/maps/sakutsuki's room.gd" id="1_xmkr2"]
+[ext_resource type="Script" uid="uid://dekpdnansexi6" path="res://scripts/maps/sakutsuki's room.gd" id="1_xmkr2"]
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="4_erpc0"]
 [ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="4_yu5hc"]
 [ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/sakutsuki.tscn" id="5_3nw47"]
-[ext_resource type="Script" path="res://scripts/classes/yume_interactable.gd" id="6_ssgvm"]
+[ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="6_ssgvm"]
 [ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="7_07u2d"]
 [ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://spritesheets/images/test.png" id="7_p7k3y"]
 

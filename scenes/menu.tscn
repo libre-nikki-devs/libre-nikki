@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://f47u5spls1q4"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_epw84"]
-[ext_resource type="Script" path="res://scripts/menu.gd" id="1_r1l5h"]
+[ext_resource type="Script" uid="uid://cvkg4u2uux7os" path="res://scripts/menu.gd" id="1_r1l5h"]
 [ext_resource type="Texture2D" uid="uid://rcvhyw1t0f3e" path="res://themes/images/frame.png" id="2_qxgd1"]
 [ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="3_vw2lq"]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=31 format=3 uid="uid://clbmyr4v7td6b"]
 
-[ext_resource type="Script" path="res://scripts/wanderer.gd" id="1_tx13e"]
+[ext_resource type="Script" uid="uid://dikjhq64j52fg" path="res://scripts/wanderer.gd" id="1_tx13e"]
 [ext_resource type="SpriteFrames" uid="uid://322p67u26b32" path="res://spritesheets/debugtsuki.tres" id="2_j7257"]
 
 [sub_resource type="Animation" id="Animation_qqr8a"]
@@ -840,31 +840,31 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fjxp4"]
 _data = {
-"RESET": SubResource("Animation_qqr8a"),
-"down": SubResource("Animation_0yd0n"),
-"down2": SubResource("Animation_yc7nl"),
-"downLookDown": SubResource("Animation_4pnl1"),
-"downLookLeft": SubResource("Animation_unovk"),
-"downLookRight": SubResource("Animation_vfv7g"),
-"downLookUp": SubResource("Animation_sw1xe"),
-"left": SubResource("Animation_67sro"),
-"left2": SubResource("Animation_37ihc"),
-"leftLookDown": SubResource("Animation_dbn08"),
-"leftLookLeft": SubResource("Animation_x1cnr"),
-"leftLookRight": SubResource("Animation_5a0y6"),
-"leftLookUp": SubResource("Animation_436k4"),
-"right": SubResource("Animation_8pexl"),
-"right2": SubResource("Animation_gaw6o"),
-"rightLookDown": SubResource("Animation_ckmys"),
-"rightLookLeft": SubResource("Animation_4dtsi"),
-"rightLookRight": SubResource("Animation_ffdkh"),
-"rightLookUp": SubResource("Animation_gl55x"),
-"up": SubResource("Animation_0bs2s"),
-"up2": SubResource("Animation_1y3se"),
-"upLookDown": SubResource("Animation_kfwfn"),
-"upLookLeft": SubResource("Animation_bpgh6"),
-"upLookRight": SubResource("Animation_qqwdd"),
-"upLookUp": SubResource("Animation_lv6qf")
+&"RESET": SubResource("Animation_qqr8a"),
+&"down": SubResource("Animation_0yd0n"),
+&"down2": SubResource("Animation_yc7nl"),
+&"downLookDown": SubResource("Animation_4pnl1"),
+&"downLookLeft": SubResource("Animation_unovk"),
+&"downLookRight": SubResource("Animation_vfv7g"),
+&"downLookUp": SubResource("Animation_sw1xe"),
+&"left": SubResource("Animation_67sro"),
+&"left2": SubResource("Animation_37ihc"),
+&"leftLookDown": SubResource("Animation_dbn08"),
+&"leftLookLeft": SubResource("Animation_x1cnr"),
+&"leftLookRight": SubResource("Animation_5a0y6"),
+&"leftLookUp": SubResource("Animation_436k4"),
+&"right": SubResource("Animation_8pexl"),
+&"right2": SubResource("Animation_gaw6o"),
+&"rightLookDown": SubResource("Animation_ckmys"),
+&"rightLookLeft": SubResource("Animation_4dtsi"),
+&"rightLookRight": SubResource("Animation_ffdkh"),
+&"rightLookUp": SubResource("Animation_gl55x"),
+&"up": SubResource("Animation_0bs2s"),
+&"up2": SubResource("Animation_1y3se"),
+&"upLookDown": SubResource("Animation_kfwfn"),
+&"upLookLeft": SubResource("Animation_bpgh6"),
+&"upLookRight": SubResource("Animation_qqwdd"),
+&"upLookUp": SubResource("Animation_lv6qf")
 }
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_hodvo"]

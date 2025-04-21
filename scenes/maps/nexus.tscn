@@ -1,10 +1,10 @@
 [gd_scene load_steps=20 format=4 uid="uid://fcv87k7188wx"]
 
-[ext_resource type="Script" path="res://scripts/maps/nexus.gd" id="1_j3gsm"]
+[ext_resource type="Script" uid="uid://duwhwgmgo6w7q" path="res://scripts/maps/nexus.gd" id="1_j3gsm"]
 [ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/sakutsuki.tscn" id="2_gfkke"]
 [ext_resource type="Texture2D" uid="uid://lnpbkktyvhvj" path="res://tilesets/images/nexus.png" id="2_jrd6r"]
-[ext_resource type="Script" path="res://scripts/classes/yume_interactable.gd" id="4_8rcjt"]
-[ext_resource type="Script" path="res://scripts/door.gd" id="4_y2428"]
+[ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="4_8rcjt"]
+[ext_resource type="Script" uid="uid://cwerewsxa8758" path="res://scripts/door.gd" id="4_y2428"]
 [ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="5_865kj"]
 [ext_resource type="PackedScene" uid="uid://clbmyr4v7td6b" path="res://scenes/wanderer.tscn" id="6_dsb3x"]
 [ext_resource type="Texture2D" uid="uid://bdew0ij1oqluq" path="res://pictures/2d_lights_and_shadows_neutral_point_light.webp" id="7_480ep"]
