@@ -12,9 +12,6 @@ func _ready() -> void:
 	await Game.transition_finished
 	get_tree().paused = false
 
-func _physics_process(delta: float) -> void:
-	parallax_layers[0].motion_offset += Vector2(8, 8) * delta
-
 func _on_door_opened() -> void:
 	Game.transition(Game.TRANSITION.FADE_OUT, 1.0)
 	get_tree().paused = true

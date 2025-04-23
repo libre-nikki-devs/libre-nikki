@@ -97,9 +97,6 @@ extends Node
 		else:
 			loop = "None"
 
-## [ParallaxLayer] nodes in this world.
-@export var parallax_layers: Array[ParallaxLayer] = []
-
 ## Node of the player character.[br][b]Note:[/b] More than one player character is not supported.
 @export var player: YumePlayer
 
@@ -187,6 +184,8 @@ func _on_node_added(node: Node):
 					instance.add_to_group("Duplicate")
 					instance.global_position += position
 					node.add_child.call_deferred(instance)
+			"Parallax2D":
+				node.add_to_group("Parallax")
 			"TileMapLayer":
 				for position: Vector2 in duplicate_positions:
 					var instance: TileMapLayer = node.duplicate()
@@ -216,16 +215,16 @@ func _on_node_wrapper_body_shape_entered(body_rid: RID, body: Node2D, body_shape
 		wrap_node_around_world(body)
 
 	if body == get_viewport().get_camera_2d().get_parent():
-		for parallax: ParallaxLayer in parallax_layers:
+		for parallax: Parallax2D in get_tree().get_nodes_in_group("Parallax"):
 			match node_wrapper.get_child(local_shape_index).shape.normal:
 				-Vector2.LEFT:
-					parallax.motion_offset -= Vector2(parallax.motion_mirroring.x - (abs(bounds[0].x) + abs(bounds[1].x)), 0)
+					parallax.scroll_offset -= Vector2(parallax.repeat_size.x - (abs(bounds[0].x) + abs(bounds[1].x)), 0)
 				-Vector2.DOWN:
-					parallax.motion_offset += Vector2(0, parallax.motion_mirroring.y - (abs(bounds[0].y) + abs(bounds[1].y)))
+					parallax.scroll_offset += Vector2(0, parallax.repeat_size.y - (abs(bounds[0].y) + abs(bounds[1].y)))
 				-Vector2.UP:
-					parallax.motion_offset -= Vector2(0, parallax.motion_mirroring.y - (abs(bounds[0].y) + abs(bounds[1].y)))
+					parallax.scroll_offset -= Vector2(0, parallax.repeat_size.y - (abs(bounds[0].y) + abs(bounds[1].y)))
 				-Vector2.RIGHT:
-					parallax.motion_offset += Vector2(parallax.motion_mirroring.x - (abs(bounds[0].x) + abs(bounds[1].x)), 0)
+					parallax.scroll_offset += Vector2(parallax.repeat_size.x - (abs(bounds[0].x) + abs(bounds[1].x)), 0)
 
 ## Change the current world to this [param world].
 func change_world(world: String, save_current_state: bool = true, player_properties: Array = ["accept_events", "cancel_events", "effect", "facing", "last_step", "speed"]) -> void:
