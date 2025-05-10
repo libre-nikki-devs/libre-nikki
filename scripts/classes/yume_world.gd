@@ -44,7 +44,7 @@ extends Node
 				node_wrapper.remove_child(child)
 			boundaries.clear()
 
-		for boundary: Vector2 in Game.DIRECTIONS:
+		for boundary: Vector2 in [Vector2.LEFT, Vector2.DOWN, Vector2.UP, Vector2.RIGHT]:
 			boundaries.append(CollisionShape2D.new())
 			var current_boundary: CollisionShape2D = boundaries.back()
 			current_boundary.shape = WorldBoundaryShape2D.new()
@@ -226,6 +226,18 @@ func _on_node_wrapper_body_shape_entered(body_rid: RID, body: Node2D, body_shape
 				-Vector2.RIGHT:
 					parallax.scroll_offset += Vector2(parallax.repeat_size.x - (abs(bounds[0].x) + abs(bounds[1].x)), 0)
 
+	#if body == get_viewport().get_camera_2d().get_parent():
+		#for parallax: Parallax2D in get_tree().get_nodes_in_group("Parallax"):
+			#match node_wrapper.get_child(local_shape_index).shape.normal:
+				#-Vector2.LEFT:
+					#parallax.scroll_offset -= Vector2(parallax.repeat_size.x - (abs(bounds[0].x) + abs(bounds[1].x)), 0)
+				#-Vector2.DOWN:
+					#parallax.scroll_offset += Vector2(0, parallax.repeat_size.y - (abs(bounds[0].y) + abs(bounds[1].y)))
+				#-Vector2.UP:
+					#parallax.scroll_offset -= Vector2(0, parallax.repeat_size.y - (abs(bounds[0].y) + abs(bounds[1].y)))
+				#-Vector2.RIGHT:
+					#parallax.scroll_offset += Vector2(parallax.repeat_size.x - (abs(bounds[0].x) + abs(bounds[1].x)), 0)
+
 ## Change the current world to this [param world].
 func change_world(world: String, save_current_state: bool = true, player_properties: Array = ["accept_events", "cancel_events", "effect", "facing", "last_step", "speed"]) -> void:
 	if save_current_state:
@@ -255,6 +267,17 @@ func set_player_data(player_properties: Array = ["effect", "facing", "speed"]):
 			if property in player:
 				Game.persistent_data["player_data"][property] = player.get(property)
 
+func wrap_around_world(value: Vector2) -> Vector2:
+	if bounds.size() >= 2:
+		match loop:
+			"All Sides":
+				return Vector2(wrap(value.x, bounds[0].x, bounds[1].x), wrap(value.y, bounds[0].y, bounds[1].y))
+			"Horizontally":
+				return Vector2(wrap(value.x, bounds[0].x, bounds[1].x), value.y)
+			"Vertically":
+				return Vector2(value.x , wrap(value.y, bounds[0].y, bounds[1].y))
+	return value
+	
 func wrap_node_around_world(node: Node2D) -> void:
 	if bounds.size() >= 2:
 		node.global_position = Vector2(wrap(node.global_position.x, bounds[0].x, bounds[1].x), wrap(node.global_position.y, bounds[0].y, bounds[1].y))

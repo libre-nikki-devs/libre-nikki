@@ -13,6 +13,14 @@ extends CharacterBody2D
 
 ## A simple node that can be interacted with.
 
+## Pixel-perfect position.
+var pixel_position: Vector2i:
+	get:
+		return Vector2i(round(position))
+	set(value):
+		position = value
+		pixel_position = value
+
 ## Emitted when something interacted with this node.
 signal body_interacted(body: Node2D)
 

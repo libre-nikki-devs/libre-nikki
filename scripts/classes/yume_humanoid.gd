@@ -54,7 +54,7 @@ func look(direction: Game.DIRECTION) -> void:
 func face_and_move(direction: Game.DIRECTION) -> void:
 	face(direction)
 	move(direction)
-	
+
 ## Get a footstep sound based on a tile.
 func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 	if tile_data:
@@ -77,8 +77,41 @@ func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 
 ## If there are no colliding objects on the same Z index as the character, move this 'direction' (diagonally, if on stairs and 'can_move_on_stairs' is true) by one tile. Otherwise, trigger 'body_touched()' signal in the colliding YumeInteractable's script.
 func move(direction: Game.DIRECTION) -> void:
-	if await is_colliding(direction) or speed <= 0:
+	set_pointer(direction)
+	target = Game.DIRECTIONS[direction] * Game.world.tile_size
+
+	for body: Node2D in current_pointer.surfaces:
+		if body.global_position == current_pointer.global_position and body is YumeInteractable:
+			body.body_stepped_on.emit(self)
+
+		if body is TileMapLayer:
+			var current_tile = body.local_to_map(current_pointer.global_position)
+			var tile_data = body.get_cell_tile_data(current_tile)
+
+			if can_use_stairs:
+				target = get_tile_stair_target_corrections(tile_data, target, direction)
+
+	if is_colliding(direction):
 		return
+
+	# var collision_shapes: Array[CollisionShape2D]
+
+	# for shape_owner: int in get_shape_owners():
+		# collision_shapes.append(shape_owner_get_owner(shape_owner))
+
+	# for collision_shape: CollisionShape2D in collision_shapes:
+		# if Game.world:
+			# collision_shape.position = Game.world.wrap_around_world(collision_shape.global_position + target)
+		# else:
+			# collision_shape.position += collision_shape.global_position + target
+		# collision_shape.top_level = true
+
+	for pointer: YumePointer in pointers.get_children():
+		if Game.world:
+			pointer.position = Game.world.wrap_around_world(pointer.global_position + target)
+		else:
+			pointer.position += pointer.global_position + target
+		pointer.top_level = true
 
 	is_busy = true
 	is_moving = true
@@ -92,21 +125,29 @@ func move(direction: Game.DIRECTION) -> void:
 
 	last_step = !last_step
 	var tween: Tween = create_tween()
-	tween.tween_property(self, "position", position + target, 0.25 / speed)
+	tween.tween_property(self, "pixel_position", Vector2i(target), 0.25 / speed).as_relative()
 	await tween.finished
+
+	# for collision_shape: CollisionShape2D in collision_shapes:
+		# collision_shape.position = Vector2.ZERO
+		# collision_shape.top_level = false
+
+	#for pointer: YumePointer in pointers.get_children():
+		#pointer.position = pointer.offset * Game.world.tile_size
+		#pointer.top_level = false
+
 	is_busy = false
 	is_moving = false
-	await get_tree().physics_frame
 	moved.emit()
 
 func play_footstep_sound() -> void:
 	Game.play_sound(footstep_sound, self, 256, RandomNumberGenerator.new().randf_range(0.90, 1.10))
 
 func set_footstep_sound() -> void:
-	for object: Node2D in current_pointer.stepped_on_objects:
-		if object is TileMapLayer:
-			var current_tile = object.local_to_map(current_pointer.global_position)
-			var tile_data = object.get_cell_tile_data(current_tile)
+	for body: Node2D in current_pointer.surfaces:
+		if body is TileMapLayer:
+			var current_tile = body.local_to_map(current_pointer.global_position)
+			var tile_data = body.get_cell_tile_data(current_tile)
 			footstep_sound = get_tile_footstep_sound(tile_data)
 			return
 

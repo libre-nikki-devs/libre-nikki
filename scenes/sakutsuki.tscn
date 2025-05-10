@@ -1673,9 +1673,9 @@ offset = Vector2(-12, -24)
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../AnimatedSprite2D")
 libraries = {
-"": SubResource("AnimationLibrary_7yjcr"),
-"Bike": SubResource("AnimationLibrary_i4sdh"),
-"Default": SubResource("AnimationLibrary_fjxp4")
+&"": SubResource("AnimationLibrary_7yjcr"),
+&"Bike": SubResource("AnimationLibrary_i4sdh"),
+&"Default": SubResource("AnimationLibrary_fjxp4")
 }
 
 [node name="AudioListener2D" type="AudioListener2D" parent="."]

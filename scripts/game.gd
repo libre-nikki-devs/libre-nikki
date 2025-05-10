@@ -12,11 +12,16 @@ extends Node
 
 ## An autoload singleton that handles the game's most important data as well as it provides functions specific to Libre Nikki.
 
-const DIRECTIONS: Array[Vector2] = [Vector2.LEFT, Vector2.DOWN, Vector2.UP, Vector2.RIGHT]
+const DIRECTIONS: Dictionary[DIRECTION, Vector2] = {
+	DIRECTION.LEFT: Vector2.LEFT,
+	DIRECTION.DOWN: Vector2.DOWN,
+	DIRECTION.UP: Vector2.UP,
+	DIRECTION.RIGHT: Vector2.RIGHT,
+}
 
-# enum { ALL = 15, HORIZONTAL = 9, VERTICAL = 6 }
-# enum DIRECTION { LEFT = 1, DOWN = 2, UP = 4, RIGHT = 8 }
-enum DIRECTION { LEFT = 0, DOWN, UP, RIGHT }
+enum { ALL = 15, HORIZONTAL = 9, VERTICAL = 6 }
+
+enum DIRECTION { LEFT = 1, DOWN = 2, UP = 4, RIGHT = 8 }
 
 enum EFFECT { DEFAULT = 0, BIKE = 1 }
 

@@ -39,113 +39,137 @@ extends YumeInteractable
 ## True, if the character is moving.
 var is_moving: bool = false
 
-## Contains three pointers that check occuring collisions.
-var pointers: Array[Area2D] = []
+## Contains pointers that check occuring collisions.
+var pointers: Node2D
 
 ## Pointer that determines where the character should move.
-var current_pointer: Area2D
+var current_pointer: YumePointer
 
 ## Target movement point.
 var target: Vector2
+
+var collision_checked: bool = false
 
 ## Emitted when the character has moved.
 signal moved
 
 func _init() -> void:
 	# initialize pointers
-	for i: int in 3:
-		pointers.insert(i, Area2D.new())
-		var collision = CollisionShape2D.new()
-		collision.shape = SegmentShape2D.new()
-		collision.shape.a = Vector2(0, 0)
-		collision.shape.b = Vector2(0, 0)
-		pointers[i].add_child(collision)
-		pointers[i].set_script(preload("res://script_templates/Area2D/pointer.gd"))
-		add_child(pointers[i])
+	pointers = Node2D.new()
+	pointers.name = "Pointers"
+	for side: Vector2 in [Vector2.UP + Vector2.LEFT, Vector2.UP, Vector2.UP + Vector2.RIGHT, Vector2.LEFT, Vector2.ZERO, Vector2.RIGHT, Vector2.DOWN + Vector2.LEFT, Vector2.DOWN, Vector2.DOWN + Vector2.RIGHT]:
+		var pointer: YumePointer = YumePointer.new()
+		pointer.offset = side
+		pointer.collision_owner = self
+		pointer.position = pointer.offset * Game.world.tile_size
+		var collision_shape: CollisionShape2D = CollisionShape2D.new()
+		collision_shape.shape = SegmentShape2D.new()
+		collision_shape.shape.a = Vector2.ZERO
+		collision_shape.shape.b = Vector2.ZERO
+		pointer.add_child(collision_shape)
+		pointers.add_child(pointer)
+	add_child(pointers)
 
-func get_tile_stair_target_corrections(tile_data: TileData, new_target: Vector2, direction: Game.DIRECTION):
+func _physics_process(delta: float) -> void:
+	# we need to wait a physics frame for area2d to start detecting collisions before moving
+	if ready and not collision_checked:
+		if not is_busy:
+			is_busy = true
+			await get_tree().physics_frame
+			is_busy = false
+			collision_checked = true
+
+func get_tile_stair_target_corrections(tile_data: TileData, new_target: Vector2, direction: Game.DIRECTION) -> Vector2:
 	if tile_data:
 		if tile_data.get_custom_data("stair"):
 			match tile_data.get_custom_data("stair"):
 				# \-shaped stairs; horizontal movement
-				1 when direction in [Game.DIRECTION.LEFT, Game.DIRECTION.RIGHT]: 
+				1 when direction & Game.HORIZONTAL: 
 						new_target += Vector2(0, target.x)
+						current_pointer = pointers.get_child(current_pointer.get_index() + 3 * int(Game.DIRECTIONS[direction].x))
 				# /-shaped stairs; horizontal movement
-				2 when direction in [Game.DIRECTION.LEFT, Game.DIRECTION.RIGHT]: 
+				2 when direction & Game.HORIZONTAL: 
 						new_target -= Vector2(0, target.x)
+						current_pointer = pointers.get_child(current_pointer.get_index() - 3 * int(Game.DIRECTIONS[direction].x))
 				# \-shaped stairs; vertical movement
-				3 when direction in [Game.DIRECTION.DOWN, Game.DIRECTION.UP]:
+				3 when direction & Game.VERTICAL:
 						new_target += Vector2(target.y, 0)
+						current_pointer = pointers.get_child(current_pointer.get_index() + int(Game.DIRECTIONS[direction].y))
 				# /-shaped stairs; vertical movement
-				4 when direction in [Game.DIRECTION.DOWN, Game.DIRECTION.UP]: 
+				4 when direction & Game.VERTICAL: 
 						new_target -= Vector2(target.y, 0)
+						current_pointer = pointers.get_child(current_pointer.get_index() - int(Game.DIRECTIONS[direction].y))
 	return new_target
 
 ## Returns true, if the character is colliding with something.
 func is_colliding(direction: Game.DIRECTION) -> bool:
-	target = Game.DIRECTIONS[direction] * Game.world.tile_size
-	pointers[0].position = target
-
-	if direction in [Game.DIRECTION.DOWN, Game.DIRECTION.UP]:
-		pointers[1].position = target + Vector2(1, 0) * Game.world.tile_size
-		pointers[2].position = target + Vector2(-1, 0) * Game.world.tile_size
-	else:
-		pointers[1].position = target + Vector2(0, 1) * Game.world.tile_size
-		pointers[2].position = target + Vector2(0, -1) * Game.world.tile_size
-
-	for i: int in 3:
-		Game.world.wrap_node_around_world(pointers[i])
-
-	await get_tree().physics_frame
-
-	current_pointer = pointers[0]
-
-	# these probably should be in different functions 
-	for object: Node2D in current_pointer.stepped_on_objects:
-		if object.global_position == current_pointer.global_position and object is YumeInteractable:
-			object.body_stepped_on.emit(self)
-
-		if object is TileMapLayer:
-			var current_tile = object.local_to_map(current_pointer.global_position)
-			var tile_data = object.get_cell_tile_data(current_tile)
-
-			if can_use_stairs:
-				target = get_tile_stair_target_corrections(tile_data, target, direction)
-
-	if direction in [Game.DIRECTION.LEFT, Game.DIRECTION.RIGHT]:
-		if target.y < 0:
-			current_pointer = pointers[2]
-		elif target.y > 0:
-			current_pointer = pointers[1]
-	else:
-		if target.x < 0:
-			current_pointer = pointers[2]
-		elif target.x > 0:
-			current_pointer = pointers[1]
-
-	if current_pointer.stepped_on_objects.is_empty() and !can_move_in_vacuum:
+	if current_pointer.surfaces.is_empty() and not can_move_in_vacuum:
 		return true
 
-	for object: Node2D in current_pointer.colliding_objects:
-		if object is YumeInteractable:
-			object.body_touched.emit(self)
+	for body: Node2D in current_pointer.collisions:
+		if body is YumeInteractable:
+			body.body_touched.emit(self)
 		return true
+
 	return false
 
 ## If there are no colliding objects on the same Z index as the character, move this [param direction] (diagonally, if on stairs and if [member can_use_stairs] is [code]true[/code]) by one tile. Otherwise, emit [signal YumeInteractable.body_touched] on the colliding [YumeInteractable].
 func move(direction: Game.DIRECTION) -> void:
-	if await is_colliding(direction) or speed <= 0:
+	set_pointer(direction)
+	target = Game.DIRECTIONS[direction] * Game.world.tile_size
+
+	for body: Node2D in current_pointer.surfaces:
+		if body.global_position == current_pointer.global_position and body is YumeInteractable:
+			body.body_stepped_on.emit(self)
+
+		if body is TileMapLayer:
+			var current_tile = body.local_to_map(current_pointer.global_position)
+			var tile_data = body.get_cell_tile_data(current_tile)
+
+			if can_use_stairs:
+				target = get_tile_stair_target_corrections(tile_data, target, direction)
+
+	if is_colliding(direction):
 		return
+
+	# var collision_shapes: Array[CollisionShape2D]
+
+	# for shape_owner: int in get_shape_owners():
+		# collision_shapes.append(shape_owner_get_owner(shape_owner))
+
+	# for collision_shape: CollisionShape2D in collision_shapes:
+		# if Game.world:
+			# collision_shape.position = Game.world.wrap_around_world(collision_shape.global_position + target)
+		# else:
+			# collision_shape.position += collision_shape.global_position + target
+		# collision_shape.top_level = true
+
+	for pointer: YumePointer in pointers.get_children():
+		if Game.world:
+			pointer.position = Game.world.wrap_around_world(pointer.global_position + target)
+		else:
+			pointer.position += pointer.global_position + target
+		pointer.top_level = true
 
 	is_busy = true
 	is_moving = true
-
 	var tween: Tween = create_tween()
-	tween.tween_property(self, "position", position + target, 0.25 / speed)
+	tween.tween_property(self, "pixel_position", Vector2i(target), 0.25 / speed).as_relative()
 	await tween.finished
 
-	is_moving = false
-	is_busy = false
+	# for collision_shape: CollisionShape2D in collision_shapes:
+		# collision_shape.position = Vector2.ZERO
+		# collision_shape.top_level = false
 
-	await get_tree().physics_frame
+	#for pointer: YumePointer in pointers.get_children():
+		#pointer.position = pointer.offset * Game.world.tile_size
+		#pointer.top_level = false
+
+	is_busy = false
+	is_moving = false
 	moved.emit()
+
+func set_pointer(direction: Game.DIRECTION) -> void:
+	for pointer: YumePointer in pointers.get_children():
+		if pointer.offset == Game.DIRECTIONS[direction]:
+			current_pointer = pointer
