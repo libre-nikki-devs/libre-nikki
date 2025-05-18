@@ -30,7 +30,11 @@ func _init() -> void:
 	connect("moved", _on_moved)
 
 func _physics_process(delta: float) -> void:
-	Game.persistent_data["playtime"] += delta
+	super(delta)
+	if Game.persistent_data.has("playtime"):
+		Game.persistent_data["playtime"] += delta
+	else:
+		Game.persistent_data["playtime"] = 0
 
 func _on_moved():
 	if !Game.persistent_data.has("steps_taken"):

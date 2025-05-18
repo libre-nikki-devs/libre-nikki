@@ -42,6 +42,16 @@ var footstep_sound: AudioStream
 
 var last_step: int = STEP_LEFT
 
+func _move() -> void:
+	set_footstep_sound()
+
+	if last_step:
+		set_animation(str(Game.DIRECTION.find_key(facing)).to_lower() + action, speed, 0.125)
+	else:
+		set_animation(str(Game.DIRECTION.find_key(facing)).to_lower() + action + "2", speed, 0.125)
+
+	last_step = !last_step
+
 ## Face this 'direction'.
 func face(direction: Game.DIRECTION) -> void:
 	facing = direction
@@ -54,7 +64,7 @@ func look(direction: Game.DIRECTION) -> void:
 func face_and_move(direction: Game.DIRECTION) -> void:
 	face(direction)
 	move(direction)
-	
+
 ## Get a footstep sound based on a tile.
 func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 	if tile_data:
@@ -75,38 +85,14 @@ func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 	else:
 		return Game.world.default_footstep_sound
 
-## If there are no colliding objects on the same Z index as the character, move this 'direction' (diagonally, if on stairs and 'can_move_on_stairs' is true) by one tile. Otherwise, trigger 'body_touched()' signal in the colliding YumeInteractable's script.
-func move(direction: Game.DIRECTION) -> void:
-	if await is_colliding(direction) or speed <= 0:
-		return
-
-	is_busy = true
-	is_moving = true
-
-	set_footstep_sound()
-
-	if last_step:
-		set_animation(str(Game.DIRECTION.find_key(facing)).to_lower() + action, speed, 0.125)
-	else:
-		set_animation(str(Game.DIRECTION.find_key(facing)).to_lower() + action + "2", speed, 0.125)
-
-	last_step = !last_step
-	var tween: Tween = create_tween()
-	tween.tween_property(self, "position", position + target, 0.25 / speed)
-	await tween.finished
-	is_busy = false
-	is_moving = false
-	await get_tree().physics_frame
-	moved.emit()
-
 func play_footstep_sound() -> void:
 	Game.play_sound(footstep_sound, self, 256, RandomNumberGenerator.new().randf_range(0.90, 1.10))
 
 func set_footstep_sound() -> void:
-	for object: Node2D in current_pointer.stepped_on_objects:
-		if object is TileMapLayer:
-			var current_tile = object.local_to_map(current_pointer.global_position)
-			var tile_data = object.get_cell_tile_data(current_tile)
+	for body: Node2D in current_pointer.surfaces:
+		if body is TileMapLayer:
+			var current_tile = body.local_to_map(current_pointer.global_position)
+			var tile_data = body.get_cell_tile_data(current_tile)
 			footstep_sound = get_tile_footstep_sound(tile_data)
 			return
 

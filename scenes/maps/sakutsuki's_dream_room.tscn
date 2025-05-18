@@ -1,9 +1,9 @@
 [gd_scene load_steps=21 format=4 uid="uid://cr7mqfgt2kyj0"]
 
-[ext_resource type="Script" path="res://scripts/maps/sakutsuki's_dream_room.gd" id="1_s0krk"]
-[ext_resource type="Script" path="res://scripts/door.gd" id="3_5x7el"]
+[ext_resource type="Script" uid="uid://bbk0ro0r6hpno" path="res://scripts/maps/sakutsuki's_dream_room.gd" id="1_s0krk"]
+[ext_resource type="Script" uid="uid://cwerewsxa8758" path="res://scripts/door.gd" id="3_5x7el"]
 [ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/sakutsuki.tscn" id="3_yakrm"]
-[ext_resource type="Script" path="res://scripts/classes/yume_interactable.gd" id="4_0rbuj"]
+[ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="4_0rbuj"]
 [ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="5_28sca"]
 [ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="7_pl1j4"]
 [ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://spritesheets/images/test.png" id="7_sd8ya"]

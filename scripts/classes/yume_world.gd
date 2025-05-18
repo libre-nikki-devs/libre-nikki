@@ -29,33 +29,6 @@ extends Node
 			bounds[0] = value[1]
 			bounds[1] = value[0]
 
-		if not node_wrapper:
-			var canvas_layer = CanvasLayer.new()
-			canvas_layer.follow_viewport_enabled = true
-			canvas_layer.name = "NodeWrapperCanvasLayer"
-			node_wrapper = Area2D.new()
-			node_wrapper.name = "NodeWrapper"
-			node_wrapper.connect("body_shape_entered", _on_node_wrapper_body_shape_entered)
-			canvas_layer.add_child(node_wrapper)
-			add_child(canvas_layer)
-
-		if not boundaries.is_empty():
-			for child: Node in node_wrapper.get_children():
-				node_wrapper.remove_child(child)
-			boundaries.clear()
-
-		for boundary: Vector2 in Game.DIRECTIONS:
-			boundaries.append(CollisionShape2D.new())
-			var current_boundary: CollisionShape2D = boundaries.back()
-			current_boundary.shape = WorldBoundaryShape2D.new()
-			current_boundary.shape.normal = -boundary
-			node_wrapper.add_child(boundaries.back())
-
-		boundaries[0].shape.distance = bounds[0].x
-		boundaries[1].shape.distance = -bounds[1].y
-		boundaries[2].shape.distance = bounds[0].y
-		boundaries[3].shape.distance = -bounds[1].x
-
 ## Indicates if the world should loop.
 @export_enum("All Sides", "Horizontally", "Vertically", "None") var loop: String = "All Sides":
 	set(value):
@@ -66,39 +39,20 @@ extends Node
 				"All Sides":
 					camera_limits = [-2147483647, 2147483647, -2147483647, 2147483647]
 					duplicate_positions = [Vector2(0, size.y), Vector2(0, -size.y), Vector2(size.x, 0), Vector2(-size.x, 0), Vector2(size.x, size.y), Vector2(size.x, -size.y), Vector2(-size.x, size.y), Vector2(-size.x, -size.y)]
-					boundaries[0].disabled = false
-					boundaries[1].disabled = false
-					boundaries[2].disabled = false
-					boundaries[3].disabled = false
 					loop = value
 				"Horizontally":
 					camera_limits = [bounds[0].x, 2147483647, -2147483647, bounds[1].x]
 					duplicate_positions = [Vector2(0, size.y), Vector2(0, -size.y)]
-					boundaries[0].disabled = false
-					boundaries[1].disabled = true
-					boundaries[2].disabled = true
-					boundaries[3].disabled = false
 					loop = value
 				"Vertically":
 					camera_limits = [-2147483647, bounds[1].y, bounds[0].y, 2147483647]
 					duplicate_positions = [Vector2(size.x, 0), Vector2(-size.x, 0)]
-					boundaries[0].disabled = true
-					boundaries[1].disabled = false
-					boundaries[2].disabled = false
-					boundaries[3].disabled = true
 					loop = value
 				"None":
 					camera_limits = [bounds[0].x, bounds[1].y, bounds[0].y, bounds[1].x]
-					boundaries[0].disabled = true
-					boundaries[1].disabled = true
-					boundaries[2].disabled = true
-					boundaries[3].disabled = true
 					loop = value
 		else:
 			loop = "None"
-
-## [ParallaxLayer] nodes in this world.
-@export var parallax_layers: Array[ParallaxLayer] = []
 
 ## Node of the player character.[br][b]Note:[/b] More than one player character is not supported.
 @export var player: YumePlayer
@@ -114,12 +68,6 @@ extends Node
 
 ## Size of a single tile (in pixels). Used for character movement.
 @export var tile_size: int = 16
-
-## NodeWrapper is a node that teleports a node to the other side of the world when it reached the bounds and the world is looping.
-var node_wrapper: Area2D
-
-## Boundaries for NodeWrapper node.
-var boundaries: Array[CollisionShape2D]
 
 ## Positions for node duplicates. Used only for looping worlds.
 var duplicate_positions: Array[Vector2] = []
@@ -187,6 +135,8 @@ func _on_node_added(node: Node):
 					instance.add_to_group("Duplicate")
 					instance.global_position += position
 					node.add_child.call_deferred(instance)
+			"Parallax2D":
+				node.add_to_group("Parallax")
 			"TileMapLayer":
 				for position: Vector2 in duplicate_positions:
 					var instance: TileMapLayer = node.duplicate()
@@ -208,24 +158,6 @@ func _on_node_added(node: Node):
 
 	# if player:
 		# player.get_parent().move_child(player, -1)
-
-func _on_node_wrapper_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
-	if body is YumeCharacter:
-		if body.is_moving:
-			await body.moved
-		wrap_node_around_world(body)
-
-	if body == get_viewport().get_camera_2d().get_parent():
-		for parallax: ParallaxLayer in parallax_layers:
-			match node_wrapper.get_child(local_shape_index).shape.normal:
-				-Vector2.LEFT:
-					parallax.motion_offset -= Vector2(parallax.motion_mirroring.x - (abs(bounds[0].x) + abs(bounds[1].x)), 0)
-				-Vector2.DOWN:
-					parallax.motion_offset += Vector2(0, parallax.motion_mirroring.y - (abs(bounds[0].y) + abs(bounds[1].y)))
-				-Vector2.UP:
-					parallax.motion_offset -= Vector2(0, parallax.motion_mirroring.y - (abs(bounds[0].y) + abs(bounds[1].y)))
-				-Vector2.RIGHT:
-					parallax.motion_offset += Vector2(parallax.motion_mirroring.x - (abs(bounds[0].x) + abs(bounds[1].x)), 0)
 
 ## Change the current world to this [param world].
 func change_world(world: String, save_current_state: bool = true, player_properties: Array = ["accept_events", "cancel_events", "effect", "facing", "last_step", "speed"]) -> void:
@@ -256,6 +188,13 @@ func set_player_data(player_properties: Array = ["effect", "facing", "speed"]):
 			if property in player:
 				Game.persistent_data["player_data"][property] = player.get(property)
 
-func wrap_node_around_world(node: Node2D) -> void:
+func wrap_around_world(value: Vector2) -> Vector2:
 	if bounds.size() >= 2:
-		node.global_position = Vector2(wrap(node.global_position.x, bounds[0].x, bounds[1].x), wrap(node.global_position.y, bounds[0].y, bounds[1].y))
+		match loop:
+			"All Sides":
+				return Vector2(wrap(value.x, bounds[0].x, bounds[1].x), wrap(value.y, bounds[0].y, bounds[1].y))
+			"Horizontally":
+				return Vector2(wrap(value.x, bounds[0].x, bounds[1].x), value.y)
+			"Vertically":
+				return Vector2(value.x , wrap(value.y, bounds[0].y, bounds[1].y))
+	return value

@@ -16,11 +16,14 @@ signal act_started(effect: Game.EFFECT)
 signal act_finished(effect: Game.EFFECT)
 
 func _ready() -> void:
+	super()
 	Game.accept_held.connect(_on_accept_held)
 	Game.cancel_held.connect(_on_cancel_held)
 
 func _physics_process(delta: float) -> void:
-	if !is_busy:
+	super(delta)
+
+	if not is_busy:
 	# do not move when calling opposite movement events (eg. pressing both 'up' and 'down' keys at once)
 		if not Game.movement_events.is_empty() and (Game.movement_events.find(Game.DIRECTION.UP) <= -1 or Game.movement_events.find(Game.DIRECTION.DOWN) <= -1 or absi(Game.movement_events.find(Game.DIRECTION.UP) - Game.movement_events.find(Game.DIRECTION.DOWN)) != 1) and (Game.movement_events.find(Game.DIRECTION.LEFT) <= -1 or Game.movement_events.find(Game.DIRECTION.RIGHT) <= -1 or absi(Game.movement_events.find(Game.DIRECTION.LEFT) - Game.movement_events.find(Game.DIRECTION.RIGHT)) != 1):
 			if is_sitting:
@@ -95,3 +98,17 @@ func open_menu() -> void:
 		else:
 			Game.cancel_events.front().call()
 		Game.cancel_events.pop_front()
+
+func interact() -> void:
+	if Game.accept_events.is_empty():
+		if not is_sitting and current_pointer:
+			for body: Node2D in current_pointer.collisions:
+				if body is YumeInteractable:
+					body.body_interacted.emit(self)
+					body.body_touched.emit(self)
+	else:
+		if Game.accept_events.front().get_argument_count() > 0:
+			Game.accept_events.front().call(self)
+		else:
+			Game.accept_events.front().call()
+		Game.accept_events.pop_front()

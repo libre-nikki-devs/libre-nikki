@@ -1,9 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bghxnpywucjso"]
+[gd_scene load_steps=3 format=3 uid="uid://bghxnpywucjso"]
 
-[ext_resource type="Script" path="res://scripts/maps/main_menu.gd" id="1_5y8n7"]
+[ext_resource type="Script" uid="uid://bwuyc2n84asut" path="res://scripts/maps/main_menu.gd" id="1_5y8n7"]
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="2_37w8h"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l7rpt"]
 
 [node name="Main Menu" type="Node"]
 script = ExtResource("1_5y8n7")
@@ -40,7 +38,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ButtonContainer" type="VBoxContainer" parent="CanvasLayer/Control/MenuContainer"]
-material = SubResource("ShaderMaterial_l7rpt")
 layout_mode = 2
 alignment = 1
 
