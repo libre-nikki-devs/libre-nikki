@@ -15,10 +15,8 @@ extends YumePlayer
 signal act_started(effect: Game.EFFECT)
 signal act_finished(effect: Game.EFFECT)
 
-func _init() -> void:
-	super()
-
 func _ready() -> void:
+	super()
 	Game.accept_held.connect(_on_accept_held)
 	Game.cancel_held.connect(_on_cancel_held)
 

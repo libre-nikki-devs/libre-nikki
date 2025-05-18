@@ -70,6 +70,11 @@ func _init() -> void:
 		pointers.add_child(pointer)
 	add_child(pointers)
 
+func _ready() -> void:
+	if Game.world:
+		for pointer: YumePointer in pointers.get_children():
+			pointer.global_position = Game.world.wrap_around_world(pointer.global_position + target)
+
 func _physics_process(delta: float) -> void:
 	# we need to wait a physics frame for area2d to start detecting collisions before moving
 	if ready and not collision_checked:
@@ -78,6 +83,9 @@ func _physics_process(delta: float) -> void:
 			await get_tree().physics_frame
 			is_busy = false
 			collision_checked = true
+
+func _move() -> void:
+	pass
 
 func get_tile_stair_target_corrections(tile_data: TileData, new_target: Vector2, direction: Game.DIRECTION) -> Vector2:
 	if tile_data:
@@ -132,39 +140,39 @@ func move(direction: Game.DIRECTION) -> void:
 	if is_colliding(direction):
 		return
 
-	# var collision_shapes: Array[CollisionShape2D]
+	if Game.world:
+		var previous_position: Vector2 = global_position
+		global_position = Game.world.wrap_around_world(global_position + target) - target
 
-	# for shape_owner: int in get_shape_owners():
-		# collision_shapes.append(shape_owner_get_owner(shape_owner))
-
-	# for collision_shape: CollisionShape2D in collision_shapes:
-		# if Game.world:
-			# collision_shape.position = Game.world.wrap_around_world(collision_shape.global_position + target)
-		# else:
-			# collision_shape.position += collision_shape.global_position + target
-		# collision_shape.top_level = true
-
-	for pointer: YumePointer in pointers.get_children():
-		if Game.world:
-			pointer.position = Game.world.wrap_around_world(pointer.global_position + target)
-		else:
-			pointer.position += pointer.global_position + target
-		pointer.top_level = true
+		if self == get_viewport().get_camera_2d().get_parent():
+			for parallax: Parallax2D in get_tree().get_nodes_in_group("Parallax"):
+				parallax.scroll_offset -= previous_position - global_position
 
 	is_busy = true
 	is_moving = true
+	_move()
 	var tween: Tween = create_tween()
 	tween.tween_property(self, "pixel_position", Vector2i(target), 0.25 / speed).as_relative()
+	var collision_shapes: Array[CollisionShape2D]
+
+	for shape_owner: int in get_shape_owners():
+		collision_shapes.append(shape_owner_get_owner(shape_owner))
+
+	for collision_shape: CollisionShape2D in collision_shapes:
+		collision_shape.position = target
+		tween.parallel()
+		tween.tween_property(collision_shape, "position", -target, 0.25 / speed).as_relative()
+
+	for pointer: YumePointer in pointers.get_children():
+		if Game.world:
+			pointer.global_position = Game.world.wrap_around_world(pointer.global_position + target)
+		else:
+			pointer.global_position = pointer.global_position + target
+
+		tween.parallel()
+		tween.tween_property(pointer, "position", -target, 0.25 / speed).as_relative()
+
 	await tween.finished
-
-	# for collision_shape: CollisionShape2D in collision_shapes:
-		# collision_shape.position = Vector2.ZERO
-		# collision_shape.top_level = false
-
-	#for pointer: YumePointer in pointers.get_children():
-		#pointer.position = pointer.offset * Game.world.tile_size
-		#pointer.top_level = false
-
 	is_busy = false
 	is_moving = false
 	moved.emit()
