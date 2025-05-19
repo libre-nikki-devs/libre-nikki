@@ -68,22 +68,22 @@ func face_and_move(direction: Game.DIRECTION) -> void:
 ## Get a footstep sound based on a tile.
 func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 	if tile_data:
-		match tile_data.get_custom_data("surface"):
-			Game.SURFACE.SILENT:
-				return
-			_:
-				return Game.world.default_footstep_sound
-			# SURFACE.CONCRETE:
-			# SURFACE.METAL:
-			# SURFACE.GRASS:
-			# SURFACE.DIRT:
-			# SURFACE.SAND:
-			# SURFACE.WATER:
-			# SURFACE.SNOW:
-			# SURFACE.WOOD:
-			# SURFACE.CARPET:
-	else:
-		return Game.world.default_footstep_sound
+		if tile_data.has_custom_data("surface"):
+			match tile_data.get_custom_data("surface"):
+				Game.SURFACE.SILENT:
+					return
+				_:
+					return Game.world.default_footstep_sound
+				# SURFACE.CONCRETE:
+				# SURFACE.METAL:
+				# SURFACE.GRASS:
+				# SURFACE.DIRT:
+				# SURFACE.SAND:
+				# SURFACE.WATER:
+				# SURFACE.SNOW:
+				# SURFACE.WOOD:
+				# SURFACE.CARPET:
+	return Game.world.default_footstep_sound
 
 func play_footstep_sound() -> void:
 	Game.play_sound(footstep_sound, self, 256, RandomNumberGenerator.new().randf_range(0.90, 1.10))

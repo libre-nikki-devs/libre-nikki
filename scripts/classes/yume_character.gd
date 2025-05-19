@@ -89,14 +89,14 @@ func _move() -> void:
 
 func get_tile_stair_target_corrections(tile_data: TileData, new_target: Vector2, direction: Game.DIRECTION) -> Vector2:
 	if tile_data:
-		if tile_data.get_custom_data("stair"):
+		if tile_data.has_custom_data("stair"):
 			match tile_data.get_custom_data("stair"):
 				# \-shaped stairs; horizontal movement
-				1 when direction & Game.HORIZONTAL: 
+				1 when direction & Game.HORIZONTAL:
 						new_target += Vector2(0, target.x)
 						current_pointer = pointers.get_child(current_pointer.get_index() + 3 * int(Game.DIRECTIONS[direction].x))
 				# /-shaped stairs; horizontal movement
-				2 when direction & Game.HORIZONTAL: 
+				2 when direction & Game.HORIZONTAL:
 						new_target -= Vector2(0, target.x)
 						current_pointer = pointers.get_child(current_pointer.get_index() - 3 * int(Game.DIRECTIONS[direction].x))
 				# \-shaped stairs; vertical movement
@@ -104,7 +104,7 @@ func get_tile_stair_target_corrections(tile_data: TileData, new_target: Vector2,
 						new_target += Vector2(target.y, 0)
 						current_pointer = pointers.get_child(current_pointer.get_index() + int(Game.DIRECTIONS[direction].y))
 				# /-shaped stairs; vertical movement
-				4 when direction & Game.VERTICAL: 
+				4 when direction & Game.VERTICAL:
 						new_target -= Vector2(target.y, 0)
 						current_pointer = pointers.get_child(current_pointer.get_index() - int(Game.DIRECTIONS[direction].y))
 	return new_target
