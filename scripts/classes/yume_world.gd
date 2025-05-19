@@ -125,7 +125,7 @@ func _on_node_added(node: Node):
 				for position: Vector2 in duplicate_positions:
 					var instance: AnimatedSprite2D = node.duplicate()
 					instance.add_to_group("Duplicate")
-					instance.set_script(preload("res://script_templates/AnimatedSprite2D/mimic.gd"))
+					instance.set_script(preload("res://scripts/templates/AnimatedSprite2D/mimic.gd"))
 					instance.global_position += position
 					instance.to_mimic = node
 					node.add_child.call_deferred(instance)

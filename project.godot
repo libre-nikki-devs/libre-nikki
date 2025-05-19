@@ -45,6 +45,7 @@ mouse_cursor/tooltip_position_offset=Vector2(8, 8)
 
 [editor]
 
+script/templates_search_path="res://scripts/templates"
 naming/script_name_casing=2
 
 [gui]
