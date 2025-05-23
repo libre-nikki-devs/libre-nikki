@@ -66,13 +66,13 @@ func _on_button_pressed(button: Button) -> void:
 func _on_play_button_pressed() -> void:
 	_on_button_pressed(play_button)
 	await button_finished
-	change_world("Sakutsuki's Room", false, [])
+	change_world("Sakutsuki's Bedroom", false, [])
 
 func _on_continue_button_pressed() -> void:
 	_on_button_pressed(continue_button)
 	await button_finished
 	load_game("user://save01.libki")
-	change_world("Sakutsuki's Room", false, [])
+	change_world("Sakutsuki's Bedroom", false, [])
 
 func _on_settings_button_pressed() -> void:
 	_on_button_pressed(settings_button)
