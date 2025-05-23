@@ -86,11 +86,11 @@ var menu = Control.new()
 
 func open_menu() -> void:
 	if Game.cancel_events.is_empty():
-		Game.transition(Game.TRANSITION.FADE_OUT, 0.1)
-		await Game.transition_finished
+		Game.transition_handler.play("fade_out", -1, 10.0)
+		await Game.transition_handler.animation_finished
 		menu = preload("res://scenes/menu.tscn").instantiate()
-		Game.canvas_layer.add_child(menu)
-		Game.transition(Game.TRANSITION.FADE_IN, 0.1)
+		Game.add_child(menu)
+		Game.transition_handler.play("fade_in", -1, 10.0)
 		get_tree().paused = true
 	else:
 		if Game.cancel_events.front().get_argument_count() > 0:

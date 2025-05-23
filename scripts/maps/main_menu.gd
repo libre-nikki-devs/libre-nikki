@@ -21,8 +21,8 @@ func _ready() -> void:
 	version_label.text = ProjectSettings.get_setting("application/config/version")
 
 	Game.persistent_data.clear()
-	Game.transition(Game.TRANSITION.FADE_IN, 0.5)
-	await Game.transition_finished
+	Game.transition_handler.play("fade_in", -1, 2.0)
+	await Game.transition_handler.animation_finished
 	menu_container.visible = true
 	var tween: Tween = create_tween()
 	tween.tween_property(menu_container, "size", Vector2(72, 72), 0.15)
@@ -50,11 +50,11 @@ func _on_button_pressed(button: Button) -> void:
 			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	if button != quit_button:
-		Game.transition(Game.TRANSITION.FADE_OUT, 0.1)
+		Game.transition_handler.play("fade_out", -1, 10.0)
 	else:
-		Game.transition(Game.TRANSITION.FADE_OUT, 0.5)
+		Game.transition_handler.play("fade_out", -1, 2.0)
 
-	await Game.transition_finished
+	await Game.transition_handler.animation_finished
 
 	for child: Control in button.get_parent().get_children():
 		if child != button:

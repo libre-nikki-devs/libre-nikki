@@ -110,9 +110,8 @@ func _on_button_pressed(button: Button) -> void:
 			child.focus_mode = Control.FOCUS_NONE
 			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	Game.transition(Game.TRANSITION.FADE_OUT, 0.1)
-
-	await Game.transition_finished
+	Game.transition_handler.play("fade_out", -1, 10.0)
+	await Game.transition_handler.animation_finished
 
 	for child: Control in button.get_parent().get_children():
 		if child != button:
@@ -155,9 +154,9 @@ func _on_settings_button_pressed() -> void:
 	Game.open_settings(settings_button)
 
 func close_menu():
-	Game.transition(Game.TRANSITION.FADE_OUT, 0.1)
-	await Game.transition_finished
-	Game.transition(Game.TRANSITION.FADE_IN, 0.1)
+	Game.transition_handler.play("fade_out", -1, 10.0)
+	await Game.transition_handler.animation_finished
+	Game.transition_handler.play("fade_in", -1, 10.0)
 	get_tree().paused = false
 	queue_free()
 

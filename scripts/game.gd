@@ -8,7 +8,7 @@
 #
 # You should have received a copy of the GNU General Public License along with Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends Node
+extends CanvasLayer
 
 ## An autoload singleton that handles the game's most important data as well as it provides functions specific to Libre Nikki.
 
@@ -26,8 +26,6 @@ enum DIRECTION { LEFT = 1, DOWN = 2, UP = 4, RIGHT = 8 }
 enum EFFECT { DEFAULT = 0, BIKE = 1 }
 
 enum SURFACE { SILENT = -1, DEFAULT, CONCRETE, METAL, GRASS, DIRT, SAND, WATER, SNOW, WOOD, CARPET }
-
-enum TRANSITION { FADE_IN, FADE_OUT }
 
 @onready var music: AudioStreamPlayer = get_node("AudioStreamPlayer")
 
@@ -49,13 +47,10 @@ var accept_events: Array[Callable] = []
 
 var cancel_events: Array[Callable] = []
 
-@onready var canvas_layer: CanvasLayer = get_node("CanvasLayer")
-
-@onready var transitionrect: ColorRect = get_node("CanvasLayer/ColorRect")
+@onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
 
 signal accept_held()
 signal cancel_held()
-signal transition_finished()
 
 @onready var accept_timer: Timer = get_node("AcceptTimer")
 @onready var cancel_timer: Timer = get_node("CancelTimer")
@@ -156,10 +151,9 @@ func sleep() -> void:
 func wake_up() -> void:
 	persistent_data["player_data"] = {}
 	persistent_data["world_data"] = {}
-
-	transition(TRANSITION.FADE_OUT, 1.0)
+	transition_handler.play("fade_out")
 	get_tree().paused = true
-	await transition_finished
+	await transition_handler.animation_finished
 	world.change_world("Sakutsuki's Room", false, [])
 
 # WIP
@@ -195,26 +189,10 @@ func fade_out_music(duration: float) -> void:
 	await tween.finished
 	music.stop()
 
-## Make a transition.
-func transition(transition_type: TRANSITION, duration: float):
-	match transition_type:
-		TRANSITION.FADE_IN:
-			transitionrect.color = Color(0, 0, 0, 1)
-			var tween: Tween = create_tween()
-			tween.tween_property(transitionrect, "color:a", 0, duration)
-			await tween.finished
-			transition_finished.emit()
-		TRANSITION.FADE_OUT:
-			transitionrect.color = Color(0, 0, 0, 0)
-			var tween: Tween = create_tween()
-			tween.tween_property(transitionrect, "color:a", 1, duration)
-			await tween.finished
-			transition_finished.emit()
-
 ## Open settings menu.
 func open_settings(focus):
 	var settings_menu: Control
 	settings_menu = preload("res://scenes/settings.tscn").instantiate()
 	settings_menu.focus = focus
-	canvas_layer.add_child(settings_menu)
-	transition(Game.TRANSITION.FADE_IN, 0.1)
+	add_child(settings_menu)
+	transition_handler.play("fade_in", -1, 10.0)

@@ -10,8 +10,8 @@ func _ready() -> void:
 		if Game.persistent_data["world_visits"].has(self.name):
 			if Game.persistent_data["world_visits"][self.name] > 1:
 				greeting.visible = false
-				Game.transition(Game.TRANSITION.FADE_IN, 1.0)
-				await Game.transition_finished
+				Game.transition_handler.play("fade_in")
+				await Game.transition_handler.animation_finished
 				get_tree().paused = false
 				return
 
@@ -19,8 +19,8 @@ func _ready() -> void:
 	greeting.visible = true
 	greeting_label.grab_focus()
 	player.is_busy = true
-	Game.transition(Game.TRANSITION.FADE_IN, 1.0)
-	await Game.transition_finished
+	Game.transition_handler.play("fade_in")
+	await Game.transition_handler.animation_finished
 	get_tree().paused = false
 
 func _input(event: InputEvent) -> void:
@@ -31,11 +31,11 @@ func _input(event: InputEvent) -> void:
 			match focus_owner.get_parent():
 				greeting:
 					get_tree().paused = true
-					Game.transition(Game.TRANSITION.FADE_OUT, 0.5)
-					await Game.transition_finished
+					Game.transition_handler.play("fade_out", -1, 2.0)
+					await Game.transition_handler.animation_finished
 					greeting.visible = false
-					Game.transition(Game.TRANSITION.FADE_IN, 0.5)
-					await Game.transition_finished
+					Game.transition_handler.play("fade_in", -1, 2.0)
+					await Game.transition_handler.animation_finished
 					get_tree().paused = false
 					player.is_busy = false
 
@@ -46,10 +46,10 @@ func save_game(save_path: String):
 func _on_bed_body_interacted(body: Node2D) -> void:
 	if body is YumePlayer:
 		get_tree().paused = true
-		Game.transition(Game.TRANSITION.FADE_OUT, 1.0)
-		await Game.transition_finished
+		Game.transition_handler.play("fade_out")
+		await Game.transition_handler.animation_finished
 		get_tree().paused = false
-	
+
 		if Game.persistent_data.has("player_data"):
 			Game.persistent_data["player_data"] = {}
 

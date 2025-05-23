@@ -58,21 +58,21 @@ func _input(event: InputEvent) -> void:
 		if focus_owner:
 			match focus_owner.get_parent():
 				scroll:
-					Game.transition(Game.TRANSITION.FADE_OUT, 0.1)
-					await Game.transition_finished
+					Game.transition_handler.play("fade_out", -1, 10.0)
+					await Game.transition_handler.animation_finished
 					license_thingy.hide()
 					scroll.hide()
 					licenses_button.grab_focus()
-					Game.transition(Game.TRANSITION.FADE_IN, 0.1)
+					Game.transition_handler.play("fade_in", -1, 10.0)
 				licenses_menu:
 					licenses_button.grab_focus()
 				side_menu:
 					close_menu()
 
 func close_menu():
-	Game.transition(Game.TRANSITION.FADE_OUT, 0.1)
-	await Game.transition_finished
-	Game.transition(Game.TRANSITION.FADE_IN, 0.1)
+	Game.transition_handler.play("fade_out", -1, 10.0)
+	await Game.transition_handler.animation_finished
+	Game.transition_handler.play("fade_in", -1, 10.0)
 	focus.grab_focus()
 	queue_free()
 
@@ -83,11 +83,11 @@ func _on_licenses_button_pressed() -> void:
 		licenses_menu.get_child(0).grab_focus()
 
 func _on_license_pressed(license: String) -> void:
-	Game.transition(Game.TRANSITION.FADE_OUT, 0.1)
-	await Game.transition_finished
+	Game.transition_handler.play("fade_out", -1, 10.0)
+	await Game.transition_handler.animation_finished
 	var file = FileAccess.open("res://LICENSES/" + license, FileAccess.READ)
 	license_thingy.show()
 	scroll.show()
 	license_label.text = file.get_as_text()
 	license_label.grab_focus()
-	Game.transition(Game.TRANSITION.FADE_IN, 0.1)
+	Game.transition_handler.play("fade_in", -1, 10.0)

@@ -9,12 +9,12 @@ func _ready() -> void:
 			player.face(Game.DIRECTION.DOWN)
 
 	get_tree().paused = true
-	Game.transition(Game.TRANSITION.FADE_IN, 1.0)
-	await Game.transition_finished
+	Game.transition_handler.play("fade_in")
+	await Game.transition_handler.animation_finished
 	get_tree().paused = false
 
 func _on_door_opened() -> void:
-	Game.transition(Game.TRANSITION.FADE_OUT, 1.0)
+	Game.transition_handler.play("fade_out")
 	get_tree().paused = true
-	await Game.transition_finished
+	await Game.transition_handler.animation_finished
 	change_world("Nexus")
