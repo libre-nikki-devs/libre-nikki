@@ -8,7 +8,39 @@
 #
 # You should have received a copy of the GNU General Public License along with Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends "res://scripts/templates/YumeHumanoid/wanderer.gd"
+extends YumeHumanoid
+
+## A simple, non-playable character that walks around mindlessly.
+
+## Amount of time (in seconds) to wait before attempting to move a randomly-picked direction.
+@export var wait_time: float = 2.0
+
+func _ready() -> void:
+	super()
+	_move_loop()
+
+func _move_loop():
+	var available_directions: Array[Game.DIRECTION]
+
+	for direction in Game.DIRECTION.values():
+		available_directions.append(direction)
+
+	await get_tree().create_timer(wait_time, false, true).timeout
+
+	if not is_busy:
+		var can_move: bool = false
+
+		while not (available_directions.is_empty() or can_move):
+			var picked_direction: Game.DIRECTION = available_directions.pick_random()
+			set_pointer(picked_direction)
+
+			if is_colliding(picked_direction):
+				available_directions.erase(picked_direction)
+			else:
+				can_move = true
+				face_and_move(picked_direction)
+
+	_move_loop()
 
 func _on_body_interacted(body: Node2D) -> void:
 	if not is_busy:
