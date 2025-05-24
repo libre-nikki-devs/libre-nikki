@@ -1,4 +1,4 @@
-# Copyright (C) 2024-2025 Libre Nikki Developers.
+# Copyright (C) 2025 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -8,33 +8,8 @@
 #
 # You should have received a copy of the GNU General Public License along with Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends YumeHumanoid
+extends "res://scripts/templates/YumeHumanoid/wanderer.gd"
 
-## A sample non-playable character that walks around mindlessly.
-
-# WIP
-
-var dirs: Array
-
-func _init():
-	super()
-
-	for direction in Game.DIRECTION.values():
-		dirs.append(direction)
-
-func _ready() -> void:
-	body_interacted.connect(_on_body_interacted)
-	do_the_stuff()
-
-func _on_body_interacted(body: Node2D):
-	if body is YumePlayer:
+func _on_body_interacted(body: Node2D) -> void:
+	if not is_busy:
 		face((Game.face(self, body.global_position)))
-
-func do_the_stuff():
-	await get_tree().create_timer(2.0).timeout
-
-	if !is_busy:
-		await get_tree().physics_frame
-		face_and_move(dirs.pick_random())
-
-	do_the_stuff()

@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="4_8rcjt"]
 [ext_resource type="Script" uid="uid://cwerewsxa8758" path="res://scripts/door.gd" id="4_y2428"]
 [ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="5_865kj"]
-[ext_resource type="PackedScene" uid="uid://clbmyr4v7td6b" path="res://scenes/wanderer.tscn" id="6_dsb3x"]
+[ext_resource type="PackedScene" uid="uid://catbsi51pb1aq" path="res://scenes/debugtsuki.tscn" id="6_dsb3x"]
 [ext_resource type="Texture2D" uid="uid://bdew0ij1oqluq" path="res://pictures/2d_lights_and_shadows_neutral_point_light.webp" id="7_480ep"]
 [ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://spritesheets/images/test.png" id="9_gkgr5"]
 
@@ -122,7 +122,7 @@ animation = &"open"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer2/CanvasGroup/Door"]
 shape = SubResource("RectangleShape2D_yuqbu")
 
-[node name="Wanderer" parent="CanvasLayer2/CanvasGroup" instance=ExtResource("6_dsb3x")]
+[node name="Debugtsuki" parent="CanvasLayer2/CanvasGroup" instance=ExtResource("6_dsb3x")]
 z_index = 1
 position = Vector2(-136, -136)
 

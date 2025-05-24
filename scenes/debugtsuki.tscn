@@ -1,7 +1,7 @@
-[gd_scene load_steps=31 format=3 uid="uid://clbmyr4v7td6b"]
+[gd_scene load_steps=31 format=3 uid="uid://catbsi51pb1aq"]
 
-[ext_resource type="Script" uid="uid://dikjhq64j52fg" path="res://scripts/wanderer.gd" id="1_tx13e"]
-[ext_resource type="SpriteFrames" uid="uid://322p67u26b32" path="res://spritesheets/debugtsuki.tres" id="2_j7257"]
+[ext_resource type="Script" uid="uid://dhrwgs612gf2w" path="res://scripts/debugtsuki.gd" id="1_g35pp"]
+[ext_resource type="SpriteFrames" uid="uid://322p67u26b32" path="res://spritesheets/debugtsuki.tres" id="2_yhhfb"]
 
 [sub_resource type="Animation" id="Animation_qqr8a"]
 length = 0.001
@@ -874,13 +874,13 @@ b = Vector2(0, 16)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0we4y"]
 size = Vector2(16, 16)
 
-[node name="Wanderer" type="CharacterBody2D" node_paths=PackedStringArray("animation_player")]
+[node name="Debugtsuki" type="CharacterBody2D" node_paths=PackedStringArray("animation_player")]
 y_sort_enabled = true
-script = ExtResource("1_tx13e")
+script = ExtResource("1_g35pp")
 animation_player = NodePath("AnimationPlayer")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = ExtResource("2_j7257")
+sprite_frames = ExtResource("2_yhhfb")
 animation = &"down"
 centered = false
 offset = Vector2(-12, -24)
@@ -888,7 +888,7 @@ offset = Vector2(-12, -24)
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../AnimatedSprite2D")
 libraries = {
-"": SubResource("AnimationLibrary_fjxp4")
+&"": SubResource("AnimationLibrary_fjxp4")
 }
 
 [node name="Area2D" type="Area2D" parent="."]
@@ -899,7 +899,4 @@ shape = SubResource("SegmentShape2D_hodvo")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_0we4y")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-volume_db = -5.0
-max_distance = 256.0
-attenuation = 2.0
+[connection signal="body_interacted" from="." to="." method="_on_body_interacted"]
