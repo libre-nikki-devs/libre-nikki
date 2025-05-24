@@ -95,7 +95,7 @@ func _notification(what: int) -> void:
 		NOTIFICATION_APPLICATION_FOCUS_OUT:
 			movement_events = []
 		NOTIFICATION_READY:
-			DisplayServer.window_set_min_size(Vector2(640, 480))
+			get_window().min_size = Vector2i(640, 480)
 
 func play_sound(sound: AudioStream, parent: Node2D, distance: int = 256, pitch: float = 1.0, volume_offset: float = 0.0) -> void:
 	if sound:
