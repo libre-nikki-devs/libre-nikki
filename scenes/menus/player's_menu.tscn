@@ -1,16 +1,16 @@
 [gd_scene load_steps=5 format=3 uid="uid://f47u5spls1q4"]
 
-[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_epw84"]
-[ext_resource type="Script" uid="uid://cvkg4u2uux7os" path="res://scripts/menu.gd" id="1_r1l5h"]
-[ext_resource type="Texture2D" uid="uid://rcvhyw1t0f3e" path="res://themes/images/frame.png" id="2_qxgd1"]
-[ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="3_vw2lq"]
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_5trwu"]
+[ext_resource type="Script" uid="uid://cvkg4u2uux7os" path="res://scripts/menus/player's_menu.gd" id="2_82afy"]
+[ext_resource type="Texture2D" uid="uid://rcvhyw1t0f3e" path="res://themes/images/frame.png" id="3_q75g0"]
+[ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="4_3gh7f"]
 
 [node name="Menu" type="Control" node_paths=PackedStringArray("side_menu")]
 layout_mode = 3
 anchor_right = 0.5
 anchor_bottom = 0.5
-theme = ExtResource("1_epw84")
-script = ExtResource("1_r1l5h")
+theme = ExtResource("1_5trwu")
+script = ExtResource("2_82afy")
 side_menu = NodePath("SidePanelContainer/VBoxContainer")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -39,12 +39,12 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="MainPanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-texture = ExtResource("2_qxgd1")
+texture = ExtResource("3_q75g0")
 stretch_mode = 1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MainPanelContainer/VBoxContainer/HBoxContainer/TextureRect"]
 position = Vector2(24, 24)
-sprite_frames = ExtResource("3_vw2lq")
+sprite_frames = ExtResource("4_3gh7f")
 animation = &"down"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainPanelContainer/VBoxContainer/HBoxContainer"]

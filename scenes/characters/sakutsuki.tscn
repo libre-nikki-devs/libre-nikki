@@ -1,6 +1,6 @@
 [gd_scene load_steps=55 format=3 uid="uid://8wulc2ysaubr"]
 
-[ext_resource type="Script" uid="uid://bwl57hfy2vtfs" path="res://scripts/sakutsuki.gd" id="1_5uo7l"]
+[ext_resource type="Script" uid="uid://bwl57hfy2vtfs" path="res://scripts/characters/sakutsuki.gd" id="1_5uo7l"]
 [ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="3_l5dwh"]
 
 [sub_resource type="Animation" id="Animation_ptolu"]
@@ -1663,6 +1663,7 @@ y_sort_enabled = true
 script = ExtResource("1_5uo7l")
 camera = NodePath("Camera2D")
 animation_player = NodePath("AnimationPlayer")
+metadata/_custom_type_script = "uid://3tw0tkifql18"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("3_l5dwh")

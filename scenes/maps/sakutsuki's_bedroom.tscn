@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dekpdnansexi6" path="res://scripts/maps/sakutsuki's_bedroom.gd" id="1_bvmiv"]
 [ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="2_0kkjn"]
-[ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/sakutsuki.tscn" id="3_wt7fi"]
+[ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/characters/sakutsuki.tscn" id="3_wt7fi"]
 [ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="4_gh7np"]
 [ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://spritesheets/images/test.png" id="5_k7kuo"]
 [ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="6_nlgcx"]

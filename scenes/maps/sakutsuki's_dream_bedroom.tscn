@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://bbk0ro0r6hpno" path="res://scripts/maps/sakutsuki's_dream_bedroom.gd" id="1_54v4e"]
 [ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="2_8dtg0"]
-[ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/sakutsuki.tscn" id="3_w136h"]
+[ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/characters/sakutsuki.tscn" id="3_w136h"]
 [ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="4_kow8v"]
 [ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://spritesheets/images/test.png" id="5_b5rdp"]
-[ext_resource type="Script" uid="uid://cwerewsxa8758" path="res://scripts/door.gd" id="6_jlni6"]
+[ext_resource type="Script" uid="uid://cwerewsxa8758" path="res://scripts/props/door.gd" id="6_jlni6"]
 [ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="7_o8k8u"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p2vj6"]

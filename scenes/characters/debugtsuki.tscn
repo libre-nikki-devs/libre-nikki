@@ -1,6 +1,6 @@
 [gd_scene load_steps=31 format=3 uid="uid://catbsi51pb1aq"]
 
-[ext_resource type="Script" uid="uid://dhrwgs612gf2w" path="res://scripts/debugtsuki.gd" id="1_g35pp"]
+[ext_resource type="Script" uid="uid://dhrwgs612gf2w" path="res://scripts/characters/debugtsuki.gd" id="1_g35pp"]
 [ext_resource type="SpriteFrames" uid="uid://322p67u26b32" path="res://spritesheets/debugtsuki.tres" id="2_yhhfb"]
 
 [sub_resource type="Animation" id="Animation_qqr8a"]

@@ -192,7 +192,7 @@ func fade_out_music(duration: float) -> void:
 ## Open settings menu.
 func open_settings(focus):
 	var settings_menu: Control
-	settings_menu = preload("res://scenes/settings.tscn").instantiate()
+	settings_menu = preload("res://scenes/menus/settings_menu.tscn").instantiate()
 	settings_menu.focus = focus
 	add_child(settings_menu)
 	transition_handler.play("fade_in", -1, 10.0)
