@@ -29,7 +29,9 @@ func _physics_process(delta: float) -> void:
 			if is_sitting:
 				look(Game.movement_events.front())
 			else:
-				face_and_move(Game.movement_events.front())
+				facing = Game.movement_events.front()
+				if not is_colliding(Game.movement_events.front()):
+					Game.call_on_available_physics_tick(Callable(move).bind(Game.movement_events.front()))
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("accept") and not is_busy:

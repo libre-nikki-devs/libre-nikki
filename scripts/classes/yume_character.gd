@@ -111,6 +111,8 @@ func get_tile_stair_target_corrections(tile_data: TileData, new_target: Vector2,
 
 ## Returns true, if the character is colliding with something.
 func is_colliding(direction: Game.DIRECTION) -> bool:
+	set_pointer(direction)
+
 	if current_pointer.surfaces.is_empty() and not can_move_in_vacuum:
 		return true
 
@@ -123,7 +125,6 @@ func is_colliding(direction: Game.DIRECTION) -> bool:
 
 ## If there are no colliding objects on the same Z index as the character, move this [param direction] (diagonally, if on stairs and if [member can_use_stairs] is [code]true[/code]) by one tile. Otherwise, emit [signal YumeInteractable.body_touched] on the colliding [YumeInteractable].
 func move(direction: Game.DIRECTION) -> void:
-	set_pointer(direction)
 	target = Game.DIRECTIONS[direction] * Game.world.tile_size
 
 	for body: Node2D in current_pointer.surfaces:

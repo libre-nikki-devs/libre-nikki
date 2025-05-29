@@ -58,6 +58,18 @@ signal cancel_held()
 var accept_is_hold = false
 var cancel_is_hold = false
 
+var default_physics_tick_rate: int = Engine.physics_ticks_per_second
+
+var is_current_physics_tick_available: bool = true
+
+var awaiting_physics_ticks: int = 0:
+	set(value):
+		awaiting_physics_ticks = value
+		_update_physics_tick_rate()
+
+func _physics_process(delta: float) -> void:
+	is_current_physics_tick_available = true
+
 func _on_accept_timer_timeout() -> void:
 	accept_held.emit()
 
@@ -96,6 +108,30 @@ func _notification(what: int) -> void:
 			movement_events = []
 		NOTIFICATION_READY:
 			get_window().min_size = Vector2i(640, 480)
+
+func _update_physics_tick_rate():
+	if awaiting_physics_ticks > Engine.physics_ticks_per_second:
+		Engine.physics_ticks_per_second = awaiting_physics_ticks
+	else:
+		Engine.physics_ticks_per_second = default_physics_tick_rate
+
+func call_on_available_physics_tick(callable: Callable) -> Variant:
+	if awaiting_physics_ticks > 1000:
+		push_warning("Reached physics tick rate limit. Some functions might be ignored.")
+		return null
+
+	awaiting_physics_ticks += 1
+
+	while not is_current_physics_tick_available or get_tree().paused:
+		await get_tree().physics_frame
+
+	awaiting_physics_ticks -= 1
+	is_current_physics_tick_available = false
+
+	if callable.get_object():
+		return await callable.call()
+
+	return null
 
 func play_sound(sound: AudioStream, parent: Node2D, distance: int = 256, pitch: float = 1.0, volume_offset: float = 0.0) -> void:
 	if sound:

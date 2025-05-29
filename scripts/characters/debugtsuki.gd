@@ -38,7 +38,7 @@ func _move_loop():
 				available_directions.erase(picked_direction)
 			else:
 				can_move = true
-				face_and_move(picked_direction)
+				Game.call_on_available_physics_tick(Callable(face_and_move).bind(picked_direction))
 
 	_move_loop()
 
