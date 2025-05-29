@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bwuyc2n84asut" path="res://scripts/maps/main_menu.gd" id="1_5y8n7"]
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="2_37w8h"]
 
-[node name="Main Menu" type="Node"]
+[node name="MainMenu" type="Node"]
 script = ExtResource("1_5y8n7")
 bounds = Array[Vector2]([])
 loop = "None"

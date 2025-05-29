@@ -93,8 +93,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6lxew"]
 size = Vector2(16, 16)
 
-[node name="Sakutsuki\'s Dream Bedroom" type="Node" node_paths=PackedStringArray("player")]
+[node name="Sakutsuki\'sDreamBedroom" type="Node" node_paths=PackedStringArray("player")]
 script = ExtResource("1_54v4e")
+pretty_name = "Sakutsuki's Dream Bedroom"
 bounds = Array[Vector2]([])
 loop = "None"
 player = NodePath("CanvasLayer/CanvasGroup/Sakutsuki")

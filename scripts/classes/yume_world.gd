@@ -11,6 +11,8 @@
 class_name YumeWorld
 extends Node
 
+@export var pretty_name: String
+
 ## Indicates the playable area of the world. Should contain two vectors being coordinates of the world's diagonal. Can be left empty for infinite worlds.
 @export var bounds: Array[Vector2] = [Vector2(-256, -256), Vector2(256, 256)]:
 	set(value):

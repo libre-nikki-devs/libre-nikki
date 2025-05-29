@@ -38,7 +38,10 @@ func _ready() -> void:
 		effects_label.modulate.a = 0.5
 		actions_button.grab_focus()
 
-	world_label.text = Game.world.name
+	if Game.world.pretty_name.is_empty():
+		world_label.text = Game.world.name
+	else:
+		world_label.text = Game.world.pretty_name
 
 	if Game.persistent_data.has("money"):
 		money_label.text = str(Game.persistent_data["money"])
