@@ -1,35 +1,35 @@
-[gd_scene load_steps=21 format=4 uid="uid://vn4fgou5kpqy"]
+[gd_scene load_steps=21 format=4 uid="uid://bra2nosjgdw7m"]
 
-[ext_resource type="Script" uid="uid://bbk0ro0r6hpno" path="res://scripts/maps/sakutsuki's_dream_bedroom.gd" id="1_54v4e"]
-[ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="2_8dtg0"]
-[ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/characters/sakutsuki.tscn" id="3_w136h"]
-[ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="4_kow8v"]
-[ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://spritesheets/images/test.png" id="5_b5rdp"]
-[ext_resource type="Script" uid="uid://cwerewsxa8758" path="res://scripts/props/door.gd" id="6_jlni6"]
-[ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="7_o8k8u"]
+[ext_resource type="Script" uid="uid://dekpdnansexi6" path="res://scripts/maps/sakutsukis_bedroom.gd" id="1_bvmiv"]
+[ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="2_0kkjn"]
+[ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/characters/sakutsuki.tscn" id="3_wt7fi"]
+[ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="4_gh7np"]
+[ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://spritesheets/images/test.png" id="5_k7kuo"]
+[ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="6_nlgcx"]
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="7_k5aee"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p2vj6"]
-texture = ExtResource("2_8dtg0")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l57qo"]
+texture = ExtResource("2_0kkjn")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
-[sub_resource type="TileSet" id="TileSet_e3vec"]
+[sub_resource type="TileSet" id="TileSet_74b13"]
 physics_layer_0/collision_layer = 1
 custom_data_layer_0/name = "surface"
 custom_data_layer_0/type = 2
 custom_data_layer_1/name = "stair"
 custom_data_layer_1/type = 2
-sources/0 = SubResource("TileSetAtlasSource_p2vj6")
+sources/0 = SubResource("TileSetAtlasSource_l57qo")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nmfb5"]
-atlas = ExtResource("5_b5rdp")
+atlas = ExtResource("5_k7kuo")
 region = Rect2(0, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yi85p"]
-atlas = ExtResource("5_b5rdp")
+atlas = ExtResource("5_k7kuo")
 region = Rect2(0, 16, 16, 16)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_f8au5"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_5i2lv"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -43,14 +43,14 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_t21p4"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_86v08"]
 size = Vector2(16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_51wel"]
-atlas = ExtResource("5_b5rdp")
+atlas = ExtResource("5_k7kuo")
 region = Rect2(0, 16, 16, 16)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_ogmwe"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_w0bp4"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -62,18 +62,18 @@ animations = [{
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0pgd7"]
-atlas = ExtResource("7_o8k8u")
+atlas = ExtResource("6_nlgcx")
 region = Rect2(0, 0, 24, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ule8b"]
-atlas = ExtResource("7_o8k8u")
+atlas = ExtResource("6_nlgcx")
 region = Rect2(0, 32, 24, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f8wv6"]
-atlas = ExtResource("7_o8k8u")
+atlas = ExtResource("6_nlgcx")
 region = Rect2(0, 64, 24, 32)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_w814h"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_wxba3"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -90,72 +90,110 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6lxew"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rdjp8"]
 size = Vector2(16, 16)
 
-[node name="Sakutsuki\'sDreamBedroom" type="Node" node_paths=PackedStringArray("player")]
-script = ExtResource("1_54v4e")
-pretty_name = "Sakutsuki's Dream Bedroom"
+[node name="SakutsukisBedroom" type="Node" node_paths=PackedStringArray("player")]
+script = ExtResource("1_bvmiv")
+pretty_name = "Sakutsuki's Bedroom"
 bounds = Array[Vector2]([])
 loop = "None"
 player = NodePath("CanvasLayer/CanvasGroup/Sakutsuki")
+depth = "?"
+dreaming = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true
 
 [node name="Camera2D" type="Camera2D" parent="CanvasLayer"]
-position = Vector2(-8, 16)
+position = Vector2(0, 8)
 zoom = Vector2(2, 2)
 
 [node name="CanvasGroup" type="CanvasGroup" parent="CanvasLayer"]
 y_sort_enabled = true
-position = Vector2(-8, 8)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="CanvasLayer/CanvasGroup"]
 tile_map_data = PackedByteArray("AAD7/wAAAAAAAAAAAAD7/wEAAAAAAAAAAAD7/wIAAAAAAAAAAAD8//3/AAAAAAAAAAD8//7/AAAAAAAAAAD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAAAAAD9//3/AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD+//3/AAAAAAAAAAD+//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD+/wIAAAAAAAAAAAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAACAP3/AAAAAAAAAAACAP7/AAAAAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAADAP3/AAAAAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/AAAAAAAAAAD7////AAAAAAAAAAD8//z/AAAAAAAAAAD9//z/AAAAAAAAAAD+//z/AAAAAAAAAAD///z/AAAAAAAAAAAAAP7/AAAAAAAAAAABAP7/AAAAAAAAAAACAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAA=")
-tile_set = SubResource("TileSet_e3vec")
+tile_set = SubResource("TileSet_74b13")
 
-[node name="Sakutsuki" parent="CanvasLayer/CanvasGroup" instance=ExtResource("3_w136h")]
+[node name="Sakutsuki" parent="CanvasLayer/CanvasGroup" instance=ExtResource("3_wt7fi")]
 z_index = 1
-position = Vector2(-40, -24)
+position = Vector2(-8, 8)
 can_move_in_vacuum = false
 
 [node name="Desk" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup"]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-72, 8)
-script = ExtResource("4_kow8v")
+script = ExtResource("4_gh7np")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Desk"]
-sprite_frames = SubResource("SpriteFrames_f8au5")
+sprite_frames = SubResource("SpriteFrames_5i2lv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Desk"]
-shape = SubResource("RectangleShape2D_t21p4")
+shape = SubResource("RectangleShape2D_86v08")
 
 [node name="Bed" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup"]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-40, -40)
-script = ExtResource("4_kow8v")
+script = ExtResource("4_gh7np")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Bed"]
-sprite_frames = SubResource("SpriteFrames_ogmwe")
+sprite_frames = SubResource("SpriteFrames_w0bp4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Bed"]
-shape = SubResource("RectangleShape2D_t21p4")
+shape = SubResource("RectangleShape2D_86v08")
 
-[node name="Door" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup" node_paths=PackedStringArray("animated_sprite")]
+[node name="Door" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup"]
 z_index = 1
 position = Vector2(56, -72)
-script = ExtResource("6_jlni6")
-animated_sprite = NodePath("AnimatedSprite2D")
+script = ExtResource("4_gh7np")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Door"]
 position = Vector2(0, -8)
-sprite_frames = SubResource("SpriteFrames_w814h")
+sprite_frames = SubResource("SpriteFrames_wxba3")
 animation = &"open"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Door"]
-shape = SubResource("RectangleShape2D_6lxew")
+shape = SubResource("RectangleShape2D_rdjp8")
 
-[connection signal="opened" from="CanvasLayer/CanvasGroup/Door" to="." method="_on_door_opened"]
+[node name="GreetingCanvasLayer" type="CanvasLayer" parent="."]
+layer = 2
+visible = false
+scale = Vector2(2, 2)
+transform = Transform2D(2, 0, 0, 2, 0, 0)
+
+[node name="ColorRect" type="ColorRect" parent="GreetingCanvasLayer"]
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="GreetingLabel" type="Label" parent="GreetingCanvasLayer"]
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+focus_mode = 2
+theme = ExtResource("7_k5aee")
+text = "Libre Nikki is not affiliated with Kikiyama
+or Yume Nikki. It is purely a fan game.
+
+Libre Nikki is still in early development.
+If you are an artist, a composer or a programmer
+and if you are willing to improve Libre Nikki,
+I recommend to contribute to the project 
+through Github. All contributions are welcome.
+
+Thank you for reading and enjoy Libre Nikki! "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_interacted" from="CanvasLayer/CanvasGroup/Desk" to="." method="_on_desk_body_interacted"]
+[connection signal="body_interacted" from="CanvasLayer/CanvasGroup/Bed" to="." method="_on_bed_body_interacted"]

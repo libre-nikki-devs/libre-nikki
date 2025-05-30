@@ -181,7 +181,7 @@ func sleep() -> void:
 	else:
 		persistent_data["times_slept"] += 1
 
-	world.change_world("Sakutsuki's Dream Bedroom", false, [])
+	world.change_world("Sakutsukis Dream Bedroom", false, [])
 
 ## End the dream session.
 func wake_up() -> void:
@@ -190,7 +190,7 @@ func wake_up() -> void:
 	transition_handler.play("fade_out")
 	get_tree().paused = true
 	await transition_handler.animation_finished
-	world.change_world("Sakutsuki's Bedroom", false, [])
+	world.change_world("Sakutsukis Bedroom", false, [])
 
 # WIP
 func face(object: Node2D, what: Vector2) -> DIRECTION:
