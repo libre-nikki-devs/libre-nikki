@@ -61,7 +61,7 @@ func _init() -> void:
 		var pointer: YumePointer = YumePointer.new()
 		pointer.offset = side
 		pointer.collision_owner = self
-		pointer.position = pointer.offset * Game.world.tile_size
+		pointer.position = pointer.offset * 16
 		var collision_shape: CollisionShape2D = CollisionShape2D.new()
 		collision_shape.shape = SegmentShape2D.new()
 		collision_shape.shape.a = Vector2.ZERO
@@ -71,9 +71,12 @@ func _init() -> void:
 	add_child(pointers)
 
 func _ready() -> void:
-	if Game.world:
+	var current_scene: Node = get_tree().current_scene
+
+	if current_scene is YumeWorld:
 		for pointer: YumePointer in pointers.get_children():
-			pointer.global_position = Game.world.wrap_around_world(pointer.global_position + target)
+			pointer.position = pointer.offset * current_scene.tile_size
+			pointer.global_position = current_scene.wrap_around_world(pointer.global_position + target)
 
 func _physics_process(delta: float) -> void:
 	# we need to wait a physics frame for area2d to start detecting collisions before moving
@@ -125,7 +128,12 @@ func is_colliding(direction: Game.DIRECTION) -> bool:
 
 ## If there are no colliding objects on the same Z index as the character, move this [param direction] (diagonally, if on stairs and if [member can_use_stairs] is [code]true[/code]) by one tile. Otherwise, emit [signal YumeInteractable.body_touched] on the colliding [YumeInteractable].
 func move(direction: Game.DIRECTION) -> void:
-	target = Game.DIRECTIONS[direction] * Game.world.tile_size
+	var current_scene: Node = get_tree().current_scene
+
+	if current_scene is YumeWorld:
+		target = Game.DIRECTIONS[direction] * current_scene.tile_size
+	else:
+		target = Game.DIRECTIONS[direction] * 16
 
 	for body: Node2D in current_pointer.surfaces:
 		if body.global_position == current_pointer.global_position and body is YumeInteractable:
@@ -141,9 +149,9 @@ func move(direction: Game.DIRECTION) -> void:
 	if is_colliding(direction):
 		return
 
-	if Game.world:
+	if current_scene is YumeWorld:
 		var previous_position: Vector2 = global_position
-		global_position = Game.world.wrap_around_world(global_position + target) - target
+		global_position = current_scene.wrap_around_world(global_position + target) - target
 
 		if self == get_viewport().get_camera_2d().get_parent():
 			for parallax: Parallax2D in get_tree().get_nodes_in_group("Parallax"):
@@ -165,8 +173,8 @@ func move(direction: Game.DIRECTION) -> void:
 		tween.tween_property(collision_shape, "position", -target, 0.25 / speed).as_relative()
 
 	for pointer: YumePointer in pointers.get_children():
-		if Game.world:
-			pointer.global_position = Game.world.wrap_around_world(pointer.global_position + target)
+		if current_scene is YumeWorld:
+			pointer.global_position = current_scene.wrap_around_world(pointer.global_position + target)
 		else:
 			pointer.global_position = pointer.global_position + target
 

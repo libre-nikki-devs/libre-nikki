@@ -15,9 +15,11 @@ extends Control
 @onready var actions_button = get_node("SidePanelContainer/VBoxContainer/ActionsButton")
 @onready var settings_button = get_node("SidePanelContainer/VBoxContainer/SettingsButton")
 @onready var quit_button = get_node("SidePanelContainer/VBoxContainer/QuitButton")
+@onready var money_container = get_node("MoneyPanelContainer")
 @onready var money_label = get_node("MoneyPanelContainer/MoneyLabel")
 @onready var players_margin_container = get_node("MainPanelContainer/VBoxContainer")
 @onready var effects_grid_container = get_node("MainPanelContainer/EffectsGridContainer")
+@onready var world_container = get_node("WorldHFlowContainer")
 @onready var world_label = get_node("WorldHFlowContainer/PanelContainer2/WorldLabel")
 @onready var depth_label = get_node("WorldHFlowContainer/PanelContainer4/DepthLabel")
 @onready var player_avatar = get_node("MainPanelContainer/VBoxContainer/HBoxContainer/TextureRect/AnimatedSprite2D")
@@ -25,6 +27,7 @@ extends Control
 @onready var player_effects_label = get_node("MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/PlayerEffectsLabel")
 @onready var health_label = get_node("MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/HealthLabel")
 @onready var actions_grid_container = get_node("MainPanelContainer/ActionsGridContainer")
+@onready var player: YumePlayer = get_tree().get_first_node_in_group("Players")
 
 signal button_finished
 
@@ -38,24 +41,31 @@ func _ready() -> void:
 		effects_label.modulate.a = 0.5
 		actions_button.grab_focus()
 
-	if Game.world.pretty_name.is_empty():
-		world_label.text = Game.world.name
+	var current_scene: Node = get_tree().current_scene
+
+	if current_scene is YumeWorld:
+		world_container.show()
+		depth_label.text = current_scene.depth
+
+		if current_scene.pretty_name.is_empty():
+			world_label.text = current_scene.name
+		else:
+			world_label.text = current_scene.pretty_name
 	else:
-		world_label.text = Game.world.pretty_name
+		world_container.hide()
+		money_container.anchors_preset = Control.PRESET_BOTTOM_LEFT
 
 	if Game.persistent_data.has("money"):
 		money_label.text = str(Game.persistent_data["money"])
 	else:
 		money_label.text = "0"
 
-	depth_label.text = Game.world.depth
-
-	if Game.world.player.effect == 0:
+	if player.effect == 0:
 		player_avatar.animation = "down"
 	else:
-		player_avatar.animation = "down" + Game.EFFECT.find_key(Game.world.player.effect).capitalize()
+		player_avatar.animation = "down" + Game.EFFECT.find_key(player.effect).capitalize()
 
-	player_label.text = Game.world.player.name
+	player_label.text = player.name
 
 	if Game.persistent_data.has("acquired_effects"):
 		player_effects_label.text = "FX: " + str(Game.persistent_data["acquired_effects"] & 1) + "/" + str(Game.EFFECT.size() - 1)
@@ -70,20 +80,23 @@ func _ready() -> void:
 	if Game.persistent_data.has("acquired_effects"):
 		for effect: Game.EFFECT in Game.EFFECT.values():
 			if Game.persistent_data["acquired_effects"] & effect:
-				var button = Button.new()
+				var button: Button = Button.new()
 				# button.text = Game.EFFECT.find_key(effect).capitalize()
 				button.text = " "
 				button.size_flags_horizontal = 3
-				var label = Label.new()
+				var label: Label = Label.new()
 				label.text = Game.EFFECT.find_key(effect).capitalize()
 				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 				label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 				label.set_anchors_preset(Control.PRESET_FULL_RECT)
 				button.add_child(label)
 				button.pressed.connect(_on_effect_button_pressed.bind(effect))
-				if not Game.world.dreaming:
-					button.disabled = true
-					label.modulate.a = 0.5
+
+				if current_scene is YumeWorld:
+					if not current_scene.dreaming:
+						button.disabled = true
+						label.modulate.a = 0.5
+
 				effects_grid_container.add_child(button)
 
 @export var side_menu: Control
@@ -99,11 +112,13 @@ func _input(event: InputEvent) -> void:
 					effects_grid_container.hide()
 					actions_grid_container.hide()
 					actions_button.grab_focus()
+
 				effects_grid_container:
 					players_margin_container.show()
 					effects_grid_container.hide()
 					actions_grid_container.hide()
 					effects_button.grab_focus()
+
 				side_menu:
 					close_menu()
 
@@ -127,6 +142,7 @@ func _on_actions_button_pressed() -> void:
 	players_margin_container.hide()
 	effects_grid_container.hide()
 	actions_grid_container.show()
+
 	if actions_grid_container.get_child_count() > 0:
 		actions_grid_container.get_children()[0].grab_focus()
 
@@ -134,7 +150,7 @@ func _on_quit_button_pressed() -> void:
 	_on_button_pressed(quit_button)
 	await button_finished
 	get_tree().paused = false
-	Game.world.change_world("Main Menu", false, [])
+	Game.change_scene("res://scenes/maps/main_menu.tscn")
 	queue_free()
 
 func _on_effects_button_pressed() -> void:
@@ -146,10 +162,10 @@ func _on_effects_button_pressed() -> void:
 func _on_effect_button_pressed(effect: Game.EFFECT) -> void:
 	close_menu()
 
-	if Game.world.player.effect == effect:
-		Game.world.player.equip()
+	if player.effect == effect:
+		player.equip()
 	else:
-		Game.world.player.equip(effect)
+		player.equip(effect)
 
 func _on_settings_button_pressed() -> void:
 	_on_button_pressed(settings_button)
@@ -165,4 +181,4 @@ func close_menu():
 
 func _on_pinch_cheek_button_pressed() -> void:
 	close_menu()
-	Game.world.player.pinch_cheek()
+	player.pinch_cheek()

@@ -86,9 +86,6 @@ var camera_limits: Array[float] = [-2147483647, 2147483647, -2147483647, 2147483
 				player.camera.limit_top = floor(camera_limits[2] - player.camera.offset.y)
 				player.camera.limit_right = floor(camera_limits[3] - player.camera.offset.x)
 
-func _init() -> void:
-	Game.world = self
-
 func _initialize_node(node: Node):
 	for child: Node in node.get_children():
 		_on_node_added(child)
@@ -160,35 +157,6 @@ func _on_node_added(node: Node):
 
 	# if player:
 		# player.get_parent().move_child(player, -1)
-
-## Change the current world to this [param world].
-func change_world(world: String, save_current_state: bool = true, player_properties: Array = ["accept_events", "cancel_events", "effect", "facing", "last_step", "speed"]) -> void:
-	if save_current_state:
-		if !Game.persistent_data.has("world_data"):
-			Game.persistent_data["world_data"] = {}
-
-		Game.persistent_data["world_data"][name] = PackedScene.new()
-		Game.persistent_data["world_data"][name].pack(self)
-
-	set_player_data(player_properties)
-
-	Game.persistent_data["entered_from"] = name
-
-	if Game.persistent_data.has("world_data"):
-		if Game.persistent_data["world_data"].has(world):
-			get_tree().change_scene_to_packed(Game.persistent_data["world_data"][world])
-			return
-
-	get_tree().change_scene_to_file("res://scenes/maps/" + world.to_snake_case() + ".tscn")
-
-func set_player_data(player_properties: Array = ["effect", "facing", "speed"]):
-	if player:
-		if not Game.persistent_data.has("player_data"):
-			Game.persistent_data["player_data"] = {}
-
-		for property: String in player_properties:
-			if property in player:
-				Game.persistent_data["player_data"][property] = player.get(property)
 
 func wrap_around_world(value: Vector2) -> Vector2:
 	if bounds.size() >= 2:

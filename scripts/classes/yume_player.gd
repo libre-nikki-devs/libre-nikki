@@ -27,6 +27,7 @@ signal equipped(effect: Game.EFFECT)
 
 func _init() -> void:
 	super()
+	add_to_group("Players")
 	connect("moved", _on_moved)
 
 func _physics_process(delta: float) -> void:
@@ -79,8 +80,11 @@ func pinch_cheek() -> void:
 			set_animation("downPinch", 1.0)
 			await animation_player.animation_finished
 
-			if Game.world.dreaming:
-				Game.wake_up()
+			var current_scene: Node = get_tree().current_scene
+
+			if current_scene is YumeWorld:
+				if current_scene.dreaming:
+					Game.wake_up()
 
 			set_animation("downPinch", -1.0, 1.0, true)
 			await animation_player.animation_finished

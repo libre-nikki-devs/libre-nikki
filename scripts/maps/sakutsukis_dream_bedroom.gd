@@ -4,7 +4,7 @@ func _ready() -> void:
 	super()
 
 	if Game.persistent_data.has("entered_from"):
-		if Game.persistent_data["entered_from"] == "Nexus":
+		if Game.persistent_data["entered_from"] == "res://scenes/maps/nexus.tscn":
 			player.position = Vector2(56, -56)
 			player.face(Game.DIRECTION.DOWN)
 
@@ -17,4 +17,5 @@ func _on_door_opened() -> void:
 	Game.transition_handler.play("fade_out")
 	get_tree().paused = true
 	await Game.transition_handler.animation_finished
-	change_world("Nexus")
+	Game.save_player_data(player)
+	Game.change_scene("res://scenes/maps/nexus.tscn")

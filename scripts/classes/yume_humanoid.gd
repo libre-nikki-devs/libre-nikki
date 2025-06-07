@@ -72,8 +72,6 @@ func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 			match tile_data.get_custom_data("surface"):
 				Game.SURFACE.SILENT:
 					return
-				_:
-					return Game.world.default_footstep_sound
 				# SURFACE.CONCRETE:
 				# SURFACE.METAL:
 				# SURFACE.GRASS:
@@ -83,7 +81,13 @@ func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 				# SURFACE.SNOW:
 				# SURFACE.WOOD:
 				# SURFACE.CARPET:
-	return Game.world.default_footstep_sound
+
+	var current_scene: Node = get_tree().current_scene
+
+	if current_scene is YumeWorld:
+		return current_scene.default_footstep_sound
+	else:
+		return load("res://sounds/あるく1.wav") # placeholder
 
 func play_footstep_sound() -> void:
 	Game.play_sound(footstep_sound, self, 256, RandomNumberGenerator.new().randf_range(0.90, 1.10))
@@ -96,7 +100,12 @@ func set_footstep_sound() -> void:
 			footstep_sound = get_tile_footstep_sound(tile_data)
 			return
 
-	footstep_sound = Game.world.default_footstep_sound
+	var current_scene: Node = get_tree().current_scene
+
+	if current_scene is YumeWorld:
+		footstep_sound = current_scene.default_footstep_sound
+	else:
+		footstep_sound = load("res://sounds/あるく1.wav") # placeholder
 
 func set_animation(animation: String = str(Game.DIRECTION.find_key(facing)).to_lower() + action, animation_speed: float = 0.0, animation_position: float = 0.0, from_end: bool = false) -> void:
 	if animation_player.get_animation_library("").has_animation(animation):

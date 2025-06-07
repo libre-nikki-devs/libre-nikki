@@ -57,5 +57,5 @@ func _on_bed_body_interacted(body: Node2D) -> void:
 
 func _on_desk_body_interacted(body: Node2D) -> void:
 	if body is YumePlayer:
-		set_player_data(["facing", "position"])
+		Game.save_player_data(player, ["facing", "position"])
 		save_game("user://save01.libki")

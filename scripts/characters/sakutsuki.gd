@@ -90,7 +90,7 @@ func open_menu() -> void:
 	if Game.cancel_events.is_empty():
 		Game.transition_handler.play("fade_out", -1, 10.0)
 		await Game.transition_handler.animation_finished
-		menu = preload("res://scenes/menus/player's_menu.tscn").instantiate()
+		menu = preload("res://scenes/menus/players_menu.tscn").instantiate()
 		Game.add_child(menu)
 		Game.transition_handler.play("fade_in", -1, 10.0)
 		get_tree().paused = true

@@ -37,9 +37,6 @@ var settings: Dictionary = {
 	"key_hold_time" = 0.5
 }
 
-## Node of the currently visiting world.
-var world: YumeWorld
-
 ## Indicates what movement events are currently called. Index 0 is the most recently called event. Note: most keyboards will not register all events at once.
 var movement_events: Array[DIRECTION] = []
 
@@ -133,6 +130,32 @@ func call_on_available_physics_tick(callable: Callable) -> Variant:
 
 	return null
 
+func change_scene(path: String) -> void:
+	persistent_data["entered_from"] = get_tree().current_scene.scene_file_path
+
+	if persistent_data.has("scene_data"):
+		if persistent_data["scene_data"].has(path):
+			get_tree().change_scene_to_packed(persistent_data["scene_data"][path])
+
+	get_tree().change_scene_to_file(path)
+
+func save_current_scene() -> void:
+	var current_scene: Node = get_tree().current_scene
+
+	if not persistent_data.has("scene_data"):
+		persistent_data["scene_data"] = {}
+
+		persistent_data["scene_data"][current_scene.scene_file_path] = PackedScene.new()
+		persistent_data["scene_data"][current_scene.scene_file_path].pack(current_scene)
+
+func save_player_data(player: YumePlayer, player_properties: Array[String] = ["effect", "facing", "last_step", "speed"]) -> void:
+	if player:
+		persistent_data["player_data"] = {}
+
+		for property: String in player_properties:
+			if property in player:
+				persistent_data["player_data"][property] = player.get(property)
+
 func play_sound(sound: AudioStream, parent: Node2D, distance: int = 256, pitch: float = 1.0, volume_offset: float = 0.0) -> void:
 	if sound:
 		var audio_stream_player = AudioStreamPlayer2D.new()
@@ -181,7 +204,7 @@ func sleep() -> void:
 	else:
 		persistent_data["times_slept"] += 1
 
-	world.change_world("Sakutsukis Dream Bedroom", false, [])
+	change_scene("res://scenes/maps/sakutsukis_dream_bedroom.tscn")
 
 ## End the dream session.
 func wake_up() -> void:
@@ -190,7 +213,7 @@ func wake_up() -> void:
 	transition_handler.play("fade_out")
 	get_tree().paused = true
 	await transition_handler.animation_finished
-	world.change_world("Sakutsukis Bedroom", false, [])
+	change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
 
 # WIP
 func face(object: Node2D, what: Vector2) -> DIRECTION:
