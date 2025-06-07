@@ -93,69 +93,65 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6lxew"]
 size = Vector2(16, 16)
 
-[node name="SakutsukisDreamBedroom" type="Node" node_paths=PackedStringArray("player")]
+[node name="SakutsukisDreamBedroom" type="Node2D" node_paths=PackedStringArray("player")]
+y_sort_enabled = true
 script = ExtResource("1_54v4e")
 pretty_name = "Sakutsuki's Dream Bedroom"
 bounds = Array[Vector2]([])
 loop = "None"
-player = NodePath("CanvasLayer/CanvasGroup/Sakutsuki")
+player = NodePath("Sakutsuki")
+metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-follow_viewport_enabled = true
-
-[node name="Camera2D" type="Camera2D" parent="CanvasLayer"]
+[node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-8, 16)
 zoom = Vector2(2, 2)
 
-[node name="CanvasGroup" type="CanvasGroup" parent="CanvasLayer"]
-y_sort_enabled = true
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(-8, 8)
-
-[node name="TileMapLayer" type="TileMapLayer" parent="CanvasLayer/CanvasGroup"]
 tile_map_data = PackedByteArray("AAD7/wAAAAAAAAAAAAD7/wEAAAAAAAAAAAD7/wIAAAAAAAAAAAD8//3/AAAAAAAAAAD8//7/AAAAAAAAAAD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAAAAAD9//3/AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD+//3/AAAAAAAAAAD+//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD+/wIAAAAAAAAAAAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAACAP3/AAAAAAAAAAACAP7/AAAAAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAADAP3/AAAAAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/AAAAAAAAAAD7////AAAAAAAAAAD8//z/AAAAAAAAAAD9//z/AAAAAAAAAAD+//z/AAAAAAAAAAD///z/AAAAAAAAAAAAAP7/AAAAAAAAAAABAP7/AAAAAAAAAAACAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAA=")
 tile_set = SubResource("TileSet_e3vec")
 
-[node name="Sakutsuki" parent="CanvasLayer/CanvasGroup" instance=ExtResource("3_w136h")]
+[node name="Sakutsuki" parent="." instance=ExtResource("3_w136h")]
 z_index = 1
-position = Vector2(-40, -24)
+position = Vector2(-48, -16)
 can_move_in_vacuum = false
 
-[node name="Desk" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup"]
+[node name="Desk" type="CharacterBody2D" parent="."]
 z_index = 1
 y_sort_enabled = true
-position = Vector2(-72, 8)
+position = Vector2(-80, 16)
 script = ExtResource("4_kow8v")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Desk"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Desk"]
 sprite_frames = SubResource("SpriteFrames_f8au5")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Desk"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Desk"]
 shape = SubResource("RectangleShape2D_t21p4")
 
-[node name="Bed" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup"]
+[node name="Bed" type="CharacterBody2D" parent="."]
 z_index = 1
 y_sort_enabled = true
-position = Vector2(-40, -40)
+position = Vector2(-48, -32)
 script = ExtResource("4_kow8v")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Bed"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Bed"]
 sprite_frames = SubResource("SpriteFrames_ogmwe")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Bed"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bed"]
 shape = SubResource("RectangleShape2D_t21p4")
 
-[node name="Door" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup" node_paths=PackedStringArray("animated_sprite")]
+[node name="Door" type="CharacterBody2D" parent="." node_paths=PackedStringArray("animated_sprite")]
 z_index = 1
-position = Vector2(56, -72)
+position = Vector2(48, -64)
 script = ExtResource("6_jlni6")
 animated_sprite = NodePath("AnimatedSprite2D")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Door"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Door"]
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_w814h")
 animation = &"open"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Door"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
 shape = SubResource("RectangleShape2D_6lxew")
 
-[connection signal="opened" from="CanvasLayer/CanvasGroup/Door" to="." method="_on_door_opened"]
+[connection signal="opened" from="Door" to="." method="_on_door_opened"]

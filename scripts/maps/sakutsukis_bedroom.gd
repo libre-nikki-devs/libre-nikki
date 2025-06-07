@@ -1,7 +1,7 @@
 extends YumeWorld
 
-@onready var greeting: CanvasLayer = get_node("GreetingCanvasLayer")
-@onready var greeting_label: Label = get_node("GreetingCanvasLayer/GreetingLabel")
+@onready var greeting: CanvasLayer = get_node("CanvasLayer")
+@onready var greeting_label: Label = get_node("CanvasLayer/GreetingLabel")
 
 func _ready() -> void:
 	super()

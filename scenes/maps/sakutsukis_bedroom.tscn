@@ -93,78 +93,23 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rdjp8"]
 size = Vector2(16, 16)
 
-[node name="SakutsukisBedroom" type="Node" node_paths=PackedStringArray("player")]
+[node name="SakutsukisBedroom" type="Node2D" node_paths=PackedStringArray("player")]
 script = ExtResource("1_bvmiv")
 pretty_name = "Sakutsuki's Bedroom"
 bounds = Array[Vector2]([])
 loop = "None"
-player = NodePath("CanvasLayer/CanvasGroup/Sakutsuki")
+player = NodePath("Sakutsuki")
 depth = "?"
 dreaming = false
+metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-follow_viewport_enabled = true
-
-[node name="Camera2D" type="Camera2D" parent="CanvasLayer"]
-position = Vector2(0, 8)
-zoom = Vector2(2, 2)
-
-[node name="CanvasGroup" type="CanvasGroup" parent="CanvasLayer"]
-y_sort_enabled = true
-
-[node name="TileMapLayer" type="TileMapLayer" parent="CanvasLayer/CanvasGroup"]
-tile_map_data = PackedByteArray("AAD7/wAAAAAAAAAAAAD7/wEAAAAAAAAAAAD7/wIAAAAAAAAAAAD8//3/AAAAAAAAAAD8//7/AAAAAAAAAAD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAAAAAD9//3/AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD+//3/AAAAAAAAAAD+//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD+/wIAAAAAAAAAAAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAACAP3/AAAAAAAAAAACAP7/AAAAAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAADAP3/AAAAAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/AAAAAAAAAAD7////AAAAAAAAAAD8//z/AAAAAAAAAAD9//z/AAAAAAAAAAD+//z/AAAAAAAAAAD///z/AAAAAAAAAAAAAP7/AAAAAAAAAAABAP7/AAAAAAAAAAACAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAA=")
-tile_set = SubResource("TileSet_74b13")
-
-[node name="Sakutsuki" parent="CanvasLayer/CanvasGroup" instance=ExtResource("3_wt7fi")]
-z_index = 1
-position = Vector2(-8, 8)
-can_move_in_vacuum = false
-
-[node name="Desk" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup"]
-z_index = 1
-y_sort_enabled = true
-position = Vector2(-72, 8)
-script = ExtResource("4_gh7np")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Desk"]
-sprite_frames = SubResource("SpriteFrames_5i2lv")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Desk"]
-shape = SubResource("RectangleShape2D_86v08")
-
-[node name="Bed" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup"]
-z_index = 1
-y_sort_enabled = true
-position = Vector2(-40, -40)
-script = ExtResource("4_gh7np")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Bed"]
-sprite_frames = SubResource("SpriteFrames_w0bp4")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Bed"]
-shape = SubResource("RectangleShape2D_86v08")
-
-[node name="Door" type="CharacterBody2D" parent="CanvasLayer/CanvasGroup"]
-z_index = 1
-position = Vector2(56, -72)
-script = ExtResource("4_gh7np")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CanvasGroup/Door"]
-position = Vector2(0, -8)
-sprite_frames = SubResource("SpriteFrames_wxba3")
-animation = &"open"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/CanvasGroup/Door"]
-shape = SubResource("RectangleShape2D_rdjp8")
-
-[node name="GreetingCanvasLayer" type="CanvasLayer" parent="."]
 layer = 2
 visible = false
 scale = Vector2(2, 2)
 transform = Transform2D(2, 0, 0, 2, 0, 0)
 
-[node name="ColorRect" type="ColorRect" parent="GreetingCanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = -1
 anchor_right = 0.5
 anchor_bottom = 0.5
@@ -172,7 +117,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="GreetingLabel" type="Label" parent="GreetingCanvasLayer"]
+[node name="GreetingLabel" type="Label" parent="CanvasLayer"]
 anchors_preset = -1
 anchor_right = 0.5
 anchor_bottom = 0.5
@@ -191,9 +136,59 @@ and if you are willing to improve Libre Nikki,
 I recommend to contribute to the project 
 through Github. All contributions are welcome.
 
-Thank you for reading and enjoy Libre Nikki! "
+Thank you for reading and enjoy Libre Nikki!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="body_interacted" from="CanvasLayer/CanvasGroup/Desk" to="." method="_on_desk_body_interacted"]
-[connection signal="body_interacted" from="CanvasLayer/CanvasGroup/Bed" to="." method="_on_bed_body_interacted"]
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, 8)
+zoom = Vector2(2, 2)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD7/wAAAAAAAAAAAAD7/wEAAAAAAAAAAAD7/wIAAAAAAAAAAAD8//3/AAAAAAAAAAD8//7/AAAAAAAAAAD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAAAAAD9//3/AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD+//3/AAAAAAAAAAD+//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD+/wIAAAAAAAAAAAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAACAP3/AAAAAAAAAAACAP7/AAAAAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAADAP3/AAAAAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/AAAAAAAAAAD7////AAAAAAAAAAD8//z/AAAAAAAAAAD9//z/AAAAAAAAAAD+//z/AAAAAAAAAAD///z/AAAAAAAAAAAAAP7/AAAAAAAAAAABAP7/AAAAAAAAAAACAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAA=")
+tile_set = SubResource("TileSet_74b13")
+
+[node name="Sakutsuki" parent="." instance=ExtResource("3_wt7fi")]
+z_index = 1
+position = Vector2(-8, 8)
+can_move_in_vacuum = false
+
+[node name="Desk" type="CharacterBody2D" parent="."]
+z_index = 1
+y_sort_enabled = true
+position = Vector2(-72, 8)
+script = ExtResource("4_gh7np")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Desk"]
+sprite_frames = SubResource("SpriteFrames_5i2lv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Desk"]
+shape = SubResource("RectangleShape2D_86v08")
+
+[node name="Bed" type="CharacterBody2D" parent="."]
+z_index = 1
+y_sort_enabled = true
+position = Vector2(-40, -40)
+script = ExtResource("4_gh7np")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Bed"]
+sprite_frames = SubResource("SpriteFrames_w0bp4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bed"]
+shape = SubResource("RectangleShape2D_86v08")
+
+[node name="Door" type="CharacterBody2D" parent="."]
+z_index = 1
+position = Vector2(56, -72)
+script = ExtResource("4_gh7np")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Door"]
+position = Vector2(0, -8)
+sprite_frames = SubResource("SpriteFrames_wxba3")
+animation = &"open"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+shape = SubResource("RectangleShape2D_rdjp8")
+
+[connection signal="body_interacted" from="Desk" to="." method="_on_desk_body_interacted"]
+[connection signal="body_interacted" from="Bed" to="." method="_on_bed_body_interacted"]

@@ -9,7 +9,7 @@
 # You should have received a copy of the GNU General Public License along with Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
 class_name YumeWorld
-extends Node
+extends Node2D
 
 @export var pretty_name: String
 
@@ -121,23 +121,23 @@ func _on_node_added(node: Node):
 	if not node.is_in_group("Duplicate"):
 		match node.get_class():
 			"AnimatedSprite2D":
-				for position: Vector2 in duplicate_positions:
+				for duplicate_position: Vector2 in duplicate_positions:
 					var instance: AnimatedSprite2D = node.duplicate()
 					instance.add_to_group("Duplicate")
 					instance.set_script(preload("res://scripts/templates/AnimatedSprite2D/mimic.gd"))
-					instance.global_position += position
+					instance.global_position += duplicate_position
 					instance.to_mimic = node
 					node.add_child.call_deferred(instance)
 			"AudioStreamPlayer2D":
-				for position: Vector2 in duplicate_positions:
+				for duplicate_position: Vector2 in duplicate_positions:
 					var instance: AudioStreamPlayer2D = node.duplicate()
 					instance.add_to_group("Duplicate")
-					instance.global_position += position
+					instance.global_position += duplicate_position
 					node.add_child.call_deferred(instance)
 			"Parallax2D":
 				node.add_to_group("Parallax")
 			"TileMapLayer":
-				for position: Vector2 in duplicate_positions:
+				for duplicate_position: Vector2 in duplicate_positions:
 					var instance: TileMapLayer = node.duplicate()
 					instance.add_to_group("Duplicate")
 
@@ -152,7 +152,7 @@ func _on_node_added(node: Node):
 					for child: Node in instance.get_children():
 						instance.remove_child(child)
 
-					instance.global_position += position
+					instance.global_position += duplicate_position
 					node.add_child.call_deferred(instance)
 
 	# if player:
