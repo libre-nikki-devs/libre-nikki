@@ -105,6 +105,16 @@ func _notification(what: int) -> void:
 			movement_events = []
 		NOTIFICATION_READY:
 			get_window().min_size = Vector2i(640, 480)
+			_count_playtime()
+
+func _count_playtime():
+	while true:
+		await get_tree().create_timer(1.0, false, true).timeout
+
+		if persistent_data.has("playtime"):
+			persistent_data["playtime"] += 1
+		else:
+			persistent_data["playtime"] = 0
 
 func _update_physics_tick_rate():
 	if awaiting_physics_ticks > Engine.physics_ticks_per_second:

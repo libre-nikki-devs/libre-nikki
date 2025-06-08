@@ -11,8 +11,6 @@ extends YumeWorld
 signal button_finished
 
 func _ready() -> void:
-	super()
-
 	menu_container.visible = false
 	play_button.visible = false
 	continue_button.visible = false

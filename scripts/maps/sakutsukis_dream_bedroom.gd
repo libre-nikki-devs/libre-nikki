@@ -1,11 +1,9 @@
 extends YumeWorld
 
 func _ready() -> void:
-	super()
-
 	if Game.persistent_data.has("entered_from"):
 		if Game.persistent_data["entered_from"] == "res://scenes/maps/nexus.tscn":
-			player.position = Vector2(56, -56)
+			player.position = Vector2(48, -48)
 			player.face(Game.DIRECTION.DOWN)
 
 	get_tree().paused = true

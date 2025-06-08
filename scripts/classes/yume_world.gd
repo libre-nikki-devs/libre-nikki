@@ -91,31 +91,26 @@ func _initialize_node(node: Node):
 		_on_node_added(child)
 		_initialize_node(child)
 
-func _ready() -> void:
-	get_tree().connect("node_added", _on_node_added)
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_READY:
+			get_tree().connect("node_added", _on_node_added)
 
-	if !Game.persistent_data.has("world_visits"):
-		Game.persistent_data["world_visits"] = {}
+			if not Game.persistent_data.has("world_visits"):
+				Game.persistent_data["world_visits"] = {}
 
-	if Game.persistent_data["world_visits"].get(name):
-		Game.persistent_data["world_visits"][name] += 1
-	else:
-		Game.persistent_data["world_visits"][name] = 1
+			if Game.persistent_data["world_visits"].get(name):
+				Game.persistent_data["world_visits"][name] += 1
+			else:
+				Game.persistent_data["world_visits"][name] = 1
 
-	if player:
-		if not Game.persistent_data.has("player_data"):
-			Game.persistent_data["player_data"] = {}
+			if bounds == [Vector2(-256, -256), Vector2(256, 256)]:
+				bounds = bounds
+			
+			if loop == "All Sides":
+				loop = loop
 
-		for property: String in Game.persistent_data["player_data"].keys():
-			player.set(property, Game.persistent_data["player_data"][property])
-
-	if bounds == [Vector2(-256, -256), Vector2(256, 256)]:
-		bounds = bounds
-	
-	if loop == "All Sides":
-		loop = loop
-
-	_initialize_node(self)
+			_initialize_node(self)
 
 func _on_node_added(node: Node):
 	if not node.is_in_group("Duplicate"):

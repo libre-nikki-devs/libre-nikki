@@ -70,22 +70,24 @@ func _init() -> void:
 		pointers.add_child(pointer)
 	add_child(pointers)
 
-func _ready() -> void:
-	var current_scene: Node = get_tree().current_scene
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_READY:
+			var current_scene: Node = get_tree().current_scene
 
-	if current_scene is YumeWorld:
-		for pointer: YumePointer in pointers.get_children():
-			pointer.position = pointer.offset * current_scene.tile_size
-			pointer.global_position = current_scene.wrap_around_world(pointer.global_position + target)
+			if current_scene is YumeWorld:
+				for pointer: YumePointer in pointers.get_children():
+					pointer.position = pointer.offset * current_scene.tile_size
+					pointer.global_position = current_scene.wrap_around_world(pointer.global_position + target)
 
-func _physics_process(delta: float) -> void:
-	# we need to wait a physics frame for area2d to start detecting collisions before moving
-	if ready and not collision_checked:
-		if not is_busy:
-			is_busy = true
-			await get_tree().physics_frame
-			is_busy = false
-			collision_checked = true
+		NOTIFICATION_PHYSICS_PROCESS:
+			# we need to wait a physics frame for area2d to start detecting collisions before moving
+			if ready and not collision_checked:
+				if not is_busy:
+					is_busy = true
+					await get_tree().physics_frame
+					is_busy = false
+					collision_checked = true
 
 func _move() -> void:
 	pass

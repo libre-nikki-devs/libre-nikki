@@ -16,7 +16,6 @@ extends YumeHumanoid
 @export var wait_time: float = 2.0
 
 func _ready() -> void:
-	super()
 	_move_loop()
 
 func _move_loop():

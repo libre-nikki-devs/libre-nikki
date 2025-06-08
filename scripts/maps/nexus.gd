@@ -1,8 +1,6 @@
 extends YumeWorld
 
 func _ready() -> void:
-	super()
-
 	if Game.persistent_data.has("entered_from"):
 		if Game.persistent_data["entered_from"] == "res://scenes/maps/sakutsukis_dream_bedroom.tscn":
 			player.face(Game.DIRECTION.DOWN)

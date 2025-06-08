@@ -16,13 +16,10 @@ signal act_started(effect: Game.EFFECT)
 signal act_finished(effect: Game.EFFECT)
 
 func _ready() -> void:
-	super()
 	Game.accept_held.connect(_on_accept_held)
 	Game.cancel_held.connect(_on_cancel_held)
 
 func _physics_process(delta: float) -> void:
-	super(delta)
-
 	if not is_busy:
 	# do not move when calling opposite movement events (eg. pressing both 'up' and 'down' keys at once)
 		if not Game.movement_events.is_empty() and (Game.movement_events.find(Game.DIRECTION.UP) <= -1 or Game.movement_events.find(Game.DIRECTION.DOWN) <= -1 or absi(Game.movement_events.find(Game.DIRECTION.UP) - Game.movement_events.find(Game.DIRECTION.DOWN)) != 1) and (Game.movement_events.find(Game.DIRECTION.LEFT) <= -1 or Game.movement_events.find(Game.DIRECTION.RIGHT) <= -1 or absi(Game.movement_events.find(Game.DIRECTION.LEFT) - Game.movement_events.find(Game.DIRECTION.RIGHT)) != 1):

@@ -4,8 +4,6 @@ extends YumeWorld
 @onready var greeting_label: Label = get_node("CanvasLayer/GreetingLabel")
 
 func _ready() -> void:
-	super()
-
 	if Game.persistent_data.has("world_visits"):
 		if Game.persistent_data["world_visits"].has(self.name):
 			if Game.persistent_data["world_visits"][self.name] > 1:

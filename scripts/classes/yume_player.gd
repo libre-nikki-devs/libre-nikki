@@ -30,12 +30,12 @@ func _init() -> void:
 	add_to_group("Players")
 	connect("moved", _on_moved)
 
-func _physics_process(delta: float) -> void:
-	super(delta)
-	if Game.persistent_data.has("playtime"):
-		Game.persistent_data["playtime"] += delta
-	else:
-		Game.persistent_data["playtime"] = 0
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_READY:
+			if Game.persistent_data.has("player_data"):
+				for property: String in Game.persistent_data["player_data"].keys():
+					set(property, Game.persistent_data["player_data"][property])
 
 func _on_moved():
 	if !Game.persistent_data.has("steps_taken"):

@@ -16,9 +16,11 @@ extends Area2D
 var collisions: Array[Node2D]
 var surfaces: Array[Node2D]
 
-func _ready() -> void:
-	body_shape_entered.connect(_on_pointer_body_shape_entered)
-	body_shape_exited.connect(_on_pointer_body_shape_exited)
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_READY:
+			body_shape_entered.connect(_on_pointer_body_shape_entered)
+			body_shape_exited.connect(_on_pointer_body_shape_exited)
 
 func _on_pointer_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	var additional_z_index: int = 0
