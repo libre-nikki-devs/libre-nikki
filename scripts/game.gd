@@ -93,6 +93,7 @@ func _notification(what: int) -> void:
 			movement_events = []
 		NOTIFICATION_READY:
 			get_window().min_size = Vector2i(640, 480)
+			_count_playtime()
 
 func _count_playtime():
 	while true:
