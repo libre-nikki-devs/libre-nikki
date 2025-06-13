@@ -43,7 +43,23 @@ var footstep_sound: AudioStream
 var last_step: int = STEP_LEFT
 
 func _move() -> void:
-	set_footstep_sound()
+	var current_scene: Node = get_tree().current_scene
+	var surface: Object = surface_detector.get_collider()
+
+	if current_scene is YumeWorld:
+		footstep_sound = current_scene.default_footstep_sound
+	else:
+		footstep_sound = load("res://sounds/あるく1.wav") # placeholder
+
+	if surface:
+		if surface is TileMapLayer:
+			var current_tile = surface.local_to_map(surface_detector.global_position + surface_detector.target_position)
+
+			if current_scene is YumeWorld:
+				current_tile = surface.local_to_map(current_scene.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
+
+			var tile_data = surface.get_cell_tile_data(current_tile)
+			footstep_sound = get_tile_footstep_sound(tile_data)
 
 	if last_step:
 		set_animation(str(Game.DIRECTION.find_key(facing)).to_lower() + action, speed, 0.125)
@@ -91,21 +107,6 @@ func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 
 func play_footstep_sound() -> void:
 	Game.play_sound(footstep_sound, self, 256, RandomNumberGenerator.new().randf_range(0.90, 1.10))
-
-func set_footstep_sound() -> void:
-	for body: Node2D in current_pointer.surfaces:
-		if body is TileMapLayer:
-			var current_tile = body.local_to_map(current_pointer.global_position)
-			var tile_data = body.get_cell_tile_data(current_tile)
-			footstep_sound = get_tile_footstep_sound(tile_data)
-			return
-
-	var current_scene: Node = get_tree().current_scene
-
-	if current_scene is YumeWorld:
-		footstep_sound = current_scene.default_footstep_sound
-	else:
-		footstep_sound = load("res://sounds/あるく1.wav") # placeholder
 
 func set_animation(animation: String = str(Game.DIRECTION.find_key(facing)).to_lower() + action, animation_speed: float = 0.0, animation_position: float = 0.0, from_end: bool = false) -> void:
 	if animation_player.get_animation_library("").has_animation(animation):

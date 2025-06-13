@@ -19,27 +19,34 @@ func _ready() -> void:
 	_move_loop()
 
 func _move_loop():
-	var available_directions: Array[Game.DIRECTION]
+	while true:
+		var available_directions: Array[Game.DIRECTION]
+		var current_scene: Node = get_tree().current_scene
 
-	for direction in Game.DIRECTION.values():
-		available_directions.append(direction)
+		for direction in Game.DIRECTION.values():
+			available_directions.append(direction)
 
-	await get_tree().create_timer(wait_time, false, true).timeout
+		await get_tree().create_timer(wait_time, false, true).timeout
 
-	if not is_busy:
-		var can_move: bool = false
+		if not is_busy:
+			var can_move: bool = false
+			var picked_direction: Game.DIRECTION = Game.DIRECTION.LEFT
 
-		while not (available_directions.is_empty() or can_move):
-			var picked_direction: Game.DIRECTION = available_directions.pick_random()
-			set_pointer(picked_direction)
+			while not (available_directions.is_empty() or can_move):
+				picked_direction = available_directions.pick_random()
 
-			if is_colliding(picked_direction):
-				available_directions.erase(picked_direction)
-			else:
-				can_move = true
-				Game.call_on_available_physics_tick(Callable(face_and_move).bind(picked_direction))
+				if current_scene is YumeWorld:
+					target_position = Game.DIRECTIONS[picked_direction] * current_scene.tile_size
+				else:
+					target_position = Game.DIRECTIONS[picked_direction] * 16.0
 
-	_move_loop()
+				if test_move(transform, target_position):
+					available_directions.erase(picked_direction)
+				else:
+					can_move = true
+
+			if can_move:
+				face_and_move(picked_direction)
 
 func _on_body_interacted(body: Node2D) -> void:
 	if not is_busy:

@@ -55,18 +55,6 @@ signal cancel_held()
 var accept_is_hold = false
 var cancel_is_hold = false
 
-var default_physics_tick_rate: int = Engine.physics_ticks_per_second
-
-var is_current_physics_tick_available: bool = true
-
-var awaiting_physics_ticks: int = 0:
-	set(value):
-		awaiting_physics_ticks = value
-		_update_physics_tick_rate()
-
-func _physics_process(delta: float) -> void:
-	is_current_physics_tick_available = true
-
 func _on_accept_timer_timeout() -> void:
 	accept_held.emit()
 
@@ -105,7 +93,6 @@ func _notification(what: int) -> void:
 			movement_events = []
 		NOTIFICATION_READY:
 			get_window().min_size = Vector2i(640, 480)
-			_count_playtime()
 
 func _count_playtime():
 	while true:
@@ -115,30 +102,6 @@ func _count_playtime():
 			persistent_data["playtime"] += 1
 		else:
 			persistent_data["playtime"] = 0
-
-func _update_physics_tick_rate():
-	if awaiting_physics_ticks > Engine.physics_ticks_per_second:
-		Engine.physics_ticks_per_second = awaiting_physics_ticks
-	else:
-		Engine.physics_ticks_per_second = default_physics_tick_rate
-
-func call_on_available_physics_tick(callable: Callable) -> Variant:
-	if awaiting_physics_ticks > 1000:
-		push_warning("Reached physics tick rate limit. Some functions might be ignored.")
-		return null
-
-	awaiting_physics_ticks += 1
-
-	while not is_current_physics_tick_available or get_tree().paused:
-		await get_tree().physics_frame
-
-	awaiting_physics_ticks -= 1
-	is_current_physics_tick_available = false
-
-	if callable.get_object():
-		return await callable.call()
-
-	return null
 
 func change_scene(path: String) -> void:
 	persistent_data["entered_from"] = get_tree().current_scene.scene_file_path
@@ -235,15 +198,6 @@ func face(object: Node2D, what: Vector2) -> DIRECTION:
 		return DIRECTION.UP
 	else:
 		return DIRECTION.DOWN
-
-## Get the global Z index of a node.
-func get_global_z_index(body: Node2D) -> int:
-	var global_z_index: int = body.z_index
-	if body.z_as_relative:
-		while body.get_parent() is CanvasItem:
-			body = body.get_parent()
-			global_z_index += body.z_index
-	return global_z_index
 
 func fade_in_music(audio: AudioStream, duration: float, pitch: float = 1.0, volume_offset: float = 0.0) -> void:
 	music.pitch_scale = pitch

@@ -114,12 +114,16 @@ tile_set = SubResource("TileSet_e3vec")
 [node name="Sakutsuki" parent="." instance=ExtResource("3_w136h")]
 z_index = 1
 position = Vector2(-48, -16)
+collision_layer = 2
+collision_mask = 2
 can_move_in_vacuum = false
 
 [node name="Desk" type="CharacterBody2D" parent="."]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-80, 16)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_kow8v")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Desk"]
@@ -132,6 +136,8 @@ shape = SubResource("RectangleShape2D_t21p4")
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-48, -32)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_kow8v")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Bed"]
@@ -143,6 +149,8 @@ shape = SubResource("RectangleShape2D_t21p4")
 [node name="Door" type="CharacterBody2D" parent="." node_paths=PackedStringArray("animated_sprite")]
 z_index = 1
 position = Vector2(48, -64)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("6_jlni6")
 animated_sprite = NodePath("AnimatedSprite2D")
 

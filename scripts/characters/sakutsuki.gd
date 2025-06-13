@@ -26,9 +26,7 @@ func _physics_process(delta: float) -> void:
 			if is_sitting:
 				look(Game.movement_events.front())
 			else:
-				facing = Game.movement_events.front()
-				if not is_colliding(Game.movement_events.front()):
-					Game.call_on_available_physics_tick(Callable(move).bind(Game.movement_events.front()))
+				face_and_move(Game.movement_events.front())
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("accept") and not is_busy:
@@ -97,17 +95,3 @@ func open_menu() -> void:
 		else:
 			Game.cancel_events.front().call()
 		Game.cancel_events.pop_front()
-
-func interact() -> void:
-	if Game.accept_events.is_empty():
-		if not is_sitting and current_pointer:
-			for body: Node2D in current_pointer.collisions:
-				if body is YumeInteractable:
-					body.body_interacted.emit(self)
-					body.body_touched.emit(self)
-	else:
-		if Game.accept_events.front().get_argument_count() > 0:
-			Game.accept_events.front().call(self)
-		else:
-			Game.accept_events.front().call()
-		Game.accept_events.pop_front()

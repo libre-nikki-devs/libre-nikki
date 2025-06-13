@@ -57,11 +57,14 @@ func equip(new_effect: Game.EFFECT = 0, silently: bool = false) -> void:
 ## If there are colliding nodes on the same Z index as this character, emit both [signal YumeInteractable.body_interacted] and [signal YumeInteractable.body_touched] on the colliding [YumeInteractable].
 func interact() -> void:
 	if Game.accept_events.is_empty():
-		if not is_sitting and current_pointer:
-			for node: Node2D in current_pointer.colliding_objects:
-				if node is YumeInteractable:
-					node.body_interacted.emit(self)
-					node.body_touched.emit(self)
+		if not is_sitting:
+			var collider: Object = collision_detector.get_collider()
+
+			if collider:
+				if collider is YumeInteractable:
+					collider.emit_signal("body_interacted", self)
+					collider.emit_signal("body_touched", self)
+
 	else:
 		if Game.accept_events.front().get_argument_count() > 0:
 			Game.accept_events.front().call(self)

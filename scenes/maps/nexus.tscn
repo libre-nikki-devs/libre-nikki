@@ -98,11 +98,15 @@ tile_set = SubResource("TileSet_2k5aw")
 [node name="Sakutsuki" parent="." instance=ExtResource("2_gfkke")]
 z_index = 1
 position = Vector2(8, 24)
+collision_layer = 2
+collision_mask = 2
 
 [node name="Door" type="CharacterBody2D" parent="." node_paths=PackedStringArray("animated_sprite")]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(8, 8)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_y2428")
 animated_sprite = NodePath("AnimatedSprite2D")
 
@@ -117,11 +121,15 @@ shape = SubResource("RectangleShape2D_yuqbu")
 [node name="Debugtsuki" parent="." instance=ExtResource("6_dsb3x")]
 z_index = 1
 position = Vector2(-136, -136)
+collision_layer = 2
+collision_mask = 2
 
 [node name="Bike" type="CharacterBody2D" parent="."]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-40, 104)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_8rcjt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Bike"]

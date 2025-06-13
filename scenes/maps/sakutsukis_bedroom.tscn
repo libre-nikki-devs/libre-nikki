@@ -94,6 +94,7 @@ animations = [{
 size = Vector2(16, 16)
 
 [node name="SakutsukisBedroom" type="Node2D" node_paths=PackedStringArray("player")]
+y_sort_enabled = true
 script = ExtResource("1_bvmiv")
 pretty_name = "Sakutsuki's Bedroom"
 bounds = Array[Vector2]([])
@@ -151,12 +152,16 @@ tile_set = SubResource("TileSet_74b13")
 [node name="Sakutsuki" parent="." instance=ExtResource("3_wt7fi")]
 z_index = 1
 position = Vector2(-8, 8)
+collision_layer = 2
+collision_mask = 2
 can_move_in_vacuum = false
 
 [node name="Desk" type="CharacterBody2D" parent="."]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-72, 8)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_gh7np")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Desk"]
@@ -169,6 +174,8 @@ shape = SubResource("RectangleShape2D_86v08")
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-40, -40)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_gh7np")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Bed"]
@@ -180,6 +187,8 @@ shape = SubResource("RectangleShape2D_86v08")
 [node name="Door" type="CharacterBody2D" parent="."]
 z_index = 1
 position = Vector2(56, -72)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_gh7np")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Door"]
