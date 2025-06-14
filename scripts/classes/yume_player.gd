@@ -8,10 +8,17 @@
 #
 # You should have received a copy of the GNU General Public License along with Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-## A character controlable by the player.
+## A character controllable by the player.
 
 class_name YumePlayer
 extends YumeHumanoid
+
+const MOVEMENT_KEYS: Dictionary[String, Game.DIRECTION] = {
+	"ui_left": 1, #Game.DIRECTION.LEFT,
+	"ui_down": 2, #Game.DIRECTION.DOWN,
+	"ui_up": 4, #Game.DIRECTION.UP,
+	"ui_right": 8 #Game.DIRECTION.RIGHT
+}
 
 ## [Camera2D] node that follows the character.
 @export var camera: Camera2D
@@ -22,13 +29,22 @@ extends YumeHumanoid
 		effect = value
 		set_animation()
 
+var current_movement_keys: Array[String] = []
+
+var accept_key_hold_time: float = 0.0
+
+var cancel_key_hold_time: float = 0.0
+
+signal accept_key_held()
+signal cancel_key_held()
+
 ## Emitted when the character equips an effect.
 signal equipped(effect: Game.EFFECT)
 
 func _init() -> void:
 	super()
 	add_to_group("Players")
-	connect("moved", _on_moved)
+	set_process(true)
 
 func _notification(what: int) -> void:
 	match what:
@@ -37,9 +53,40 @@ func _notification(what: int) -> void:
 				for property: String in Game.persistent_data["player_data"].keys():
 					set(property, Game.persistent_data["player_data"][property])
 
-func _on_moved():
-	if !Game.persistent_data.has("steps_taken"):
+		NOTIFICATION_PROCESS:
+			for movement_key: StringName in MOVEMENT_KEYS.keys():
+				var is_movement_key_pressed: bool = Input.is_action_pressed(movement_key)
+
+				if is_movement_key_pressed and movement_key not in current_movement_keys:
+					current_movement_keys.append(movement_key)
+
+				elif not is_movement_key_pressed and movement_key in current_movement_keys:
+					current_movement_keys.erase(movement_key)
+
+			if Input.is_action_pressed("ui_accept"):
+				accept_key_hold_time += get_process_delta_time()
+
+				if accept_key_hold_time > Game.settings["key_hold_time"]:
+					emit_signal("accept_key_held")
+
+			else:
+				accept_key_hold_time = 0.0
+
+			if Input.is_action_pressed("ui_cancel"):
+				cancel_key_hold_time += get_process_delta_time()
+
+				if cancel_key_hold_time > Game.settings["key_hold_time"]:
+					emit_signal("cancel_key_held")
+
+			else:
+				cancel_key_hold_time = 0.0
+
+func _move() -> void:
+	super()
+
+	if not Game.persistent_data.has("steps_taken"):
 		Game.persistent_data["steps_taken"] = 0
+
 	Game.persistent_data["steps_taken"] += 1
 
 ## Equip this [param effect].

@@ -22,7 +22,7 @@ func _ready() -> void:
 	get_tree().paused = false
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("accept") or event.is_action_pressed("cancel"):
+	if event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_cancel"):
 		var focus_owner: Control = get_viewport().gui_get_focus_owner()
 
 		if focus_owner:

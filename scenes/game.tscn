@@ -93,11 +93,6 @@ volume_db = -40.0
 max_polyphony = 2
 bus = &"Music"
 
-[node name="AcceptTimer" type="Timer" parent="."]
-one_shot = true
-
-[node name="CancelTimer" type="Timer" parent="."]
-
 [node name="TransitionHandler" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_yqjtg")
@@ -112,6 +107,3 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-
-[connection signal="timeout" from="AcceptTimer" to="." method="_on_accept_timer_timeout"]
-[connection signal="timeout" from="CancelTimer" to="." method="_on_cancel_timer_timeout"]

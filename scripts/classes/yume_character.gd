@@ -14,16 +14,7 @@ extends YumeInteractable
 ## A simple moving character.
 
 ## If true, prevent the character from performing certain actions. For [YumePlayer]s, useful for scripted sequences where the player interaction is forbidden.[br][b]Warning:[/b] might cause softlocks when used incorrectly; make sure to set it to false once the sequence is done.
-@export var is_busy: bool = false:
-	set(value):
-		is_busy = value
-		if self is YumePlayer and Game.accept_timer:
-			if Game.accept_held and not Game.accept_timer.is_stopped():
-				Game.accept_timer.start(Game.settings["key_hold_time"])
-
-		if self is YumePlayer and Game.cancel_timer:
-			if Game.cancel_held and not Game.cancel_timer.is_stopped():
-				Game.cancel_timer.start(Game.settings["key_hold_time"])
+@export var is_busy: bool = false
 
 @export_group("Movement")
 

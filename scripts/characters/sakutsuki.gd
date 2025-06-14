@@ -16,39 +16,49 @@ signal act_started(effect: Game.EFFECT)
 signal act_finished(effect: Game.EFFECT)
 
 func _ready() -> void:
-	Game.accept_held.connect(_on_accept_held)
-	Game.cancel_held.connect(_on_cancel_held)
+	connect("accept_key_held", _on_accept_key_held)
+	connect("cancel_key_held", _on_cancel_key_held)
 
 func _physics_process(delta: float) -> void:
 	if not is_busy:
-	# do not move when calling opposite movement events (eg. pressing both 'up' and 'down' keys at once)
-		if not Game.movement_events.is_empty() and (Game.movement_events.find(Game.DIRECTION.UP) <= -1 or Game.movement_events.find(Game.DIRECTION.DOWN) <= -1 or absi(Game.movement_events.find(Game.DIRECTION.UP) - Game.movement_events.find(Game.DIRECTION.DOWN)) != 1) and (Game.movement_events.find(Game.DIRECTION.LEFT) <= -1 or Game.movement_events.find(Game.DIRECTION.RIGHT) <= -1 or absi(Game.movement_events.find(Game.DIRECTION.LEFT) - Game.movement_events.find(Game.DIRECTION.RIGHT)) != 1):
+		if current_movement_keys.size() > 0:
+			var direction: Game.DIRECTION = MOVEMENT_KEYS[current_movement_keys[-1]]
+
+			# Do not move when calling opposite movement events (eg. pressing both 'up' and 'down' keys at once).
+			if current_movement_keys.size() > 1:
+				if direction & Game.HORIZONTAL:
+					if MOVEMENT_KEYS[current_movement_keys[-2]] & Game.HORIZONTAL:
+						return
+
+				if direction & Game.VERTICAL:
+					if MOVEMENT_KEYS[current_movement_keys[-2]] & Game.VERTICAL:
+						return
+
 			if is_sitting:
-				look(Game.movement_events.front())
+				look(direction)
 			else:
-				face_and_move(Game.movement_events.front())
+				face_and_move(direction)
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("accept") and not is_busy:
-		interact()
-
-	if event.is_action_pressed("cancel") and not is_busy:
-		open_menu()
-
-func _on_accept_held() -> void:
 	if not is_busy:
-		# act()
+		if event.is_action_pressed("ui_accept"):
+			interact()
+
+		if event.is_action_pressed("ui_cancel"):
+			open_menu()
+
+func _on_accept_key_held() -> void:
+	if not is_busy:
+		#act()
 		pass
 	else:
-		if not Game.cancel_timer.is_stopped():
-			Game.accept_timer.start(Game.settings["key_hold_time"])
+		accept_key_hold_time = 0.0
 
-func _on_cancel_held() -> void:
+func _on_cancel_key_held() -> void:
 	if not is_busy:
 		equip()
 	else:
-		if not Game.cancel_timer.is_stopped():
-			Game.cancel_timer.start(Game.settings["key_hold_time"])
+		cancel_key_hold_time = 0.0
 
 ## Perform an action.
 func act() -> void:

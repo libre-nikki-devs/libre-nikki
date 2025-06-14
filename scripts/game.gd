@@ -37,63 +37,15 @@ var settings: Dictionary = {
 	"key_hold_time" = 0.5
 }
 
-## Indicates what movement events are currently called. Index 0 is the most recently called event. Note: most keyboards will not register all events at once.
-var movement_events: Array[DIRECTION] = []
-
 var accept_events: Array[Callable] = []
 
 var cancel_events: Array[Callable] = []
 
 @onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
 
-signal accept_held()
-signal cancel_held()
-
-@onready var accept_timer: Timer = get_node("AcceptTimer")
-@onready var cancel_timer: Timer = get_node("CancelTimer")
-
-var accept_is_hold = false
-var cancel_is_hold = false
-
-func _on_accept_timer_timeout() -> void:
-	accept_held.emit()
-
-func _on_cancel_timer_timeout() -> void:
-	cancel_held.emit()
-
-func _input(event: InputEvent) -> void:
-	for direction: String in DIRECTION:
-		if event.is_action_pressed(str(direction).to_lower()):
-			movement_events.push_front(Game.DIRECTION[direction])
-
-		if event.is_action_released(str(direction).to_lower()):
-			movement_events.erase(Game.DIRECTION[direction])
-
-	if event.is_action_pressed("accept"):
-		accept_is_hold = true
-		accept_timer.start(settings["key_hold_time"])
-
-	if event.is_action_released("accept"):
-		accept_is_hold = false
-		if not accept_timer.is_stopped():
-			accept_timer.stop()
-
-	if event.is_action_pressed("cancel"):
-		cancel_is_hold = true
-		cancel_timer.start(settings["key_hold_time"])
-
-	if event.is_action_released("cancel"):
-		cancel_is_hold = false
-		if not cancel_timer.is_stopped():
-			cancel_timer.stop()
-
-func _notification(what: int) -> void:
-	match what:
-		NOTIFICATION_APPLICATION_FOCUS_OUT:
-			movement_events = []
-		NOTIFICATION_READY:
-			get_window().min_size = Vector2i(640, 480)
-			_count_playtime()
+func _ready() -> void:
+	get_window().min_size = Vector2i(640, 480)
+	_count_playtime()
 
 func _count_playtime():
 	while true:
