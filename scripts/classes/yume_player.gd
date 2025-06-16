@@ -13,20 +13,22 @@
 class_name YumePlayer
 extends YumeHumanoid
 
-const MOVEMENT_KEYS: Dictionary[String, Game.DIRECTION] = {
-	"ui_left": 1, #Game.DIRECTION.LEFT,
-	"ui_down": 2, #Game.DIRECTION.DOWN,
-	"ui_up": 4, #Game.DIRECTION.UP,
-	"ui_right": 8 #Game.DIRECTION.RIGHT
+enum EFFECT { DEFAULT = 0, BIKE = 1 }
+
+const MOVEMENT_KEYS: Dictionary[String, DIRECTION] = {
+	"ui_left": DIRECTION.LEFT,
+	"ui_down": DIRECTION.DOWN,
+	"ui_up": DIRECTION.UP,
+	"ui_right": DIRECTION.RIGHT
 }
 
 ## [Camera2D] node that follows the character.
 @export var camera: Camera2D
 
 ## Currently equipped effect.
-@export var effect: Game.EFFECT = 0:
+@export var equipped_effect: EFFECT = EFFECT.DEFAULT:
 	set(value):
-		effect = value
+		equipped_effect = value
 		set_animation()
 
 var current_movement_keys: Array[String] = []
@@ -39,7 +41,7 @@ signal accept_key_held()
 signal cancel_key_held()
 
 ## Emitted when the character equips an effect.
-signal equipped(effect: Game.EFFECT)
+signal equipped(effect: EFFECT)
 
 func _init() -> void:
 	super()
@@ -90,11 +92,11 @@ func _move() -> void:
 	Game.persistent_data["steps_taken"] += 1
 
 ## Equip this [param effect].
-func equip(new_effect: Game.EFFECT = 0, silently: bool = false) -> void:
-	effect = new_effect
+func equip(effect: EFFECT = 0, silently: bool = false) -> void:
+	equipped_effect = effect
 
-	match new_effect:
-		Game.EFFECT.BIKE:
+	match effect:
+		EFFECT.BIKE:
 			speed = 2
 		_:
 			speed = 1
@@ -121,12 +123,12 @@ func interact() -> void:
 
 ## Play the cheek pinching animation. Wakes up the character, if is dreaming.
 func pinch_cheek() -> void:
-	var effect_name: String = Game.EFFECT.find_key(effect).capitalize()
+	var effect_name: String = EFFECT.find_key(equipped_effect).capitalize()
 
 	if animation_player.has_animation_library(effect_name):
 		if animation_player.get_animation_library(effect_name).has_animation("downPinch"):
 			is_busy = true
-			face(Game.DIRECTION.DOWN)
+			facing = DIRECTION.DOWN
 			set_animation("downPinch", 1.0)
 			await animation_player.animation_finished
 
@@ -145,10 +147,23 @@ func pinch_cheek() -> void:
 	equip()
 	pinch_cheek()
 
-func set_animation(animation: String = str(Game.DIRECTION.find_key(facing)).to_lower() + action, animation_speed: float = 0.0, animation_position: float = 0.0, from_end: bool = false) -> void:
-	var effect_name: String = Game.EFFECT.find_key(effect).capitalize()
+func set_animation(animation: String = str(DIRECTION.find_key(facing)).to_lower() + action, animation_speed: float = 0.0, animation_position: float = 0.0, from_end: bool = false) -> void:
+	var effect_name: String = EFFECT.find_key(equipped_effect).capitalize()
 
 	if animation_player.has_animation_library(effect_name):
 		if animation_player.get_animation_library(effect_name).has_animation(animation):
 			animation_player.play(effect_name + "/" + animation, -1, animation_speed, from_end)
 			animation_player.seek(animation_position, true)
+
+## Grant the player an effect.
+func grant_effect(effect: EFFECT) -> void:
+	if not Game.persistent_data.has("acquired_effects"):
+		Game.persistent_data["acquired_effects"] = 0
+
+	if Game.persistent_data["acquired_effects"] & effect == 0:
+		Game.persistent_data["acquired_effects"] ^= effect
+
+func revoke_effect(effect: EFFECT) -> void:
+	if Game.persistent_data.has("acquired_effects"):
+		if Game.persistent_data["acquired_effects"] & effect:
+			Game.persistent_data["acquired_effects"] -= effect

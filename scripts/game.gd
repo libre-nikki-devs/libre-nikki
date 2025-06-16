@@ -12,21 +12,6 @@ extends CanvasLayer
 
 ## An autoload singleton that handles the game's most important data as well as it provides functions specific to Libre Nikki.
 
-const DIRECTIONS: Dictionary[DIRECTION, Vector2] = {
-	DIRECTION.LEFT: Vector2.LEFT,
-	DIRECTION.DOWN: Vector2.DOWN,
-	DIRECTION.UP: Vector2.UP,
-	DIRECTION.RIGHT: Vector2.RIGHT,
-}
-
-enum { ALL = 15, HORIZONTAL = 9, VERTICAL = 6 }
-
-enum DIRECTION { LEFT = 1, DOWN = 2, UP = 4, RIGHT = 8 }
-
-enum EFFECT { DEFAULT = 0, BIKE = 1 }
-
-enum SURFACE { SILENT = -1, DEFAULT, CONCRETE, METAL, GRASS, DIRT, SAND, WATER, SNOW, WOOD, CARPET }
-
 @onready var music: AudioStreamPlayer = get_node("AudioStreamPlayer")
 
 ## Contains data that are preserved in a save file.
@@ -105,21 +90,9 @@ func play_sound_everywhere(sound: AudioStream, pitch: float = 1.0, volume_offset
 		audio_stream_player.pitch_scale = pitch
 		audio_stream_player.stream = sound
 		audio_stream_player.volume_db = linear_to_db(1.0 + volume_offset)
-		Game.add_child(audio_stream_player)
+		add_child(audio_stream_player)
 		await audio_stream_player.finished
 		audio_stream_player.queue_free()
-
-## Grant the player an effect.
-func grant_effect(effect: EFFECT) -> void:
-	if not persistent_data.has("acquired_effects"):
-		persistent_data["acquired_effects"] = 0
-	if persistent_data["acquired_effects"] & effect == 0:
-		persistent_data["acquired_effects"] ^= effect
-
-func revoke_effect(effect: EFFECT) -> void:
-	if persistent_data.has("acquired_effects"):
-		if persistent_data["acquired_effects"] & effect:
-			persistent_data["acquired_effects"] -= effect
 
 ## Start the dream session.
 func sleep() -> void:
@@ -140,17 +113,6 @@ func wake_up() -> void:
 	get_tree().paused = true
 	await transition_handler.animation_finished
 	change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
-
-# WIP
-func face(object: Node2D, what: Vector2) -> DIRECTION:
-	if object.position.x > what.x:
-		return DIRECTION.LEFT
-	elif object.position.x < what.x:
-		return DIRECTION.RIGHT
-	if object.position.y > what.y:
-		return DIRECTION.UP
-	else:
-		return DIRECTION.DOWN
 
 func fade_in_music(audio: AudioStream, duration: float, pitch: float = 1.0, volume_offset: float = 0.0) -> void:
 	music.pitch_scale = pitch

@@ -4,7 +4,7 @@ func _ready() -> void:
 	if Game.persistent_data.has("entered_from"):
 		if Game.persistent_data["entered_from"] == "res://scenes/maps/nexus.tscn":
 			player.position = Vector2(48, -48)
-			player.face(Game.DIRECTION.DOWN)
+			player.facing = YumeCharacter.DIRECTION.DOWN
 
 	get_tree().paused = true
 	Game.transition_handler.play("fade_in")

@@ -3,7 +3,7 @@ extends YumeWorld
 func _ready() -> void:
 	if Game.persistent_data.has("entered_from"):
 		if Game.persistent_data["entered_from"] == "res://scenes/maps/sakutsukis_dream_bedroom.tscn":
-			player.face(Game.DIRECTION.DOWN)
+			player.facing = YumeCharacter.DIRECTION.DOWN
 
 	get_tree().paused = true
 	Game.transition_handler.play("fade_in")
@@ -20,5 +20,5 @@ func _on_door_opened() -> void:
 
 func _on_bike_body_interacted(body: Node2D) -> void:
 	if body is YumePlayer:
-		Game.grant_effect(Game.EFFECT.BIKE)
-		body.equip(Game.EFFECT.BIKE)
+		body.grant_effect(YumePlayer.EFFECT.BIKE)
+		body.equip(YumePlayer.EFFECT.BIKE)

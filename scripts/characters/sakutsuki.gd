@@ -12,8 +12,8 @@ extends YumePlayer
 
 ## A default player character. Libre Nikki protagonist.
 
-signal act_started(effect: Game.EFFECT)
-signal act_finished(effect: Game.EFFECT)
+signal act_started(effect: EFFECT)
+signal act_finished(effect: EFFECT)
 
 func _ready() -> void:
 	connect("accept_key_held", _on_accept_key_held)
@@ -22,22 +22,23 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not is_busy:
 		if current_movement_keys.size() > 0:
-			var direction: Game.DIRECTION = MOVEMENT_KEYS[current_movement_keys[-1]]
+			var direction: DIRECTION = MOVEMENT_KEYS[current_movement_keys[-1]]
 
 			# Do not move when calling opposite movement events (eg. pressing both 'up' and 'down' keys at once).
 			if current_movement_keys.size() > 1:
-				if direction & Game.HORIZONTAL:
-					if MOVEMENT_KEYS[current_movement_keys[-2]] & Game.HORIZONTAL:
+				if direction & HORIZONTAL:
+					if MOVEMENT_KEYS[current_movement_keys[-2]] & HORIZONTAL:
 						return
 
-				if direction & Game.VERTICAL:
-					if MOVEMENT_KEYS[current_movement_keys[-2]] & Game.VERTICAL:
+				if direction & VERTICAL:
+					if MOVEMENT_KEYS[current_movement_keys[-2]] & VERTICAL:
 						return
 
 			if is_sitting:
 				look(direction)
 			else:
-				face_and_move(direction)
+				facing = direction
+				move(direction)
 
 func _input(event: InputEvent) -> void:
 	if not is_busy:
@@ -62,20 +63,20 @@ func _on_cancel_key_held() -> void:
 
 ## Perform an action.
 func act() -> void:
-	act_started.emit(effect)
+	act_started.emit(equipped_effect)
 
-	match effect:
-		Game.EFFECT.BIKE:
+	match equipped_effect:
+		EFFECT.BIKE:
 			return
-		Game.EFFECT.DEFAULT:
+		EFFECT.DEFAULT:
 			is_busy = true
 
 			if is_sitting:
-				set_animation(str(Game.DIRECTION.find_key(facing)).to_lower() + "Action2", 1.0)
+				set_animation(str(DIRECTION.find_key(facing)).to_lower() + "Action2", 1.0)
 				await animation_player.animation_finished
 				action = "Default"
 			else:
-				set_animation(str(Game.DIRECTION.find_key(facing)).to_lower() + "Action", 1.0)
+				set_animation(str(DIRECTION.find_key(facing)).to_lower() + "Action", 1.0)
 				await animation_player.animation_finished
 				action = "Sit"
 
@@ -84,10 +85,7 @@ func act() -> void:
 		_:
 			pass
 
-	act_finished.emit(effect)
-
-	if Game.accept_is_hold:
-		Game.accept_timer.start(Game.settings["key_hold_time"])
+	act_finished.emit(equipped_effect)
 
 var menu = Control.new()
 

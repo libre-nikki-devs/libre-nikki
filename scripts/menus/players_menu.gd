@@ -60,17 +60,17 @@ func _ready() -> void:
 	else:
 		money_label.text = "0"
 
-	if player.effect == 0:
+	if player.equipped_effect == 0:
 		player_avatar.animation = "down"
 	else:
-		player_avatar.animation = "down" + Game.EFFECT.find_key(player.effect).capitalize()
+		player_avatar.animation = "down" + YumePlayer.EFFECT.find_key(player.equipped_effect).capitalize()
 
 	player_label.text = player.name
 
 	if Game.persistent_data.has("acquired_effects"):
-		player_effects_label.text = "FX: " + str(Game.persistent_data["acquired_effects"] & 1) + "/" + str(Game.EFFECT.size() - 1)
+		player_effects_label.text = "FX: " + str(Game.persistent_data["acquired_effects"] & 1) + "/" + str(YumePlayer.EFFECT.size() - 1)
 	else:
-		player_effects_label.text = "FX: 0/" + str(Game.EFFECT.size() - 1)
+		player_effects_label.text = "FX: 0/" + str(YumePlayer.EFFECT.size() - 1)
 
 	if Game.persistent_data.has("health"):
 		health_label.text = "HP: " + str(Game.persistent_data["health"])
@@ -78,14 +78,14 @@ func _ready() -> void:
 		health_label.text = "HP: 0"
 
 	if Game.persistent_data.has("acquired_effects"):
-		for effect: Game.EFFECT in Game.EFFECT.values():
+		for effect: YumePlayer.EFFECT in YumePlayer.EFFECT.values():
 			if Game.persistent_data["acquired_effects"] & effect:
 				var button: Button = Button.new()
-				# button.text = Game.EFFECT.find_key(effect).capitalize()
+				# button.text = YumePlayer.EFFECT.find_key(effect).capitalize()
 				button.text = " "
 				button.size_flags_horizontal = 3
 				var label: Label = Label.new()
-				label.text = Game.EFFECT.find_key(effect).capitalize()
+				label.text = YumePlayer.EFFECT.find_key(effect).capitalize()
 				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 				label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 				label.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -159,10 +159,10 @@ func _on_effects_button_pressed() -> void:
 	actions_grid_container.hide()
 	effects_grid_container.get_children()[0].grab_focus()
 
-func _on_effect_button_pressed(effect: Game.EFFECT) -> void:
+func _on_effect_button_pressed(effect: YumePlayer.EFFECT) -> void:
 	close_menu()
 
-	if player.effect == effect:
+	if player.equipped_effect == effect:
 		player.equip()
 	else:
 		player.equip(effect)
