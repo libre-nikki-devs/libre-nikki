@@ -97,7 +97,6 @@ size = Vector2(16, 16)
 y_sort_enabled = true
 script = ExtResource("1_bvmiv")
 pretty_name = "Sakutsuki's Bedroom"
-bounds = Array[Vector2]([])
 loop = "None"
 player = NodePath("Sakutsuki")
 depth = "?"

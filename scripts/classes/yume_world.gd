@@ -13,48 +13,33 @@ extends Node2D
 
 @export var pretty_name: String
 
-## Indicates the playable area of the world. Should contain two vectors being coordinates of the world's diagonal. Can be left empty for infinite worlds.
-@export var bounds: Array[Vector2] = [Vector2(-256, -256), Vector2(256, 256)]:
-	set(value):
-		if value.is_empty():
-			bounds = value
-			return
-
-		if value.size() < 2:
-			push_error("\'bounds\' must have two or no elements.")
-			return
-
-		if value[0] <= value[1]:
-			bounds[0] = value[0]
-			bounds[1] = value[1]
-		else:
-			bounds[0] = value[1]
-			bounds[1] = value[0]
+## Indicates the playable area of the world. Can be left empty for infinite worlds.
+@export var bounds: Rect2
 
 ## Indicates if the world should loop.
 @export_enum("All Sides", "Horizontally", "Vertically", "None") var loop: String = "All Sides":
 	set(value):
-		if bounds.size() >= 2:
-			var size: Vector2 = Vector2(abs(bounds[0].x) + abs(bounds[1].x), abs(bounds[0].y) + abs(bounds[1].y))
-
+		if bounds.has_area():
 			match value:
 				"All Sides":
 					camera_limits = [-2147483647, 2147483647, -2147483647, 2147483647]
-					duplicate_positions = [Vector2(0, size.y), Vector2(0, -size.y), Vector2(size.x, 0), Vector2(-size.x, 0), Vector2(size.x, size.y), Vector2(size.x, -size.y), Vector2(-size.x, size.y), Vector2(-size.x, -size.y)]
-					loop = value
+					duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y), Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0), Vector2(bounds.size.x, bounds.size.y), Vector2(bounds.size.x, -bounds.size.y), Vector2(-bounds.size.x, bounds.size.y), Vector2(-bounds.size.x, -bounds.size.y)]
+
 				"Horizontally":
-					camera_limits = [bounds[0].x, 2147483647, -2147483647, bounds[1].x]
-					duplicate_positions = [Vector2(0, size.y), Vector2(0, -size.y)]
-					loop = value
+					camera_limits = [bounds.position.x, 2147483647, -2147483647, bounds.end.x]
+					duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y)]
+
 				"Vertically":
-					camera_limits = [-2147483647, bounds[1].y, bounds[0].y, 2147483647]
-					duplicate_positions = [Vector2(size.x, 0), Vector2(-size.x, 0)]
-					loop = value
+					camera_limits = [-2147483647, bounds.end.y, bounds.position.y, 2147483647]
+					duplicate_positions = [Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0)]
+
 				"None":
-					camera_limits = [bounds[0].x, bounds[1].y, bounds[0].y, bounds[1].x]
-					loop = value
+					camera_limits = [bounds.position.x, bounds.end.y, bounds.position.y, bounds.end.x]
+
+			return(value)
+
 		else:
-			loop = "None"
+			return("None")
 
 ## Node of the player character.[br][b]Note:[/b] More than one player character is not supported.
 @export var player: YumePlayer
@@ -104,9 +89,6 @@ func _notification(what: int) -> void:
 			else:
 				Game.persistent_data["world_visits"][name] = 1
 
-			if bounds == [Vector2(-256, -256), Vector2(256, 256)]:
-				bounds = bounds
-			
 			if loop == "All Sides":
 				loop = loop
 
@@ -154,12 +136,15 @@ func _on_node_added(node: Node):
 		# player.get_parent().move_child(player, -1)
 
 func wrap_around_world(value: Vector2) -> Vector2:
-	if bounds.size() >= 2:
+	if bounds.has_area():
 		match loop:
 			"All Sides":
-				return Vector2(wrap(value.x, bounds[0].x, bounds[1].x), wrap(value.y, bounds[0].y, bounds[1].y))
+				return Vector2(wrap(value.x, bounds.position.x, bounds.end.x), wrap(value.y, bounds.position.y, bounds.end.y))
+
 			"Horizontally":
-				return Vector2(wrap(value.x, bounds[0].x, bounds[1].x), value.y)
+				return Vector2(wrap(value.x, bounds.position.x, bounds.end.x), value.y)
+
 			"Vertically":
-				return Vector2(value.x , wrap(value.y, bounds[0].y, bounds[1].y))
+				return Vector2(value.x, wrap(value.y, bounds.position.y, bounds.end.y))
+
 	return value

@@ -76,7 +76,7 @@ size = Vector2(16, 16)
 [node name="Nexus" type="Node2D" node_paths=PackedStringArray("player")]
 y_sort_enabled = true
 script = ExtResource("1_j3gsm")
-bounds = Array[Vector2]([Vector2(-192, -192), Vector2(288, 288)])
+bounds = Rect2(-192, -192, 480, 480)
 player = NodePath("Sakutsuki")
 depth = "0"
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"

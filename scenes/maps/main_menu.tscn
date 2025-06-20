@@ -5,7 +5,6 @@
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_5y8n7")
-bounds = Array[Vector2]([])
 loop = "None"
 dreaming = false
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
