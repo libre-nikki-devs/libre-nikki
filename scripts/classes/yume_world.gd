@@ -22,24 +22,24 @@ extends Node2D
 		if bounds.has_area():
 			match value:
 				"All Sides":
-					camera_limits = [-2147483647, 2147483647, -2147483647, 2147483647]
+					camera_limits = [-2147483647.0, 2147483647.0, -2147483647.0, 2147483647.0]
 					duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y), Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0), Vector2(bounds.size.x, bounds.size.y), Vector2(bounds.size.x, -bounds.size.y), Vector2(-bounds.size.x, bounds.size.y), Vector2(-bounds.size.x, -bounds.size.y)]
 
 				"Horizontally":
-					camera_limits = [bounds.position.x, 2147483647, -2147483647, bounds.end.x]
-					duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y)]
+					camera_limits = [-2147483647.0, bounds.end.y, bounds.position.y, 2147483647.0]
+					duplicate_positions = [Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0)]
 
 				"Vertically":
-					camera_limits = [-2147483647, bounds.end.y, bounds.position.y, 2147483647]
-					duplicate_positions = [Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0)]
+					camera_limits = [bounds.position.x, 2147483647.0, -2147483647.0, bounds.end.x]
+					duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y)]
 
 				"None":
 					camera_limits = [bounds.position.x, bounds.end.y, bounds.position.y, bounds.end.x]
 
-			return(value)
+			loop = value
 
 		else:
-			return("None")
+			loop = "None"
 
 ## Node of the player character.[br][b]Note:[/b] More than one player character is not supported.
 @export var player: YumePlayer
@@ -60,9 +60,12 @@ extends Node2D
 var duplicate_positions: Array[Vector2] = []
 
 ## Limits for the player character's camera. The camera will stop moving, if the limit is reached. By default, they are set to the lowest and the highest values in the following order: left, bottom, top, right.
-var camera_limits: Array[float] = [-2147483647, 2147483647, -2147483647, 2147483647]:
+var camera_limits: Array[float] = [-2147483647.0, 2147483647.0, -2147483647.0, 2147483647.0]:
 	set(value):
 		camera_limits = value
+
+		if not is_node_ready():
+			await ready
 
 		if player:
 			if player.camera:
