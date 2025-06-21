@@ -110,10 +110,14 @@ func set_animation(animation: String = str(DIRECTION.find_key(facing)).to_lower(
 func face(what: Vector2) -> void:
 	if position.x > what.x:
 		facing = DIRECTION.LEFT
+		return
+
 	elif position.x < what.x:
 		facing = DIRECTION.RIGHT
+		return
 
 	if position.y > what.y:
 		facing = DIRECTION.UP
-	else:
-		facing = DIRECTION.DOWN
+		return
+
+	facing = DIRECTION.DOWN
