@@ -40,12 +40,21 @@ func _physics_process(delta: float) -> void:
 				facing = direction
 				move(direction)
 
-func _input(event: InputEvent) -> void:
-	if not is_busy:
-		if event.is_action_pressed("ui_accept"):
-			interact()
+var menu_queued: bool = false
 
-		if event.is_action_pressed("ui_cancel"):
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_accept") and not is_busy:
+		interact()
+
+	if event.is_action_pressed("ui_cancel"):
+		if is_busy:
+			if is_moving:
+				if not menu_queued:
+					menu_queued = true
+					await moved
+					open_menu()
+					menu_queued = false
+		else:
 			open_menu()
 
 func _on_accept_key_held() -> void:
@@ -91,12 +100,12 @@ var menu = Control.new()
 
 func open_menu() -> void:
 	if Game.cancel_events.is_empty():
+		get_tree().paused = true
 		Game.transition_handler.play("fade_out", -1, 10.0)
 		await Game.transition_handler.animation_finished
 		menu = preload("res://scenes/menus/players_menu.tscn").instantiate()
 		Game.add_child(menu)
 		Game.transition_handler.play("fade_in", -1, 10.0)
-		get_tree().paused = true
 	else:
 		if Game.cancel_events.front().get_argument_count() > 0:
 			Game.cancel_events.front().call(self)
