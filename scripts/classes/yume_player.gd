@@ -31,11 +31,19 @@ const MOVEMENT_KEYS: Dictionary[String, DIRECTION] = {
 		equipped_effect = value
 		set_animation()
 
+@export var menu: PackedScene = preload("res://scenes/menus/players_menu.tscn")
+
+var accept_events: Array[Callable] = []
+
+var cancel_events: Array[Callable] = []
+
 var current_movement_keys: Array[String] = []
 
 var accept_key_hold_time: float = 0.0
 
 var cancel_key_hold_time: float = 0.0
+
+var menu_queued: bool = false
 
 signal accept_key_held()
 signal cancel_key_held()
@@ -83,6 +91,21 @@ func _notification(what: int) -> void:
 			else:
 				cancel_key_hold_time = 0.0
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_accept") and not is_busy:
+		interact()
+
+	if event.is_action_pressed("ui_cancel"):
+		if is_busy:
+			if is_moving:
+				if not menu_queued:
+					menu_queued = true
+					await moved
+					open_menu()
+					menu_queued = false
+		else:
+			open_menu()
+
 func _move() -> void:
 	super()
 
@@ -103,9 +126,8 @@ func equip(effect: EFFECT = 0, silently: bool = false) -> void:
 
 	equipped.emit()
 
-## If there are colliding nodes on the same Z index as this character, emit both [signal YumeInteractable.body_interacted] and [signal YumeInteractable.body_touched] on the colliding [YumeInteractable].
 func interact() -> void:
-	if Game.accept_events.is_empty():
+	if accept_events.is_empty():
 		if not is_sitting:
 			var collider: Object = collision_detector.get_collider()
 
@@ -113,13 +135,13 @@ func interact() -> void:
 				if collider is YumeInteractable:
 					collider.emit_signal("body_interacted", self)
 					collider.emit_signal("body_touched", self)
-
 	else:
-		if Game.accept_events.front().get_argument_count() > 0:
-			Game.accept_events.front().call(self)
+		if accept_events.front().get_argument_count() > 0:
+			accept_events.front().call(self)
 		else:
-			Game.accept_events.front().call()
-		Game.accept_events.pop_front()
+			accept_events.front().call()
+
+		accept_events.pop_front()
 
 ## Play the cheek pinching animation. Wakes up the character, if is dreaming.
 func pinch_cheek() -> void:
@@ -167,3 +189,18 @@ func revoke_effect(effect: EFFECT) -> void:
 	if Game.persistent_data.has("acquired_effects"):
 		if Game.persistent_data["acquired_effects"] & effect:
 			Game.persistent_data["acquired_effects"] -= effect
+
+func open_menu() -> void:
+	if cancel_events.is_empty():
+		get_tree().paused = true
+		Game.transition_handler.play("fade_out", -1, 10.0)
+		await Game.transition_handler.animation_finished
+		Game.add_child(menu.instantiate())
+		Game.transition_handler.play("fade_in", -1, 10.0)
+	else:
+		if cancel_events.front().get_argument_count() > 0:
+			cancel_events.front().call(self)
+		else:
+			cancel_events.front().call()
+
+		cancel_events.pop_front()

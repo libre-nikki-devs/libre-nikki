@@ -22,10 +22,6 @@ var settings: Dictionary = {
 	"key_hold_time" = 0.5
 }
 
-var accept_events: Array[Callable] = []
-
-var cancel_events: Array[Callable] = []
-
 @onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
 
 func _ready() -> void:
@@ -59,7 +55,7 @@ func save_current_scene() -> void:
 		persistent_data["scene_data"][current_scene.scene_file_path] = PackedScene.new()
 		persistent_data["scene_data"][current_scene.scene_file_path].pack(current_scene)
 
-func save_player_data(player: YumePlayer, player_properties: Array[String] = ["effect", "facing", "last_step", "speed"]) -> void:
+func save_player_data(player: YumePlayer, player_properties: Array[String] = ["accept_events", "cancel_events", "equipped_effect", "facing", "last_step", "speed"]) -> void:
 	if player:
 		persistent_data["player_data"] = {}
 
