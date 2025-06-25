@@ -1,6 +1,17 @@
-[sounds/boot_steel_door_close-1.wav, sounds/boot_steel_door_close-2.wav, sounds/boot_steel_door_locked-1.wav, sounds/boot_steel_door_open-1.wav]
-# Copyright (C) 2024-2025 boot <bootovy@proton.me>
-# Attribution 4.0 International 
-# All rights reserved.
+# This file contains licensing information about Libre Nikki's assets.
+#
+# 'Assets' are files that are not the source code. All files in binary form
+# of this repository, such as: images, spritesheets, tilemaps, music and sounds
+# are all assets.
+#
+# In this file, asset creators can specify what license their content is using.
+#
+# Assets not mentioned in this file are considered to be in Public Domain.
 
-# All other assets not mentioned in this file are considered to be in Public Domain.
+Copyright (C) 2024-2025 boot <bootovy@proton.me>. All rights reserved.
+
+Following files are licensed under the terms of the
+Attribution 4.0 International license:
+
+sounds/boot_steel_door_close-1.wav, sounds/boot_steel_door_close-2.wav,
+sounds/boot_steel_door_locked-1.wav, sounds/boot_steel_door_open-1.wav.
