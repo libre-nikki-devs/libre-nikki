@@ -62,12 +62,12 @@ layout_mode = 2
 [node name="PlayerEffectsLabel" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
-text = "FX: 0/1"
+text = "✨: 0/1"
 
 [node name="HealthLabel" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
-text = "HP: 0"
+text = "❤️: 0"
 
 [node name="Label2" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -212,7 +212,7 @@ grow_vertical = 0
 
 [node name="MoneyLabel" type="Label" parent="MoneyPanelContainer"]
 layout_mode = 2
-text = "0"
+text = "0♎"
 horizontal_alignment = 2
 vertical_alignment = 1
 

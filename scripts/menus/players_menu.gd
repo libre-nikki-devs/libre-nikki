@@ -56,9 +56,9 @@ func _ready() -> void:
 		money_container.anchors_preset = Control.PRESET_BOTTOM_LEFT
 
 	if Game.persistent_data.has("money"):
-		money_label.text = str(Game.persistent_data["money"])
+		money_label.text = str(Game.persistent_data["money"]) + "♎"
 	else:
-		money_label.text = "0"
+		money_label.text = "0♎"
 
 	if player.equipped_effect == 0:
 		player_avatar.animation = "down"
@@ -68,14 +68,14 @@ func _ready() -> void:
 	player_label.text = player.name
 
 	if Game.persistent_data.has("acquired_effects"):
-		player_effects_label.text = "FX: " + str(Game.persistent_data["acquired_effects"] & 1) + "/" + str(YumePlayer.EFFECT.size() - 1)
+		player_effects_label.text = "✨: " + str(Game.persistent_data["acquired_effects"] & 1) + "/" + str(YumePlayer.EFFECT.size() - 1)
 	else:
-		player_effects_label.text = "FX: 0/" + str(YumePlayer.EFFECT.size() - 1)
+		player_effects_label.text = "✨: 0/" + str(YumePlayer.EFFECT.size() - 1)
 
 	if Game.persistent_data.has("health"):
-		health_label.text = "HP: " + str(Game.persistent_data["health"])
+		health_label.text = "❤️: " + str(Game.persistent_data["health"])
 	else:
-		health_label.text = "HP: 0"
+		health_label.text = "❤️: 0"
 
 	if Game.persistent_data.has("acquired_effects"):
 		for effect: YumePlayer.EFFECT in YumePlayer.EFFECT.values():
