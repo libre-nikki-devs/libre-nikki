@@ -2,18 +2,25 @@
 #
 # This file is part of Libre Nikki.
 #
-# Libre Nikki is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+# Libre Nikki is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
 #
-# Libre Nikki is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# Libre Nikki is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along with
+# Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
 class_name YumeWorld
 extends Node2D
 
 @export var pretty_name: String
 
-## Indicates the playable area of the world. Can be left empty for infinite worlds.
+## Indicates the playable area of the world. Can be left empty for infinite
+## worlds.
 @export var bounds: Rect2
 
 ## Indicates if the world should loop.
@@ -41,13 +48,17 @@ extends Node2D
 		else:
 			loop = "None"
 
-## Node of the player character.[br][b]Note:[/b] More than one player character is not supported.
+## Node of the player character.[br][b]Note:[/b] More than one player character 
+## is not supported.
 @export var player: YumePlayer
 
-## The distance between this world and the Nexus measured in the amount of worlds required to visit. Optionally, value in brackets is the distance with the unlocked shortcut (if exists).
+## The distance between this world and the Nexus measured in the amount of
+## worlds required to visit. Optionally, value in brackets is the distance with
+## the unlocked shortcut (if exists).
 @export var depth: String = "1"
 
-## If there are no tiles on the surface, [YumeHumanoid]s will use this sound for footsteps.
+## If there are no tiles on the surface, [YumeHumanoid]s will use this sound for
+## footsteps.
 @export var default_footstep_sound: AudioStream = preload("res://sounds/あるく1.wav") # placeholder
 
 ## True, if this is a dream world.
@@ -59,7 +70,9 @@ extends Node2D
 ## Positions for node duplicates. Used only for looping worlds.
 var duplicate_positions: Array[Vector2] = []
 
-## Limits for the player character's camera. The camera will stop moving, if the limit is reached. By default, they are set to the lowest and the highest values in the following order: left, bottom, top, right.
+## Limits for the player character's camera. The camera will stop moving, if the
+## limit is reached. By default, they are set to the lowest and the highest
+## values in the following order: left, bottom, top, right.
 var camera_limits: Array[float] = [-2147483647.0, 2147483647.0, -2147483647.0, 2147483647.0]:
 	set(value):
 		camera_limits = value
@@ -135,8 +148,8 @@ func _on_node_added(node: Node):
 					instance.global_position += duplicate_position
 					node.add_child.call_deferred(instance)
 
-	# if player:
-		# player.get_parent().move_child(player, -1)
+	#if player:
+		#player.get_parent().move_child(player, -1)
 
 func wrap_around_world(value: Vector2) -> Vector2:
 	if bounds.has_area():

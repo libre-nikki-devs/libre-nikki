@@ -2,11 +2,17 @@
 #
 # This file is part of Libre Nikki.
 #
-# Libre Nikki is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+# Libre Nikki is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
 #
-# Libre Nikki is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# Libre Nikki is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along with
+# Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
 class_name YumeCharacter
 extends YumeInteractable
@@ -24,7 +30,10 @@ const DIRECTIONS: Dictionary[DIRECTION, Vector2] = {
 	DIRECTION.RIGHT: Vector2.RIGHT,
 }
 
-## If true, prevent the character from performing certain actions. For [YumePlayer]s, useful for scripted sequences where the player interaction is forbidden.[br][b]Warning:[/b] might cause softlocks when used incorrectly; make sure to set it to false once the sequence is done.
+## If true, prevent the character from performing certain actions.
+## For [YumePlayer]s, useful for scripted sequences where the player interaction
+## is forbidden.[br][b]Warning:[/b] might cause softlocks when used incorrectly;
+## make sure to set it to false once the sequence is done.
 @export var is_busy: bool = false
 
 @export_group("Movement")
@@ -72,7 +81,10 @@ func _notification(what: int) -> void:
 func _move() -> void:
 	pass
 
-## If there are no colliding objects on the same Z index as the character, move this [param direction] (diagonally, if on stairs and if [member can_use_stairs] is [code]true[/code]) by one tile. Otherwise, emit [signal YumeInteractable.body_touched] on the colliding [YumeInteractable].
+## If there are no colliding objects on the same Z index as the character, move
+## this [param direction] (diagonally, if on stairs and if
+## [member can_use_stairs] is [code]true[/code]) by one tile. Otherwise, emit
+## [signal YumeInteractable.body_touched] on the colliding [YumeInteractable].
 func move(direction: DIRECTION) -> void:
 	var current_scene: Node = get_tree().current_scene
 
@@ -103,7 +115,7 @@ func move(direction: DIRECTION) -> void:
 			if tile_data:
 				if tile_data.has_custom_data("stair"):
 					match tile_data.get_custom_data("stair"):
-						# \-shaped stairs; horizontal movement
+						# \-shaped stairs; horizontal movement.
 						1 when direction & HORIZONTAL:
 								target_position += Vector2(0.0, target_position.x)
 
@@ -113,7 +125,7 @@ func move(direction: DIRECTION) -> void:
 									collision_detector.global_position = global_position + Vector2(0, target_position.x)
 
 								surface_detector.global_position = collision_detector.global_position
-						# /-shaped stairs; horizontal movement
+						# /-shaped stairs; horizontal movement.
 						2 when direction & HORIZONTAL:
 								target_position -= Vector2(0.0, target_position.x)
 
@@ -123,7 +135,7 @@ func move(direction: DIRECTION) -> void:
 									collision_detector.global_position = global_position - Vector2(0, target_position.x)
 
 								surface_detector.global_position = collision_detector.global_position
-						# \-shaped stairs; vertical movement
+						# \-shaped stairs; vertical movement.
 						3 when direction & VERTICAL:
 								target_position += Vector2(target_position.y, 0.0)
 								
@@ -133,7 +145,7 @@ func move(direction: DIRECTION) -> void:
 									collision_detector.global_position = global_position + Vector2(target_position.y, 0.0)
 
 								surface_detector.global_position = collision_detector.global_position
-						# /-shaped stairs; vertical movement
+						# /-shaped stairs; vertical movement.
 						4 when direction & VERTICAL:
 								target_position -= Vector2(target_position.y, 0.0)
 								

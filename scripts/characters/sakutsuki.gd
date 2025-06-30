@@ -2,11 +2,17 @@
 #
 # This file is part of Libre Nikki.
 #
-# Libre Nikki is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+# Libre Nikki is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
 #
-# Libre Nikki is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# Libre Nikki is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along with
+# Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
 extends YumePlayer
 
@@ -24,7 +30,8 @@ func _physics_process(delta: float) -> void:
 		if current_movement_keys.size() > 0:
 			var direction: DIRECTION = MOVEMENT_KEYS[current_movement_keys[-1]]
 
-			# Do not move when calling opposite movement events (eg. pressing both 'up' and 'down' keys at once).
+			# Do not move when calling opposite movement events (eg. pressing
+			# both 'up' and 'down' keys at once).
 			if current_movement_keys.size() > 1:
 				if direction & HORIZONTAL:
 					if MOVEMENT_KEYS[current_movement_keys[-2]] & HORIZONTAL:
