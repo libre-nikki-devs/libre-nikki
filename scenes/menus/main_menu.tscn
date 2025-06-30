@@ -1,29 +1,23 @@
 [gd_scene load_steps=3 format=3 uid="uid://bghxnpywucjso"]
 
-[ext_resource type="Script" uid="uid://bwuyc2n84asut" path="res://scripts/maps/main_menu.gd" id="1_5y8n7"]
-[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="2_37w8h"]
+[ext_resource type="Script" uid="uid://bwuyc2n84asut" path="res://scripts/menus/main_menu.gd" id="1_ovrgc"]
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="2_2o76q"]
 
-[node name="MainMenu" type="Node2D"]
-script = ExtResource("1_5y8n7")
-loop = "None"
-dreaming = false
-metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-scale = Vector2(2, 2)
-transform = Transform2D(2, 0, 0, 2, 0, 0)
-
-[node name="Control" type="Control" parent="CanvasLayer"]
+[node name="MainMenu" type="Control"]
 layout_mode = 3
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -320.0
+offset_bottom = -240.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(2, 2)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme = ExtResource("2_37w8h")
+theme = ExtResource("2_2o76q")
+script = ExtResource("1_ovrgc")
 
-[node name="MenuContainer" type="PanelContainer" parent="CanvasLayer/Control"]
+[node name="MenuContainer" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -37,11 +31,11 @@ offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ButtonContainer" type="VBoxContainer" parent="CanvasLayer/Control/MenuContainer"]
+[node name="ButtonContainer" type="VBoxContainer" parent="MenuContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="PlayButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
+[node name="PlayButton" type="Button" parent="MenuContainer/ButtonContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../QuitButton")
@@ -51,7 +45,7 @@ focus_next = NodePath("../ContinueButton")
 focus_previous = NodePath("../QuitButton")
 text = " "
 
-[node name="PlayLabel" type="Label" parent="CanvasLayer/Control/MenuContainer/ButtonContainer/PlayButton"]
+[node name="PlayLabel" type="Label" parent="MenuContainer/ButtonContainer/PlayButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -62,7 +56,7 @@ text = "Play"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ContinueButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
+[node name="ContinueButton" type="Button" parent="MenuContainer/ButtonContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../PlayButton")
@@ -73,7 +67,7 @@ focus_previous = NodePath("../PlayButton")
 disabled = true
 text = " "
 
-[node name="ContinueLabel" type="Label" parent="CanvasLayer/Control/MenuContainer/ButtonContainer/ContinueButton"]
+[node name="ContinueLabel" type="Label" parent="MenuContainer/ButtonContainer/ContinueButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -84,7 +78,7 @@ text = "Continue"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SettingsButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
+[node name="SettingsButton" type="Button" parent="MenuContainer/ButtonContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../ContinueButton")
@@ -94,7 +88,7 @@ focus_next = NodePath("../QuitButton")
 focus_previous = NodePath("../ContinueButton")
 text = " "
 
-[node name="SettingsLabel" type="Label" parent="CanvasLayer/Control/MenuContainer/ButtonContainer/SettingsButton"]
+[node name="SettingsLabel" type="Label" parent="MenuContainer/ButtonContainer/SettingsButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -105,7 +99,7 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="QuitButton" type="Button" parent="CanvasLayer/Control/MenuContainer/ButtonContainer"]
+[node name="QuitButton" type="Button" parent="MenuContainer/ButtonContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../SettingsButton")
@@ -115,7 +109,7 @@ focus_next = NodePath("../PlayButton")
 focus_previous = NodePath("../SettingsButton")
 text = " "
 
-[node name="QuitLabel" type="Label" parent="CanvasLayer/Control/MenuContainer/ButtonContainer/QuitButton"]
+[node name="QuitLabel" type="Label" parent="MenuContainer/ButtonContainer/QuitButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -126,7 +120,7 @@ text = "Quit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="GameLabel" type="Label" parent="CanvasLayer/Control"]
+[node name="GameLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -143,7 +137,7 @@ text = "Libre Nikki"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VersionLabel" type="Label" parent="CanvasLayer/Control"]
+[node name="VersionLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -154,7 +148,7 @@ grow_vertical = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="CanvasLayer/Control/MenuContainer/ButtonContainer/PlayButton" to="." method="_on_play_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/MenuContainer/ButtonContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/MenuContainer/ButtonContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/MenuContainer/ButtonContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="MenuContainer/ButtonContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MenuContainer/ButtonContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="MenuContainer/ButtonContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="MenuContainer/ButtonContainer/QuitButton" to="." method="_on_quit_button_pressed"]

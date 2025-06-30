@@ -1,12 +1,12 @@
-extends YumeWorld
+extends Control
 
-@onready var menu_container: Container = get_node("CanvasLayer/Control/MenuContainer")
-@onready var play_button: Button = get_node("CanvasLayer/Control/MenuContainer/ButtonContainer/PlayButton")
-@onready var continue_button: Button = get_node("CanvasLayer/Control/MenuContainer/ButtonContainer/ContinueButton")
-@onready var continue_label: Label = get_node("CanvasLayer/Control/MenuContainer/ButtonContainer/ContinueButton/ContinueLabel")
-@onready var settings_button: Button = get_node("CanvasLayer/Control/MenuContainer/ButtonContainer/SettingsButton")
-@onready var quit_button: Button = get_node("CanvasLayer/Control/MenuContainer/ButtonContainer/QuitButton")
-@onready var version_label: Label = get_node("CanvasLayer/Control/VersionLabel")
+@onready var menu_container: Container = get_node("MenuContainer")
+@onready var play_button: Button = get_node("MenuContainer/ButtonContainer/PlayButton")
+@onready var continue_button: Button = get_node("MenuContainer/ButtonContainer/ContinueButton")
+@onready var continue_label: Label = get_node("MenuContainer/ButtonContainer/ContinueButton/ContinueLabel")
+@onready var settings_button: Button = get_node("MenuContainer/ButtonContainer/SettingsButton")
+@onready var quit_button: Button = get_node("MenuContainer/ButtonContainer/QuitButton")
+@onready var version_label: Label = get_node("VersionLabel")
 
 signal button_finished
 
