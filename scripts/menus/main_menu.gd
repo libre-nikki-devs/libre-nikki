@@ -23,18 +23,19 @@ extends Control
 @onready var settings_button: Button = get_node("MenuContainer/ButtonContainer/SettingsButton")
 @onready var quit_button: Button = get_node("MenuContainer/ButtonContainer/QuitButton")
 @onready var version_label: Label = get_node("VersionLabel")
+@onready var greeting: Control = get_node("Greeting")
+@onready var greeting_label: Label = get_node("Greeting/GreetingLabel")
 
 signal button_finished
 
 func _ready() -> void:
+	Game.persistent_data.clear()
 	menu_container.visible = false
 	play_button.visible = false
 	continue_button.visible = false
 	settings_button.visible = false
 	quit_button.visible = false
 	version_label.text = ProjectSettings.get_setting("application/config/version")
-
-	Game.persistent_data.clear()
 	Game.transition_handler.play("fade_in", -1, 2.0)
 	await Game.transition_handler.animation_finished
 	menu_container.visible = true
@@ -56,6 +57,19 @@ func _ready() -> void:
 		continue_button.disabled = true
 		continue_label.modulate.a = 0.5
 		play_button.grab_focus()
+
+func _input(event: InputEvent) -> void:
+	if (event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_cancel")) and not get_tree().paused:
+		var focus_owner: Control = get_viewport().gui_get_focus_owner()
+
+		if focus_owner:
+			match focus_owner.get_parent():
+				greeting:
+					get_tree().paused = true
+					Game.transition_handler.play("fade_out")
+					await Game.transition_handler.animation_finished
+					greeting.visible = false
+					Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
 
 func _on_button_pressed(button: Button) -> void:
 	for child: Control in button.get_parent().get_children():
@@ -80,7 +94,12 @@ func _on_button_pressed(button: Button) -> void:
 func _on_play_button_pressed() -> void:
 	_on_button_pressed(play_button)
 	await button_finished
-	Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
+	get_tree().paused = true
+	greeting.visible = true
+	greeting_label.grab_focus()
+	Game.transition_handler.play("fade_in")
+	await Game.transition_handler.animation_finished
+	get_tree().paused = false
 
 func _on_continue_button_pressed() -> void:
 	_on_button_pressed(continue_button)

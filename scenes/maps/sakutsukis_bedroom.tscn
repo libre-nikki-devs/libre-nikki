@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://bra2nosjgdw7m"]
+[gd_scene load_steps=20 format=4 uid="uid://bra2nosjgdw7m"]
 
 [ext_resource type="Script" uid="uid://dekpdnansexi6" path="res://scripts/maps/sakutsukis_bedroom.gd" id="1_bvmiv"]
 [ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="2_0kkjn"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="4_gh7np"]
 [ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://spritesheets/images/test.png" id="5_k7kuo"]
 [ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="6_nlgcx"]
-[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="7_k5aee"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l57qo"]
 texture = ExtResource("2_0kkjn")
@@ -102,43 +101,6 @@ player = NodePath("Sakutsuki")
 depth = "?"
 dreaming = false
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-layer = 2
-visible = false
-scale = Vector2(2, 2)
-transform = Transform2D(2, 0, 0, 2, 0, 0)
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-anchors_preset = -1
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-
-[node name="GreetingLabel" type="Label" parent="CanvasLayer"]
-anchors_preset = -1
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 6
-size_flags_vertical = 6
-focus_mode = 2
-theme = ExtResource("7_k5aee")
-text = "Libre Nikki is not affiliated with Kikiyama
-or Yume Nikki. It is purely a fan game.
-
-Libre Nikki is still in early development.
-If you are an artist, a composer or a programmer
-and if you are willing to improve Libre Nikki,
-I recommend to contribute to the project 
-through Github. All contributions are welcome.
-
-Thank you for reading and enjoy Libre Nikki!"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, 8)
