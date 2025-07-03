@@ -112,7 +112,7 @@ func sleep() -> void:
 func wake_up() -> void:
 	persistent_data["player_data"] = {}
 	persistent_data["world_data"] = {}
-	transition_handler.play("fade_out")
+	transition_handler.play("pixelate_out")
 	get_tree().paused = true
 	await transition_handler.animation_finished
 	change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")

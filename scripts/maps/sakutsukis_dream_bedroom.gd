@@ -7,7 +7,7 @@ func _ready() -> void:
 			player.facing = YumeCharacter.DIRECTION.DOWN
 
 	get_tree().paused = true
-	Game.transition_handler.play("fade_in")
+	Game.transition_handler.play("pixelate_in")
 	await Game.transition_handler.animation_finished
 	get_tree().paused = false
 

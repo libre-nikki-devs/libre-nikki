@@ -2,7 +2,7 @@ extends YumeWorld
 
 func _ready() -> void:
 	get_tree().paused = true
-	Game.transition_handler.play("fade_in")
+	Game.transition_handler.play("pixelate_in")
 	await Game.transition_handler.animation_finished
 	get_tree().paused = false
 
@@ -13,7 +13,7 @@ func save_game(save_path: String):
 func _on_bed_body_interacted(body: Node2D) -> void:
 	if body is YumePlayer:
 		get_tree().paused = true
-		Game.transition_handler.play("fade_out")
+		Game.transition_handler.play("pixelate_out")
 		await Game.transition_handler.animation_finished
 		get_tree().paused = false
 
