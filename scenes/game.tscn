@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://dhnn80wdox05k"]
 
 [ext_resource type="Script" uid="uid://c305spui1e7hh" path="res://scripts/game.gd" id="1_w2k2j"]
-[ext_resource type="Shader" uid="uid://djggkoos5xcjo" path="res://shaders/pixelate.gdshader" id="2_yqjtg"]
+[ext_resource type="Shader" uid="uid://clrvlroex8lf6" path="res://shaders/pixelate.gdshader" id="2_yqjtg"]
 
 [sub_resource type="Animation" id="Animation_yqjtg"]
 length = 0.001
