@@ -17,7 +17,6 @@ run/main_scene="res://scenes/menus/main_menu.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="libre_nikki"
 config/features=PackedStringArray("4.4", "Mobile")
-run/max_fps=60
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 
