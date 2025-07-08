@@ -156,10 +156,15 @@ func pinch_cheek() -> void:
 	if animation_player.has_animation_library(effect_name):
 		if animation_player.get_animation_library(effect_name).has_animation("downPinch"):
 			is_busy = true
-			facing = DIRECTION.DOWN
+
+			if facing != DIRECTION.DOWN:
+				await get_tree().create_timer(0.5, false, true).timeout
+				facing = DIRECTION.DOWN
+				await get_tree().create_timer(0.5, false, true).timeout
+
 			set_animation("downPinch", 1.0)
 			await animation_player.animation_finished
-
+			await get_tree().create_timer(0.25, false, true).timeout
 			var current_scene: Node = get_tree().current_scene
 
 			if current_scene is YumeWorld:
