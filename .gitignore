@@ -1,1 +1,3 @@
 .godot/
+build/*
+!build/.gdignore
