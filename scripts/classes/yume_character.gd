@@ -81,6 +81,16 @@ func _notification(what: int) -> void:
 func _move() -> void:
 	pass
 
+func _update_detector_positions(target_vector: Vector2) -> void:
+	var current_scene: Node = get_tree().current_scene
+
+	if current_scene is YumeWorld:
+		collision_detector.global_position = current_scene.wrap_around_world(global_position + target_position + target_vector) - target_position
+	else:
+		collision_detector.global_position = global_position + target_vector
+
+	surface_detector.global_position = collision_detector.global_position
+
 ## If there are no colliding objects on the same Z index as the character, move
 ## this [param direction] (diagonally, if on stairs and if
 ## [member can_use_stairs] is [code]true[/code]) by one tile. Otherwise, emit
@@ -117,44 +127,23 @@ func move(direction: DIRECTION) -> void:
 					match tile_data.get_custom_data("stair"):
 						# \-shaped stairs; horizontal movement.
 						1 when direction & HORIZONTAL:
-								target_position += Vector2(0.0, target_position.x)
+							target_position += Vector2(0.0, target_position.x)
+							_update_detector_positions(Vector2(0.0, target_position.x))
 
-								if current_scene is YumeWorld:
-									collision_detector.global_position = current_scene.wrap_around_world(global_position + target_position + Vector2(0.0, target_position.x)) - target_position
-								else:
-									collision_detector.global_position = global_position + Vector2(0, target_position.x)
-
-								surface_detector.global_position = collision_detector.global_position
 						# /-shaped stairs; horizontal movement.
 						2 when direction & HORIZONTAL:
-								target_position -= Vector2(0.0, target_position.x)
+							target_position -= Vector2(0.0, target_position.x)
+							_update_detector_positions(-Vector2(0.0, target_position.x))
 
-								if current_scene is YumeWorld:
-									collision_detector.global_position = current_scene.wrap_around_world(global_position + target_position - Vector2(0.0, target_position.x)) - target_position
-								else:
-									collision_detector.global_position = global_position - Vector2(0, target_position.x)
-
-								surface_detector.global_position = collision_detector.global_position
 						# \-shaped stairs; vertical movement.
 						3 when direction & VERTICAL:
-								target_position += Vector2(target_position.y, 0.0)
-								
-								if current_scene is YumeWorld:
-									collision_detector.global_position = current_scene.wrap_around_world(global_position + target_position + Vector2(target_position.y, 0.0)) - target_position
-								else:
-									collision_detector.global_position = global_position + Vector2(target_position.y, 0.0)
+							target_position += Vector2(target_position.y, 0.0)
+							_update_detector_positions(Vector2(target_position.y, 0.0))
 
-								surface_detector.global_position = collision_detector.global_position
 						# /-shaped stairs; vertical movement.
 						4 when direction & VERTICAL:
-								target_position -= Vector2(target_position.y, 0.0)
-								
-								if current_scene is YumeWorld:
-									collision_detector.global_position = current_scene.wrap_around_world(global_position + target_position - Vector2(target_position.y, 0.0)) - target_position
-								else:
-									collision_detector.global_position = global_position - Vector2(target_position.y, 0.0)
-
-								surface_detector.global_position = collision_detector.global_position
+							target_position -= Vector2(target_position.y, 0.0)
+							_update_detector_positions(-Vector2(target_position.y, 0.0))
 
 			collision_detector.force_raycast_update()
 			collider = collision_detector.get_collider()
