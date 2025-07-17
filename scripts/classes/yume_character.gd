@@ -190,3 +190,59 @@ func move(direction: DIRECTION) -> void:
 	is_busy = false
 	is_moving = false
 	moved.emit()
+
+func is_colliding(direction: DIRECTION) -> bool:
+	var current_scene: Node = get_tree().current_scene
+
+	if current_scene is YumeWorld:
+		target_position = DIRECTIONS[direction] * current_scene.tile_size
+		collision_detector.global_position = current_scene.wrap_around_world(global_position + target_position) - target_position
+	else:
+		target_position = DIRECTIONS[direction] * 16.0
+		collision_detector.global_position = global_position
+
+	collision_detector.target_position = target_position
+	collision_detector.force_raycast_update()
+	surface_detector.global_position = collision_detector.global_position
+	surface_detector.target_position = target_position
+	surface_detector.force_raycast_update()
+	var surface: Object = surface_detector.get_collider()
+
+	if surface and can_use_stairs:
+		if surface is TileMapLayer:
+			var current_tile: Vector2i = surface.local_to_map(surface_detector.global_position + surface_detector.target_position)
+
+			if current_scene is YumeWorld:
+				current_tile = surface.local_to_map(current_scene.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
+
+			var tile_data: TileData = surface.get_cell_tile_data(current_tile)
+
+			if tile_data:
+				if tile_data.has_custom_data("stair"):
+					match tile_data.get_custom_data("stair"):
+						# \-shaped stairs; horizontal movement.
+						1 when direction & HORIZONTAL:
+							target_position += Vector2(0.0, target_position.x)
+							_update_detector_positions(Vector2(0.0, target_position.x))
+
+						# /-shaped stairs; horizontal movement.
+						2 when direction & HORIZONTAL:
+							target_position -= Vector2(0.0, target_position.x)
+							_update_detector_positions(-Vector2(0.0, target_position.x))
+
+						# \-shaped stairs; vertical movement.
+						3 when direction & VERTICAL:
+							target_position += Vector2(target_position.y, 0.0)
+							_update_detector_positions(Vector2(target_position.y, 0.0))
+
+						# /-shaped stairs; vertical movement.
+						4 when direction & VERTICAL:
+							target_position -= Vector2(target_position.y, 0.0)
+							_update_detector_positions(-Vector2(target_position.y, 0.0))
+
+			collision_detector.force_raycast_update()
+
+	if collision_detector.is_colliding():
+		return true
+	else:
+		return false

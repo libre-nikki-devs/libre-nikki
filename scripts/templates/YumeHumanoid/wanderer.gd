@@ -28,7 +28,6 @@ func _ready() -> void:
 func _move_loop():
 	while true:
 		var available_directions: Array[DIRECTION]
-		var current_scene: Node = get_tree().current_scene
 
 		for direction in DIRECTION.values():
 			available_directions.append(direction)
@@ -42,12 +41,7 @@ func _move_loop():
 			while not (available_directions.is_empty() or can_move):
 				picked_direction = available_directions.pick_random()
 
-				if current_scene is YumeWorld:
-					target_position = DIRECTIONS[picked_direction] * current_scene.tile_size
-				else:
-					target_position = DIRECTIONS[picked_direction] * 16.0
-
-				if test_move(transform, target_position):
+				if is_colliding(picked_direction):
 					available_directions.erase(picked_direction)
 				else:
 					can_move = true
