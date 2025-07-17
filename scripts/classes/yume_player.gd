@@ -165,10 +165,9 @@ func pinch_cheek() -> void:
 			set_animation("downPinch", 1.0)
 			await animation_player.animation_finished
 			await get_tree().create_timer(0.25, false, true).timeout
-			var current_scene: Node = get_tree().current_scene
 
-			if current_scene is YumeWorld:
-				if current_scene.dreaming:
+			if current_world:
+				if current_world.dreaming:
 					Game.wake_up()
 
 			set_animation("downPinch", -1.0, 1.0, true)

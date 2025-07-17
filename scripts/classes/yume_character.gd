@@ -47,6 +47,8 @@ const DIRECTIONS: Dictionary[DIRECTION, Vector2] = {
 ## If true, the character will move diagonally on stairs.
 @export var can_use_stairs: bool = true
 
+var current_world: YumeWorld = null
+
 ## True, if the character is moving.
 var is_moving: bool = false
 
@@ -74,6 +76,21 @@ func _init() -> void:
 
 func _notification(what: int) -> void:
 	match what:
+		NOTIFICATION_PARENTED:
+			current_world = null
+			var node: Node = self
+
+			while true:
+				var parent: Node = node.get_parent()
+				node = parent
+
+				if not parent:
+					return
+
+				if parent is YumeWorld:
+					current_world = parent
+					return
+
 		NOTIFICATION_READY:
 			collision_detector.collision_mask = collision_mask
 			surface_detector.collision_mask = collision_mask - 1
@@ -82,10 +99,8 @@ func _move() -> void:
 	pass
 
 func _update_detector_positions(target_vector: Vector2) -> void:
-	var current_scene: Node = get_tree().current_scene
-
-	if current_scene is YumeWorld:
-		collision_detector.global_position = current_scene.wrap_around_world(global_position + target_position + target_vector) - target_position
+	if current_world:
+		collision_detector.global_position = current_world.wrap_around_world(global_position + target_position + target_vector) - target_position
 	else:
 		collision_detector.global_position = global_position + target_vector
 
@@ -96,11 +111,9 @@ func _update_detector_positions(target_vector: Vector2) -> void:
 ## [member can_use_stairs] is [code]true[/code]) by one tile. Otherwise, emit
 ## [signal YumeInteractable.body_touched] on the colliding [YumeInteractable].
 func move(direction: DIRECTION) -> void:
-	var current_scene: Node = get_tree().current_scene
-
-	if current_scene is YumeWorld:
-		target_position = DIRECTIONS[direction] * current_scene.tile_size
-		collision_detector.global_position = current_scene.wrap_around_world(global_position + target_position) - target_position
+	if current_world:
+		target_position = DIRECTIONS[direction] * current_world.tile_size
+		collision_detector.global_position = current_world.wrap_around_world(global_position + target_position) - target_position
 	else:
 		target_position = DIRECTIONS[direction] * 16.0
 		collision_detector.global_position = global_position
@@ -117,8 +130,8 @@ func move(direction: DIRECTION) -> void:
 		if surface is TileMapLayer:
 			var current_tile: Vector2i = surface.local_to_map(surface_detector.global_position + surface_detector.target_position)
 
-			if current_scene is YumeWorld:
-				current_tile = surface.local_to_map(current_scene.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
+			if current_world:
+				current_tile = surface.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
 
 			var tile_data: TileData = surface.get_cell_tile_data(current_tile)
 
@@ -163,9 +176,9 @@ func move(direction: DIRECTION) -> void:
 	elif not can_move_in_vacuum:
 		return
 
-	if current_scene is YumeWorld:
+	if current_world:
 		var previous_position: Vector2 = global_position
-		global_position = current_scene.wrap_around_world(global_position + target_position) - target_position
+		global_position = current_world.wrap_around_world(global_position + target_position) - target_position
 
 		if self == get_viewport().get_camera_2d().get_parent():
 			for parallax: Parallax2D in get_tree().get_nodes_in_group("Parallax"):
@@ -192,11 +205,9 @@ func move(direction: DIRECTION) -> void:
 	moved.emit()
 
 func is_colliding(direction: DIRECTION) -> bool:
-	var current_scene: Node = get_tree().current_scene
-
-	if current_scene is YumeWorld:
-		target_position = DIRECTIONS[direction] * current_scene.tile_size
-		collision_detector.global_position = current_scene.wrap_around_world(global_position + target_position) - target_position
+	if current_world:
+		target_position = DIRECTIONS[direction] * current_world.tile_size
+		collision_detector.global_position = current_world.wrap_around_world(global_position + target_position) - target_position
 	else:
 		target_position = DIRECTIONS[direction] * 16.0
 		collision_detector.global_position = global_position
@@ -212,8 +223,8 @@ func is_colliding(direction: DIRECTION) -> bool:
 		if surface is TileMapLayer:
 			var current_tile: Vector2i = surface.local_to_map(surface_detector.global_position + surface_detector.target_position)
 
-			if current_scene is YumeWorld:
-				current_tile = surface.local_to_map(current_scene.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
+			if current_world:
+				current_tile = surface.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
 
 			var tile_data: TileData = surface.get_cell_tile_data(current_tile)
 

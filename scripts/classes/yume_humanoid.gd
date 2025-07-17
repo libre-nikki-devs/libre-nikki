@@ -51,11 +51,10 @@ var footstep_sound: AudioStream
 var last_step: int = STEP_LEFT
 
 func _move() -> void:
-	var current_scene: Node = get_tree().current_scene
 	var surface: Object = surface_detector.get_collider()
 
-	if current_scene is YumeWorld:
-		footstep_sound = current_scene.default_footstep_sound
+	if current_world:
+		footstep_sound = current_world.default_footstep_sound
 	else:
 		footstep_sound = load("res://sounds/あるく1.wav") # placeholder
 
@@ -63,8 +62,8 @@ func _move() -> void:
 		if surface is TileMapLayer:
 			var current_tile = surface.local_to_map(surface_detector.global_position + surface_detector.target_position)
 
-			if current_scene is YumeWorld:
-				current_tile = surface.local_to_map(current_scene.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
+			if current_world:
+				current_tile = surface.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
 
 			var tile_data = surface.get_cell_tile_data(current_tile)
 			footstep_sound = get_tile_footstep_sound(tile_data)
@@ -97,10 +96,8 @@ func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 				#SURFACE.WOOD:
 				#SURFACE.CARPET:
 
-	var current_scene: Node = get_tree().current_scene
-
-	if current_scene is YumeWorld:
-		return current_scene.default_footstep_sound
+	if current_world:
+		return current_world.default_footstep_sound
 	else:
 		return load("res://sounds/あるく1.wav") # placeholder
 
