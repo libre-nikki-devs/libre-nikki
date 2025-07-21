@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://catbsi51pb1aq"]
+[gd_scene load_steps=30 format=3 uid="uid://catbsi51pb1aq"]
 
 [ext_resource type="Script" uid="uid://dhrwgs612gf2w" path="res://scripts/characters/debugtsuki.gd" id="1_g35pp"]
 [ext_resource type="SpriteFrames" uid="uid://322p67u26b32" path="res://spritesheets/debugtsuki.tres" id="2_yhhfb"]
@@ -867,10 +867,6 @@ _data = {
 &"upLookUp": SubResource("Animation_lv6qf")
 }
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_hodvo"]
-a = Vector2(0, 16)
-b = Vector2(0, 16)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0we4y"]
 size = Vector2(16, 16)
 
@@ -890,11 +886,6 @@ root_node = NodePath("../AnimatedSprite2D")
 libraries = {
 &"": SubResource("AnimationLibrary_fjxp4")
 }
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("SegmentShape2D_hodvo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_0we4y")
