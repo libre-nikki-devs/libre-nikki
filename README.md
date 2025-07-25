@@ -2,6 +2,10 @@
 
 Libre Nikki is a surreal walking simulator running on Godot Engine, heavily inspired by Yume Nikki and open for collaboration.
 
+## Downloading
+
+Official builds of the game can be downloaded from the [Libre Nikki's Releases page](https://github.com/libre-nikki-devs/libre-nikki/releases/latest).
+
 ## Exporting
 
 To export the project to an executable, you will need:
@@ -10,7 +14,7 @@ To export the project to an executable, you will need:
 
 ### Exporting from GUI:
 
-* Go to [Libre Nikki repository page](https://github.com/libre-nikki-devs/libre-nikki).
+* Go to the [Libre Nikki's Repository page](https://github.com/libre-nikki-devs/libre-nikki).
 * Press **Code > Download ZIP**.
 * Open Godot Engine.
 * Press **Import** and select the project's ZIP file.
