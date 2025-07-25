@@ -50,6 +50,6 @@ To export the project to an executable, you will need:
 
 Libre Nikki's source code is licensed under the terms of the GNU General Public License Version 3.
 
-Libre Nikki features assets that use licenses compatible with the GPL-3. See ASSET_LICENSING for the detailed asset licensing information.
+Libre Nikki features assets that use licenses compatible with the GPL-3. See [ASSET_LICENSING](./ASSET_LICENSING) for the detailed asset licensing information.
 
-Licenses' terms and conditions are located in the LICENSES directory.
+Licenses' terms and conditions are located in the [LICENSES](./LICENSES) directory.
