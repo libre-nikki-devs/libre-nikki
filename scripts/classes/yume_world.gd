@@ -73,19 +73,7 @@ var duplicate_positions: Array[Vector2] = []
 ## Limits for the player character's camera. The camera will stop moving, if the
 ## limit is reached. By default, they are set to the lowest and the highest
 ## values in the following order: left, bottom, top, right.
-var camera_limits: Array[float] = [-2147483647.0, 2147483647.0, -2147483647.0, 2147483647.0]:
-	set(value):
-		camera_limits = value
-
-		if not is_node_ready():
-			await ready
-
-		if player:
-			if player.camera:
-				player.camera.limit_left = floor(camera_limits[0] - player.camera.offset.x)
-				player.camera.limit_bottom = floor(camera_limits[1] - player.camera.offset.y)
-				player.camera.limit_top = floor(camera_limits[2] - player.camera.offset.y)
-				player.camera.limit_right = floor(camera_limits[3] - player.camera.offset.x)
+var camera_limits: Array[float] = [-2147483647.0, 2147483647.0, -2147483647.0, 2147483647.0]
 
 func _initialize_node(node: Node):
 	for child: Node in node.get_children():
