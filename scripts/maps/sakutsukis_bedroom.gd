@@ -1,5 +1,7 @@
 extends YumeWorld
 
+@onready var player: YumePlayer = get_node("Sakutsuki")
+
 func _ready() -> void:
 	get_tree().paused = true
 	Game.transition_handler.play("pixelate_in")

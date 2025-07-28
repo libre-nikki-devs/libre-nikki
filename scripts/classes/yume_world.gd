@@ -48,10 +48,6 @@ extends Node2D
 		else:
 			loop = "None"
 
-## Node of the player character.[br][b]Note:[/b] More than one player character 
-## is not supported.
-@export var player: YumePlayer
-
 ## The distance between this world and the Nexus measured in the amount of
 ## worlds required to visit. Optionally, value in brackets is the distance with
 ## the unlocked shortcut (if exists).

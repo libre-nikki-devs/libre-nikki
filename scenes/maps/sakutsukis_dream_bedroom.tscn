@@ -93,12 +93,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6lxew"]
 size = Vector2(16, 16)
 
-[node name="SakutsukisDreamBedroom" type="Node2D" node_paths=PackedStringArray("player")]
+[node name="SakutsukisDreamBedroom" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_54v4e")
 pretty_name = "Sakutsuki's Dream Bedroom"
 loop = "None"
-player = NodePath("Sakutsuki")
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 
 [node name="Camera2D" type="Camera2D" parent="."]

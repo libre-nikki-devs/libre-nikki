@@ -73,11 +73,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2kjem"]
 size = Vector2(16, 16)
 
-[node name="Nexus" type="Node2D" node_paths=PackedStringArray("player")]
+[node name="Nexus" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_j3gsm")
 bounds = Rect2(-192, -192, 480, 480)
-player = NodePath("Sakutsuki")
 depth = "0"
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 

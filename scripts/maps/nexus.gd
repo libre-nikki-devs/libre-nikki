@@ -1,5 +1,7 @@
 extends YumeWorld
 
+@onready var player: YumePlayer = get_node("Sakutsuki")
+
 func _ready() -> void:
 	if Game.persistent_data.has("entered_from"):
 		if Game.persistent_data["entered_from"] == "res://scenes/maps/sakutsukis_dream_bedroom.tscn":
