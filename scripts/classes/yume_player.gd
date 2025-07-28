@@ -66,10 +66,14 @@ func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_PARENTED:
 			if camera and current_world:
-				camera.limit_left = floor(current_world.camera_limits[0] - camera.offset.x)
-				camera.limit_bottom = floor(current_world.camera_limits[1] - camera.offset.y)
-				camera.limit_top = floor(current_world.camera_limits[2] - camera.offset.y)
-				camera.limit_right = floor(current_world.camera_limits[3] - camera.offset.x)
+				if current_world.bounds.has_area():
+					if not current_world.is_node_ready():
+						await current_world.ready
+
+					camera.limit_left = floor(current_world.camera_limits[0] - camera.offset.x)
+					camera.limit_bottom = floor(current_world.camera_limits[1] - camera.offset.y)
+					camera.limit_top = floor(current_world.camera_limits[2] - camera.offset.y)
+					camera.limit_right = floor(current_world.camera_limits[3] - camera.offset.x)
 
 		NOTIFICATION_READY:
 			if Game.persistent_data.has("player_data"):

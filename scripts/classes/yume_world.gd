@@ -24,7 +24,7 @@ extends Node2D
 @export var bounds: Rect2
 
 ## Indicates if the world should loop.
-@export_enum("All Sides", "Horizontally", "Vertically", "None") var loop: String = "All Sides":
+@export_enum("All Sides", "Horizontally", "Vertically", "None") var loop: String = "None":
 	set(value):
 		if bounds.has_area():
 			match value:
@@ -66,10 +66,9 @@ extends Node2D
 ## Positions for node duplicates. Used only for looping worlds.
 var duplicate_positions: Array[Vector2] = []
 
-## Limits for the player character's camera. The camera will stop moving, if the
-## limit is reached. By default, they are set to the lowest and the highest
-## values in the following order: left, bottom, top, right.
-var camera_limits: Array[float] = [-2147483647.0, 2147483647.0, -2147483647.0, 2147483647.0]
+## Limits for the player character's camera. The camera will stop moving after
+## the limit is reached.
+var camera_limits: Array[float] = []
 
 func _initialize_node(node: Node):
 	for child: Node in node.get_children():
@@ -89,7 +88,7 @@ func _notification(what: int) -> void:
 			else:
 				Game.persistent_data["world_visits"][name] = 1
 
-			if loop == "All Sides":
+			if loop == "None":
 				loop = loop
 
 			_initialize_node(self)
