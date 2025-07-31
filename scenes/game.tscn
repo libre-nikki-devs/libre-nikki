@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://dhnn80wdox05k"]
+[gd_scene load_steps=11 format=3 uid="uid://dhnn80wdox05k"]
 
 [ext_resource type="Script" uid="uid://c305spui1e7hh" path="res://scripts/game.gd" id="1_w2k2j"]
 [ext_resource type="Shader" uid="uid://clrvlroex8lf6" path="res://shaders/pixelate.gdshader" id="2_yqjtg"]
+[ext_resource type="PackedScene" uid="uid://s5isouysugs2" path="res://scenes/menus/fast_forward_indicator.tscn" id="3_lnu2h"]
 
 [sub_resource type="Animation" id="Animation_yqjtg"]
 length = 0.001
@@ -239,6 +240,17 @@ script = ExtResource("1_w2k2j")
 volume_db = -40.0
 max_polyphony = 2
 bus = &"Music"
+
+[node name="FastForwardIndicator" parent="." instance=ExtResource("3_lnu2h")]
+visible = false
+z_index = 2
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -22.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = 16.0
 
 [node name="TransitionHandler" type="AnimationPlayer" parent="."]
 libraries = {
