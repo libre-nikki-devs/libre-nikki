@@ -4,12 +4,12 @@
 [ext_resource type="FontFile" uid="uid://b0qlr2tc8xin1" path="res://spritesheets/images/font.png" id="2_5ne33"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h1dj2"]
-bg_color = Color(0, 0, 0, 0.501961)
+bg_color = Color(0, 0, 0, 0.5)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0, 0, 0, 0.501961)
+border_color = Color(0, 0, 0, 0.5)
 
 [node name="FastForwardIndicator" type="PanelContainer"]
 offset_right = 20.0
