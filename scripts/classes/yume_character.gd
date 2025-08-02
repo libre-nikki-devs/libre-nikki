@@ -139,22 +139,22 @@ func move(direction: DIRECTION) -> void:
 				if tile_data.has_custom_data("stair"):
 					match tile_data.get_custom_data("stair"):
 						# \-shaped stairs; horizontal movement.
-						1 when direction & HORIZONTAL:
+						1, 5 when direction & HORIZONTAL:
 							target_position += Vector2(0.0, target_position.x)
 							_update_detector_positions(Vector2(0.0, target_position.x))
 
 						# /-shaped stairs; horizontal movement.
-						2 when direction & HORIZONTAL:
+						2, 6 when direction & HORIZONTAL:
 							target_position -= Vector2(0.0, target_position.x)
 							_update_detector_positions(-Vector2(0.0, target_position.x))
 
 						# \-shaped stairs; vertical movement.
-						3 when direction & VERTICAL:
+						3, 5 when direction & VERTICAL:
 							target_position += Vector2(target_position.y, 0.0)
 							_update_detector_positions(Vector2(target_position.y, 0.0))
 
 						# /-shaped stairs; vertical movement.
-						4 when direction & VERTICAL:
+						4, 6 when direction & VERTICAL:
 							target_position -= Vector2(target_position.y, 0.0)
 							_update_detector_positions(-Vector2(target_position.y, 0.0))
 
@@ -232,22 +232,22 @@ func is_colliding(direction: DIRECTION) -> bool:
 				if tile_data.has_custom_data("stair"):
 					match tile_data.get_custom_data("stair"):
 						# \-shaped stairs; horizontal movement.
-						1 when direction & HORIZONTAL:
+						1, 5 when direction & HORIZONTAL:
 							target_position += Vector2(0.0, target_position.x)
 							_update_detector_positions(Vector2(0.0, target_position.x))
 
 						# /-shaped stairs; horizontal movement.
-						2 when direction & HORIZONTAL:
+						2, 6 when direction & HORIZONTAL:
 							target_position -= Vector2(0.0, target_position.x)
 							_update_detector_positions(-Vector2(0.0, target_position.x))
 
 						# \-shaped stairs; vertical movement.
-						3 when direction & VERTICAL:
+						3, 5 when direction & VERTICAL:
 							target_position += Vector2(target_position.y, 0.0)
 							_update_detector_positions(Vector2(target_position.y, 0.0))
 
 						# /-shaped stairs; vertical movement.
-						4 when direction & VERTICAL:
+						4, 6 when direction & VERTICAL:
 							target_position -= Vector2(target_position.y, 0.0)
 							_update_detector_positions(-Vector2(target_position.y, 0.0))
 
