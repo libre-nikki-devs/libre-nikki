@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bghxnpywucjso"]
 
-[ext_resource type="Script" uid="uid://bwuyc2n84asut" path="res://scripts/menus/main_menu.gd" id="1_ovrgc"]
-[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="2_2o76q"]
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_fe2o3"]
+[ext_resource type="Script" uid="uid://bwuyc2n84asut" path="res://scripts/ui/main_menu.gd" id="2_1g8jr"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -15,8 +15,8 @@ grow_vertical = 2
 scale = Vector2(2, 2)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme = ExtResource("2_2o76q")
-script = ExtResource("1_ovrgc")
+theme = ExtResource("1_fe2o3")
+script = ExtResource("2_1g8jr")
 
 [node name="MenuContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -177,7 +177,7 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 focus_mode = 2
-theme = ExtResource("2_2o76q")
+theme = ExtResource("1_fe2o3")
 text = "Libre Nikki is not affiliated with Kikiyama
 or Yume Nikki. It is purely a fan game.
 

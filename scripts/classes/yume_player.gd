@@ -37,7 +37,7 @@ const MOVEMENT_KEYS: Dictionary[String, DIRECTION] = {
 		equipped_effect = value
 		set_animation()
 
-@export var menu: PackedScene = preload("res://scenes/menus/players_menu.tscn")
+@export var menu: PackedScene = preload("res://scenes/ui/players_menu.tscn")
 
 var accept_events: Array[Callable] = []
 

@@ -156,7 +156,7 @@ func _on_quit_button_pressed() -> void:
 	_on_button_pressed(quit_button)
 	await button_finished
 	get_tree().paused = false
-	Game.change_scene("res://scenes/menus/main_menu.tscn")
+	Game.change_scene("res://scenes/ui/main_menu.tscn")
 	queue_free()
 
 func _on_effects_button_pressed() -> void:

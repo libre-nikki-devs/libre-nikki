@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://s5isouysugs2"]
 
-[ext_resource type="Script" uid="uid://dxo4yqx4fke4a" path="res://scripts/menus/fast_forward_indicator.gd" id="1_5ne33"]
-[ext_resource type="FontFile" uid="uid://b0qlr2tc8xin1" path="res://spritesheets/images/font.png" id="2_5ne33"]
+[ext_resource type="Script" uid="uid://dxo4yqx4fke4a" path="res://scripts/ui/fast_forward_indicator.gd" id="1_0qwkn"]
+[ext_resource type="FontFile" uid="uid://b0qlr2tc8xin1" path="res://spritesheets/images/font.png" id="2_5aulx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h1dj2"]
 bg_color = Color(0, 0, 0, 0.5)
@@ -17,14 +17,14 @@ offset_bottom = 14.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_h1dj2")
-script = ExtResource("1_5ne33")
+script = ExtResource("1_0qwkn")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
-theme_override_fonts/font = ExtResource("2_5ne33")
+theme_override_fonts/font = ExtResource("2_5aulx")
 text = ">>>"
 horizontal_alignment = 1
 vertical_alignment = 1
