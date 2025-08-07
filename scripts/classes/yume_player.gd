@@ -146,6 +146,8 @@ func equip(effect: EFFECT = 0, silently: bool = false) -> void:
 func interact() -> void:
 	if accept_events.is_empty():
 		if not is_sitting:
+			await get_tree().physics_frame
+			collision_detector.force_raycast_update()
 			var collider: Object = collision_detector.get_collider()
 
 			if collider:
