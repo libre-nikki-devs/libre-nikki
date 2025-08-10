@@ -140,8 +140,8 @@ layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../EffectsButton")
 focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath("../SettingsButton")
-focus_next = NodePath("../SettingsButton")
+focus_neighbor_bottom = NodePath("../TravelButton")
+focus_next = NodePath("../TravelButton")
 focus_previous = NodePath("../EffectsButton")
 text = " "
 
@@ -156,14 +156,35 @@ text = "Actions"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SettingsButton" type="Button" parent="SidePanelContainer/VBoxContainer"]
+[node name="TravelButton" type="Button" parent="SidePanelContainer/VBoxContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../ActionsButton")
 focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../SettingsButton")
+focus_next = NodePath("../SettingsButton")
+focus_previous = NodePath("../ActionsButton")
+text = " "
+
+[node name="TravelLabel" type="Label" parent="SidePanelContainer/VBoxContainer/TravelButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Travel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SettingsButton" type="Button" parent="SidePanelContainer/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../TravelButton")
+focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../QuitButton")
 focus_next = NodePath("../QuitButton")
-focus_previous = NodePath("../ActionsButton")
+focus_previous = NodePath("../TravelButton")
 text = " "
 
 [node name="SettingsLabel" type="Label" parent="SidePanelContainer/VBoxContainer/SettingsButton"]
@@ -251,5 +272,6 @@ vertical_alignment = 1
 [connection signal="pressed" from="MainPanelContainer/ActionsGridContainer/PinchCheekButton" to="." method="_on_pinch_cheek_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/VBoxContainer/EffectsButton" to="." method="_on_effects_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/VBoxContainer/ActionsButton" to="." method="_on_actions_button_pressed"]
+[connection signal="pressed" from="SidePanelContainer/VBoxContainer/TravelButton" to="." method="_on_travel_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

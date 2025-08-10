@@ -58,7 +58,7 @@ func _ready() -> void:
 	licenses_button.grab_focus()
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_go_back"):
 		var focus_owner: Control = get_viewport().gui_get_focus_owner()
 
 		if focus_owner:

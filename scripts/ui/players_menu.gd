@@ -19,6 +19,7 @@ extends Control
 @onready var effects_button = get_node("SidePanelContainer/VBoxContainer/EffectsButton")
 @onready var effects_label = get_node("SidePanelContainer/VBoxContainer/EffectsButton/EffectsLabel")
 @onready var actions_button = get_node("SidePanelContainer/VBoxContainer/ActionsButton")
+@onready var travel_button = get_node("SidePanelContainer/VBoxContainer/TravelButton")
 @onready var settings_button = get_node("SidePanelContainer/VBoxContainer/SettingsButton")
 @onready var quit_button = get_node("SidePanelContainer/VBoxContainer/QuitButton")
 @onready var money_container = get_node("MoneyPanelContainer")
@@ -105,10 +106,15 @@ func _ready() -> void:
 
 				effects_grid_container.add_child(button)
 
+	if OS.is_debug_build():
+		travel_button.show()
+	else:
+		travel_button.hide()
+
 @export var side_menu: Control
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_go_back"):
 		var focus_owner: Control = get_viewport().gui_get_focus_owner()
 
 		if focus_owner:
@@ -188,3 +194,11 @@ func close_menu():
 func _on_pinch_cheek_button_pressed() -> void:
 	close_menu()
 	player.pinch_cheek()
+
+func _on_travel_button_pressed() -> void:
+	_on_button_pressed(travel_button)
+	await button_finished
+	var travel_menu: Node = preload("res://scenes/ui/travel_menu.tscn").instantiate()
+	travel_menu.focus = travel_button
+	add_child(travel_menu)
+	Game.transition_handler.play("fade_in", -1, 10.0)

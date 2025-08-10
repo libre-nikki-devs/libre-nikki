@@ -99,7 +99,7 @@ func _notification(what: int) -> void:
 			else:
 				accept_key_hold_time = 0.0
 
-			if Input.is_action_pressed("ui_cancel"):
+			if Input.is_action_pressed("ui_go_back"):
 				cancel_key_hold_time += get_process_delta_time()
 
 				if cancel_key_hold_time > Game.settings["key_hold_time"]:
@@ -112,7 +112,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") and not is_busy:
 		interact()
 
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_go_back"):
 		if is_busy:
 			if is_moving:
 				if not menu_queued:

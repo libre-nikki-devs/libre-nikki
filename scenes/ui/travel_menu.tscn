@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://bojy2o2nyo8y2"]
+
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_kk08f"]
+[ext_resource type="Script" uid="uid://d1ofgp8iifwmr" path="res://scripts/ui/travel_menu.gd" id="2_ii56h"]
+
+[node name="TravelMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_kk08f")
+script = ExtResource("2_ii56h")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MapContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="FilterBar" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+placeholder_text = "Type '/' to filter..."
+context_menu_enabled = false
+emoji_menu_enabled = false
+caret_blink = true
+caret_blink_interval = 0.5
+
+[connection signal="focus_entered" from="FilterBar" to="." method="_on_filter_bar_focus_entered"]
+[connection signal="focus_exited" from="FilterBar" to="." method="_on_filter_bar_focus_exited"]
+[connection signal="text_changed" from="FilterBar" to="." method="_on_filter_bar_text_changed"]
