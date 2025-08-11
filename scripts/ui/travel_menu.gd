@@ -13,30 +13,33 @@ func _ready() -> void:
 
 	for map_name: String in maps:
 		map_name = MAP_DIRECTORY + map_name
-		var map_state: SceneState = load(map_name).get_state()
-		var pretty_name: String
-		var property_id: int = 0
+		var map: Resource = load(map_name)
 
-		while property_id < map_state.get_node_property_count(0) and pretty_name.is_empty():
-			if map_state.get_node_property_name(0, property_id) == "pretty_name":
-				pretty_name = map_state.get_node_property_value(0, property_id)
+		if map is PackedScene:
+			var map_state: SceneState = map.get_state()
+			var pretty_name: String
+			var property_id: int = 0
 
-			property_id += 1
+			while property_id < map_state.get_node_property_count(0) and pretty_name.is_empty():
+				if map_state.get_node_property_name(0, property_id) == "pretty_name":
+					pretty_name = map_state.get_node_property_value(0, property_id)
 
-		if pretty_name.is_empty():
-			pretty_name =  map_state.get_node_name(0)
+				property_id += 1
 
-		var button: Button = Button.new()
-		button.text = " "
-		button.size_flags_horizontal = 3
-		var label: Label = Label.new()
-		label.text = pretty_name
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		label.set_anchors_preset(Control.PRESET_FULL_RECT)
-		button.add_child(label)
-		button.pressed.connect(_on_map_button_pressed.bind(map_name))
-		map_container.add_child(button)
+			if pretty_name.is_empty():
+				pretty_name =  map_state.get_node_name(0)
+
+			var button: Button = Button.new()
+			button.text = " "
+			button.size_flags_horizontal = 3
+			var label: Label = Label.new()
+			label.text = pretty_name
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			label.set_anchors_preset(Control.PRESET_FULL_RECT)
+			button.add_child(label)
+			button.pressed.connect(_on_map_button_pressed.bind(map_name))
+			map_container.add_child(button)
 
 	for child: Node in map_container.get_children():
 		child.focus_neighbor_left = child.get_path()
