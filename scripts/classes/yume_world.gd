@@ -72,13 +72,14 @@ var camera_limits: Array[float] = []
 
 func _initialize_node(node: Node):
 	for child: Node in node.get_children():
-		_on_node_added(child)
-		_initialize_node(child)
+		if child is not YumeWorld:
+			_on_child_entered_tree(child)
+			_initialize_node(child)
 
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_READY:
-			get_tree().connect("node_added", _on_node_added)
+			connect("child_entered_tree", _on_child_entered_tree)
 
 			if not Game.persistent_data.has("world_visits"):
 				Game.persistent_data["world_visits"] = {}
@@ -93,7 +94,7 @@ func _notification(what: int) -> void:
 
 			_initialize_node(self)
 
-func _on_node_added(node: Node):
+func _on_child_entered_tree(node: Node):
 	if not node.is_in_group("Duplicate"):
 		match node.get_class():
 			"AnimatedSprite2D":
@@ -104,14 +105,17 @@ func _on_node_added(node: Node):
 					instance.global_position += duplicate_position
 					instance.to_mimic = node
 					node.add_child.call_deferred(instance)
+
 			"AudioStreamPlayer2D":
 				for duplicate_position: Vector2 in duplicate_positions:
 					var instance: AudioStreamPlayer2D = node.duplicate()
 					instance.add_to_group("Duplicate")
 					instance.global_position += duplicate_position
 					node.add_child.call_deferred(instance)
+
 			"Parallax2D":
 				node.add_to_group("Parallax")
+
 			"TileMapLayer":
 				for duplicate_position: Vector2 in duplicate_positions:
 					var instance: TileMapLayer = node.duplicate()
@@ -130,9 +134,6 @@ func _on_node_added(node: Node):
 
 					instance.global_position += duplicate_position
 					node.add_child.call_deferred(instance)
-
-	#if player:
-		#player.get_parent().move_child(player, -1)
 
 func wrap_around_world(value: Vector2) -> Vector2:
 	if bounds.has_area():
