@@ -9,7 +9,7 @@ const MAP_DIRECTORY: String = "res://scenes/maps/"
 var focus
 
 func _ready() -> void:
-	var maps: PackedStringArray = DirAccess.get_files_at(MAP_DIRECTORY)
+	var maps: PackedStringArray = ResourceLoader.list_directory(MAP_DIRECTORY)
 
 	for map_name: String in maps:
 		map_name = MAP_DIRECTORY + map_name
