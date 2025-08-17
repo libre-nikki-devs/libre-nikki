@@ -49,35 +49,40 @@ func _ready() -> void:
 		child.focus_previous = child.focus_neighbor_top
 		child.focus_next = child.focus_neighbor_bottom
 
-	map_container.get_child(0).grab_focus()
+	_focus_first_visible_button()
 
 func _input(event: InputEvent) -> void:
 	var focus_owner: Control = get_viewport().gui_get_focus_owner()
 
 	if focus_owner:
-		if event.is_action_pressed("ui_text_submit") or event.is_action_pressed("ui_cancel"):
+		if event.is_action_pressed("ui_cancel") or event.is_action_pressed("ui_text_submit"):
 			match focus_owner:
 				filter_bar:
 					await get_tree().process_frame
-					var current_child_id: int = 0
-					var found_visible_child: bool = false
-
-					while current_child_id < map_container.get_child_count() and not found_visible_child:
-						var current_child: Node = map_container.get_child(current_child_id)
-						current_child_id += 1
-
-						if current_child.visible:
-							current_child.grab_focus()
-							found_visible_child = true
+					_focus_first_visible_button()
 
 		if event.is_action_pressed("ui_go_back"):
-				match focus_owner.get_parent():
-					map_container:
-						close_menu()
+			match focus_owner:
+				map_container:
+					close_menu()
+
+			match focus_owner.get_parent():
+				map_container:
+					close_menu()
 
 	if Input.is_key_pressed(KEY_SLASH):
 		await get_tree().process_frame
 		filter_bar.edit()
+
+func _focus_first_visible_button() -> void:
+	for child_id in map_container.get_child_count():
+		var current_child: Node = map_container.get_child(child_id)
+
+		if current_child is Control and current_child.visible:
+			current_child.grab_focus()
+			return
+
+	map_container.grab_focus()
 
 func _on_map_button_pressed(scene: String) -> void:
 	Game.save_player_data(get_tree().get_first_node_in_group("Players"))
