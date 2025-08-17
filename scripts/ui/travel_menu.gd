@@ -1,6 +1,6 @@
 extends Control
 
-const MAP_DIRECTORY: String = "res://scenes/maps/"
+const MAP_DIRECTORY: String = "res://scenes/maps"
 
 @onready var filter_bar: LineEdit = get_node("FilterBar")
 
@@ -12,7 +12,7 @@ func _ready() -> void:
 	var maps: PackedStringArray = ResourceLoader.list_directory(MAP_DIRECTORY)
 
 	for map_name: String in maps:
-		map_name = MAP_DIRECTORY + map_name
+		map_name = MAP_DIRECTORY + "/" + map_name
 		var map: Resource = load(map_name)
 
 		if map is PackedScene:
