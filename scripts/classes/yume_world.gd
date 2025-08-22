@@ -102,7 +102,7 @@ func _on_child_entered_tree(node: Node):
 					var instance: AnimatedSprite2D = node.duplicate()
 					instance.add_to_group("Duplicate")
 					instance.set_script(preload("res://scripts/templates/AnimatedSprite2D/mimic.gd"))
-					instance.global_position += duplicate_position
+					instance.global_position = duplicate_position
 					instance.to_mimic = node
 					node.add_child.call_deferred(instance)
 
@@ -110,7 +110,7 @@ func _on_child_entered_tree(node: Node):
 				for duplicate_position: Vector2 in duplicate_positions:
 					var instance: AudioStreamPlayer2D = node.duplicate()
 					instance.add_to_group("Duplicate")
-					instance.global_position += duplicate_position
+					instance.global_position = duplicate_position
 					node.add_child.call_deferred(instance)
 
 			"Parallax2D":
@@ -132,7 +132,7 @@ func _on_child_entered_tree(node: Node):
 					for child: Node in instance.get_children():
 						instance.remove_child(child)
 
-					instance.global_position += duplicate_position
+					instance.global_position = duplicate_position
 					node.add_child.call_deferred(instance)
 
 func wrap_around_world(value: Vector2) -> Vector2:
