@@ -14,16 +14,29 @@
 # You should have received a copy of the GNU General Public License along with
 # Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends AnimatedSprite2D
+extends Node2D
 
-var to_mimic: AnimatedSprite2D
+## A node that follows the properties of the other node.
+
+var mimic_properties: Array[String] = ["position", "visible", "z_index"]
+
+var mimic_position_offset: Vector2 = Vector2(0.0, 0.0)
+
+var to_mimic: Node2D
 
 func _ready() -> void:
-	to_mimic.connect("animation_changed", _on_animated_sprite_2d_animation_changed)
-	to_mimic.connect("frame_changed", _on_animated_sprite_2d_frame_changed)
+	mimic()
 
-func _on_animated_sprite_2d_animation_changed() -> void:
-	animation = to_mimic.animation
+func _process(delta: float) -> void:
+	mimic()
 
-func _on_animated_sprite_2d_frame_changed() -> void:
-	frame = to_mimic.frame
+func mimic() -> void:
+	if to_mimic:
+		for property: String in mimic_properties:
+			if property in self:
+				if property == "position":
+					set(property, to_mimic.get(property) + mimic_position_offset)
+				else:
+					set(property, to_mimic.get(property))
+	else:
+		queue_free()
