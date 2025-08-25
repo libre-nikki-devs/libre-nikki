@@ -73,9 +73,6 @@ var camera_limits: Array[float] = []
 func _initialize_node(node: Node):
 	for child: Node in node.get_children():
 		if child is not YumeWorld:
-			if not child.is_connected("child_entered_tree", _on_child_entered_tree):
-				child.connect("child_entered_tree", _on_child_entered_tree)
-
 			_on_child_entered_tree(child)
 			_initialize_node(child)
 
@@ -83,6 +80,7 @@ func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_READY:
 			connect("child_entered_tree", _on_child_entered_tree)
+			connect("child_exiting_tree", _on_child_exiting_tree)
 
 			if not Game.persistent_data.has("world_visits"):
 				Game.persistent_data["world_visits"] = {}
@@ -98,36 +96,32 @@ func _notification(what: int) -> void:
 			_initialize_node(self)
 
 func _on_child_entered_tree(node: Node):
+	if not node.is_connected("child_entered_tree", _on_child_entered_tree):
+		node.connect("child_entered_tree", _on_child_entered_tree)
+
+	if not node.is_connected("child_exiting_tree", _on_child_exiting_tree):
+		node.connect("child_exiting_tree", _on_child_exiting_tree)
+
 	if not node.is_in_group("Duplicate"):
 		match node.get_class():
 			"AnimatedSprite2D":
 				for duplicate_position: Vector2 in duplicate_positions:
 					var instance: AnimatedSprite2D = node.duplicate()
-					var parent: Node = node.get_parent()
 					instance.add_to_group("Duplicate")
 					instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
 					instance.mimic_properties.append_array(["animation", "frame", "sprite_frames"])
 					instance.mimic_position_offset += duplicate_position
 					instance.to_mimic = node
-
-					if parent:
-						parent.add_child.call_deferred(instance)
-					else:
-						add_child.call_deferred(instance)
+					node.get_parent().add_child.call_deferred(instance)
 
 			"AudioStreamPlayer2D":
 				for duplicate_position: Vector2 in duplicate_positions:
 					var instance: AudioStreamPlayer2D = node.duplicate()
-					var parent: Node2D = node.get_parent()
 					instance.add_to_group("Duplicate")
 					instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
 					instance.mimic_position_offset += duplicate_position
 					instance.to_mimic = node
-
-					if parent:
-						parent.add_child.call_deferred(instance)
-					else:
-						add_child.call_deferred(instance)
+					node.get_parent().add_child.call_deferred(instance)
 
 			"Parallax2D":
 				node.add_to_group("Parallax")
@@ -135,7 +129,6 @@ func _on_child_entered_tree(node: Node):
 			"TileMapLayer":
 				for duplicate_position: Vector2 in duplicate_positions:
 					var instance: TileMapLayer = node.duplicate()
-					var parent: Node2D = node.get_parent()
 					instance.add_to_group("Duplicate")
 					instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
 
@@ -151,10 +144,17 @@ func _on_child_entered_tree(node: Node):
 					for child: Node in instance.get_children():
 						instance.remove_child(child)
 
-					if parent:
-						parent.add_child.call_deferred(instance)
-					else:
-						add_child.call_deferred(instance)
+					node.get_parent().add_child.call_deferred(instance)
+
+func _on_child_exiting_tree(node: Node):
+	if node.is_connected("child_entered_tree", _on_child_entered_tree):
+		node.disconnect("child_entered_tree", _on_child_entered_tree)
+
+	if node.is_connected("child_exiting_tree", _on_child_exiting_tree):
+		node.disconnect("child_exiting_tree", _on_child_exiting_tree)
+
+	if node.is_in_group("Duplicate"):
+		node.queue_free()
 
 func wrap_around_world(value: Vector2) -> Vector2:
 	if bounds.has_area():
