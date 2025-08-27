@@ -147,6 +147,8 @@ ui_go_back={
 
 2d/run_on_separate_thread=true
 3d/run_on_separate_thread=true
+common/physics_ticks_per_second=180
+common/max_physics_steps_per_frame=24
 
 [rendering]
 
