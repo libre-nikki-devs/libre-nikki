@@ -132,7 +132,7 @@ func _move() -> void:
 	Game.persistent_data["steps_taken"] += 1
 
 ## Equip this [param effect].
-func equip(effect: EFFECT = 0, silently: bool = false) -> void:
+func equip(effect: EFFECT = EFFECT.DEFAULT, silently: bool = false) -> void:
 	equipped_effect = effect
 
 	match effect:

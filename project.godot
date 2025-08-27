@@ -34,7 +34,6 @@ file_logging/enable_file_logging.pc=false
 file_logging/max_log_files=1
 gdscript/warnings/unused_parameter=0
 gdscript/warnings/unused_signal=0
-gdscript/warnings/int_as_enum_without_cast=0
 
 [display]
 
@@ -42,16 +41,11 @@ window/size/viewport_width=640
 window/size/viewport_height=480
 window/stretch/mode="viewport"
 window/stretch/scale_mode="integer"
-mouse_cursor/tooltip_position_offset=Vector2(8, 8)
 
 [editor]
 
 script/templates_search_path="res://scripts/templates"
 naming/script_name_casing=2
-
-[gui]
-
-theme/default_font_antialiasing=0
 
 [input]
 
