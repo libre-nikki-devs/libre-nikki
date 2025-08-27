@@ -1,11 +1,11 @@
 [gd_scene load_steps=5 format=3 uid="uid://f47u5spls1q4"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_enftr"]
-[ext_resource type="Script" uid="uid://cvkg4u2uux7os" path="res://scripts/ui/players_menu.gd" id="2_01phm"]
+[ext_resource type="Script" uid="uid://cvkg4u2uux7os" path="res://scripts/ui/player_menu.gd" id="2_01phm"]
 [ext_resource type="Texture2D" uid="uid://rcvhyw1t0f3e" path="res://themes/images/frame.png" id="3_rprfk"]
 [ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="4_r4t8x"]
 
-[node name="PlayersMenu" type="Control" node_paths=PackedStringArray("side_menu")]
+[node name="PlayerMenu" type="Control" node_paths=PackedStringArray("side_menu")]
 layout_mode = 3
 anchor_right = 0.5
 anchor_bottom = 0.5
