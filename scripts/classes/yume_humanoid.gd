@@ -21,8 +21,6 @@ extends YumeCharacter
 
 enum { STEP_LEFT = 0, STEP_RIGHT = 1 }
 
-enum SURFACE { SILENT = -1, DEFAULT, CONCRETE, METAL, GRASS, DIRT, SAND, WATER, SNOW, WOOD, CARPET }
-
 ## [AnimationPlayer] for this character.
 @export var animation_player: AnimationPlayer
 
@@ -51,22 +49,25 @@ var footstep_sound: AudioStream
 var last_step: int = STEP_LEFT
 
 func _move() -> void:
-	var surface: Object = surface_detector.get_collider()
+	var ground: Object = surface_detector.get_collider()
 
 	if current_world:
 		footstep_sound = current_world.default_footstep_sound
 	else:
 		footstep_sound = load("res://sounds/あるく1.wav") # placeholder
 
-	if surface:
-		if surface is TileMapLayer:
-			var current_tile = surface.local_to_map(surface_detector.global_position + surface_detector.target_position)
+	if ground:
+		if ground is TileMapLayer:
+			var current_tile = ground.local_to_map(surface_detector.global_position + surface_detector.target_position)
 
 			if current_world:
-				current_tile = surface.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
+				current_tile = ground.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
 
-			var tile_data = surface.get_cell_tile_data(current_tile)
+			var tile_data = ground.get_cell_tile_data(current_tile)
 			footstep_sound = get_tile_footstep_sound(tile_data)
+
+		elif ground is YumeInteractable:
+			footstep_sound = get_footstep_sound(ground.surface)
 
 	if last_step:
 		set_animation(str(DIRECTION.find_key(facing)).to_lower() + action, speed, 0.125)
@@ -79,27 +80,37 @@ func _move() -> void:
 func look(direction: DIRECTION) -> void:
 	set_animation(str(DIRECTION.find_key(facing)).to_lower() + action + "Look" + str(DIRECTION.find_key(direction)).capitalize())
 
+func get_footstep_sound(ground: SURFACE) -> AudioStream:
+	match ground:
+		SURFACE.SILENT:
+			return
+		#SURFACE.CONCRETE:
+		#SURFACE.METAL:
+		#SURFACE.GRASS:
+		#SURFACE.DIRT:
+		#SURFACE.SAND:
+		#SURFACE.WATER:
+		#SURFACE.SNOW:
+		#SURFACE.WOOD:
+		#SURFACE.CARPET:
+
+	if current_world:
+		if current_world.default_footstep_sound:
+			return current_world.default_footstep_sound
+
+	return load("res://sounds/あるく1.wav") # placeholder
+
 ## Get a footstep sound based on a tile.
 func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 	if tile_data:
 		if tile_data.has_custom_data("surface"):
-			match tile_data.get_custom_data("surface"):
-				SURFACE.SILENT:
-					return
-				#SURFACE.CONCRETE:
-				#SURFACE.METAL:
-				#SURFACE.GRASS:
-				#SURFACE.DIRT:
-				#SURFACE.SAND:
-				#SURFACE.WATER:
-				#SURFACE.SNOW:
-				#SURFACE.WOOD:
-				#SURFACE.CARPET:
+			return get_footstep_sound(tile_data.get_custom_data("surface") as YumeInteractable.SURFACE)
 
 	if current_world:
-		return current_world.default_footstep_sound
-	else:
-		return load("res://sounds/あるく1.wav") # placeholder
+		if current_world.default_footstep_sound:
+			return current_world.default_footstep_sound
+
+	return load("res://sounds/あるく1.wav") # placeholder
 
 func play_footstep_sound() -> void:
 	Game.play_sound(footstep_sound, self, 256, RandomNumberGenerator.new().randf_range(0.90, 1.10))

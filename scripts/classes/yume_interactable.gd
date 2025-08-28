@@ -19,6 +19,12 @@ extends CharacterBody2D
 
 ## A simple node that can be interacted with.
 
+enum SURFACE { SILENT = -1, DEFAULT = 0, CONCRETE = 1, METAL = 2,
+		GRASS = 3, DIRT = 4, SAND = 5, WATER = 6, SNOW = 7,
+		WOOD = 8, CARPET = 9 }
+
+@export var surface: SURFACE = SURFACE.DEFAULT
+
 ## Pixel-perfect position.
 var pixel_position: Vector2i:
 	get:

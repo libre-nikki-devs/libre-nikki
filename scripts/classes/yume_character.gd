@@ -124,16 +124,16 @@ func move(direction: DIRECTION) -> void:
 	surface_detector.target_position = target_position
 	surface_detector.force_raycast_update()
 	var collider: Object = collision_detector.get_collider()
-	var surface: Object = surface_detector.get_collider()
+	var ground: Object = surface_detector.get_collider()
 
-	if surface and can_use_stairs:
-		if surface is TileMapLayer:
-			var current_tile: Vector2i = surface.local_to_map(surface_detector.global_position + surface_detector.target_position)
+	if ground and can_use_stairs:
+		if ground is TileMapLayer:
+			var current_tile: Vector2i = ground.local_to_map(surface_detector.global_position + surface_detector.target_position)
 
 			if current_world:
-				current_tile = surface.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
+				current_tile = ground.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
 
-			var tile_data: TileData = surface.get_cell_tile_data(current_tile)
+			var tile_data: TileData = ground.get_cell_tile_data(current_tile)
 
 			if tile_data:
 				if tile_data.has_custom_data("stair"):
@@ -161,7 +161,7 @@ func move(direction: DIRECTION) -> void:
 			collision_detector.force_raycast_update()
 			collider = collision_detector.get_collider()
 			surface_detector.force_raycast_update()
-			surface = surface_detector.get_collider()
+			ground = surface_detector.get_collider()
 
 	if collider:
 		if collider is YumeInteractable:
@@ -169,9 +169,9 @@ func move(direction: DIRECTION) -> void:
 
 		return
 
-	if surface:
-		if surface is YumeInteractable:
-			surface.emit_signal("body_stepped_on", self)
+	if ground:
+		if ground is YumeInteractable:
+			ground.emit_signal("body_stepped_on", self)
 
 	elif not can_move_in_vacuum:
 		return
@@ -217,16 +217,16 @@ func is_colliding(direction: DIRECTION) -> bool:
 	surface_detector.global_position = collision_detector.global_position
 	surface_detector.target_position = target_position
 	surface_detector.force_raycast_update()
-	var surface: Object = surface_detector.get_collider()
+	var ground: Object = surface_detector.get_collider()
 
-	if surface and can_use_stairs:
-		if surface is TileMapLayer:
-			var current_tile: Vector2i = surface.local_to_map(surface_detector.global_position + surface_detector.target_position)
+	if ground and can_use_stairs:
+		if ground is TileMapLayer:
+			var current_tile: Vector2i = ground.local_to_map(surface_detector.global_position + surface_detector.target_position)
 
 			if current_world:
-				current_tile = surface.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
+				current_tile = ground.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
 
-			var tile_data: TileData = surface.get_cell_tile_data(current_tile)
+			var tile_data: TileData = ground.get_cell_tile_data(current_tile)
 
 			if tile_data:
 				if tile_data.has_custom_data("stair"):
