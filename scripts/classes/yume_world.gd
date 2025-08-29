@@ -82,14 +82,6 @@ func _notification(what: int) -> void:
 			connect("child_entered_tree", _on_child_entered_tree)
 			connect("child_exiting_tree", _on_child_exiting_tree)
 
-			if not Game.persistent_data.has("world_visits"):
-				Game.persistent_data["world_visits"] = {}
-
-			if Game.persistent_data["world_visits"].get(name):
-				Game.persistent_data["world_visits"][name] += 1
-			else:
-				Game.persistent_data["world_visits"][name] = 1
-
 			if loop == "None":
 				loop = loop
 

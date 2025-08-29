@@ -32,10 +32,22 @@ var settings: Dictionary = {
 @onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
 
 func _ready() -> void:
+	_on_scene_tree_node_added(get_tree().current_scene)
+	get_tree().connect("node_added", _on_scene_tree_node_added)
 	get_window().min_size = Vector2i(640, 480)
 	_count_playtime()
 
-func _count_playtime():
+func _on_scene_tree_node_added(node: Node) -> void:
+	if node == get_tree().current_scene:
+		if not persistent_data.has("scene_visits"):
+			persistent_data["scene_visits"] = {}
+
+		if persistent_data["scene_visits"].get(node.scene_file_path):
+			persistent_data["scene_visits"][node.scene_file_path] += 1
+		else:
+			persistent_data["scene_visits"][node.scene_file_path] = 1
+
+func _count_playtime() -> void:
 	while true:
 		await get_tree().create_timer(1.0, false, true).timeout
 
@@ -101,7 +113,7 @@ func play_sound_everywhere(sound: AudioStream, pitch: float = 1.0, volume_offset
 func sleep() -> void:
 	persistent_data["random"] = RandomNumberGenerator.new().randi_range(0, 255)
 
-	if !persistent_data.has("times_slept"):
+	if not persistent_data.has("times_slept"):
 		persistent_data["times_slept"] = 1
 	else:
 		persistent_data["times_slept"] += 1
@@ -111,7 +123,7 @@ func sleep() -> void:
 ## End the dream session.
 func wake_up() -> void:
 	persistent_data["player_data"] = {}
-	persistent_data["world_data"] = {}
+	persistent_data["scene_data"] = {}
 	transition_handler.play("pixelate_out")
 	get_tree().paused = true
 	await transition_handler.animation_finished
