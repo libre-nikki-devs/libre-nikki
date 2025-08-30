@@ -236,11 +236,6 @@ scale = Vector2(2, 2)
 transform = Transform2D(2, 0, 0, 2, 0, 0)
 script = ExtResource("1_w2k2j")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-volume_db = -40.0
-max_polyphony = 2
-bus = &"Music"
-
 [node name="FastForwardIndicator" parent="." instance=ExtResource("3_lnu2h")]
 visible = false
 z_index = 2
@@ -251,6 +246,11 @@ offset_left = -22.0
 offset_top = 2.0
 offset_right = -2.0
 offset_bottom = 16.0
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -40.0
+max_polyphony = 2
+bus = &"Music"
 
 [node name="TransitionHandler" type="AnimationPlayer" parent="."]
 libraries = {

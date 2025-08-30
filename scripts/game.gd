@@ -19,7 +19,9 @@ extends CanvasLayer
 ## An autoload singleton that handles the game's most important data as well as
 ## it provides functions specific to Libre Nikki.
 
-@onready var music: AudioStreamPlayer = get_node("AudioStreamPlayer")
+@onready var music_player: AudioStreamPlayer = get_node("MusicPlayer")
+
+@onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
 
 ## Contains data that are preserved in a save file.
 var persistent_data: Dictionary = {}
@@ -28,8 +30,6 @@ var persistent_data: Dictionary = {}
 var settings: Dictionary = {
 	"key_hold_time" = 0.5
 }
-
-@onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
 
 func _ready() -> void:
 	_on_scene_tree_node_added(get_tree().current_scene)
@@ -124,23 +124,21 @@ func sleep() -> void:
 func wake_up() -> void:
 	persistent_data["player_data"] = {}
 	persistent_data["scene_data"] = {}
+	var tween: Tween
+
+	if music_player.playing:
+		tween = create_tween()
+		tween.tween_property(music_player, "volume_db", linear_to_db(0.01), 5.0)
+
 	transition_handler.play("pixelate_out")
 	get_tree().paused = true
 	await transition_handler.animation_finished
 	change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
 
-func fade_in_music(audio: AudioStream, duration: float, pitch: float = 1.0, volume_offset: float = 0.0) -> void:
-	music.pitch_scale = pitch
-	music.stream = audio
-	music.play()
-	var tween = create_tween()
-	tween.tween_property(music, "volume_db", linear_to_db(1.0 + volume_offset), duration).from(linear_to_db(0.01))
-
-func fade_out_music(duration: float) -> void:
-	var tween = create_tween()
-	tween.parallel().tween_property(music, "volume_db", linear_to_db(0.01), duration)
-	await tween.finished
-	music.stop()
+	if tween:
+		if tween.is_running():
+			await tween.finished
+			music_player.stop()
 
 ## Open settings menu.
 func open_settings(focus):
