@@ -98,19 +98,7 @@ func _notification(what: int) -> void:
 func _move() -> void:
 	pass
 
-func _update_detector_positions(target_vector: Vector2) -> void:
-	if current_world:
-		collision_detector.global_position = current_world.wrap_around_world(global_position + target_position + target_vector) - target_position
-	else:
-		collision_detector.global_position = global_position + target_vector
-
-	surface_detector.global_position = collision_detector.global_position
-
-## If there are no colliding objects on the same Z index as the character, move
-## this [param direction] (diagonally, if on stairs and if
-## [member can_use_stairs] is [code]true[/code]) by one tile. Otherwise, emit
-## [signal YumeInteractable.body_touched] on the colliding [YumeInteractable].
-func move(direction: DIRECTION) -> void:
+func _update_detectors(direction: DIRECTION) -> void:
 	if current_world:
 		target_position = DIRECTIONS[direction] * current_world.tile_size
 		collision_detector.global_position = current_world.wrap_around_world(global_position + target_position) - target_position
@@ -123,7 +111,6 @@ func move(direction: DIRECTION) -> void:
 	surface_detector.global_position = collision_detector.global_position
 	surface_detector.target_position = target_position
 	surface_detector.force_raycast_update()
-	var collider: Object = collision_detector.get_collider()
 	var ground: Object = surface_detector.get_collider()
 
 	if ground and can_use_stairs:
@@ -159,9 +146,20 @@ func move(direction: DIRECTION) -> void:
 							_update_detector_positions(-Vector2(target_position.y, 0.0))
 
 			collision_detector.force_raycast_update()
-			collider = collision_detector.get_collider()
 			surface_detector.force_raycast_update()
-			ground = surface_detector.get_collider()
+
+func _update_detector_positions(target_vector: Vector2) -> void:
+	if current_world:
+		collision_detector.global_position = current_world.wrap_around_world(global_position + target_position + target_vector) - target_position
+	else:
+		collision_detector.global_position = global_position + target_vector
+
+	surface_detector.global_position = collision_detector.global_position
+
+func move(direction: DIRECTION) -> void:
+	_update_detectors(direction)
+	var collider: Object = collision_detector.get_collider()
+	var ground: Object = surface_detector.get_collider()
 
 	if collider:
 		if collider is YumeInteractable:
@@ -205,55 +203,11 @@ func move(direction: DIRECTION) -> void:
 	moved.emit()
 
 func is_colliding(direction: DIRECTION) -> bool:
-	if current_world:
-		target_position = DIRECTIONS[direction] * current_world.tile_size
-		collision_detector.global_position = current_world.wrap_around_world(global_position + target_position) - target_position
-	else:
-		target_position = DIRECTIONS[direction] * 16.0
-		collision_detector.global_position = global_position
-
-	collision_detector.target_position = target_position
-	collision_detector.force_raycast_update()
-	surface_detector.global_position = collision_detector.global_position
-	surface_detector.target_position = target_position
-	surface_detector.force_raycast_update()
-	var ground: Object = surface_detector.get_collider()
-
-	if ground and can_use_stairs:
-		if ground is TileMapLayer:
-			var current_tile: Vector2i = ground.local_to_map(surface_detector.global_position + surface_detector.target_position)
-
-			if current_world:
-				current_tile = ground.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
-
-			var tile_data: TileData = ground.get_cell_tile_data(current_tile)
-
-			if tile_data:
-				if tile_data.has_custom_data("stair"):
-					match tile_data.get_custom_data("stair"):
-						# \-shaped stairs; horizontal movement.
-						1, 5 when direction & HORIZONTAL:
-							target_position += Vector2(0.0, target_position.x)
-							_update_detector_positions(Vector2(0.0, target_position.x))
-
-						# /-shaped stairs; horizontal movement.
-						2, 6 when direction & HORIZONTAL:
-							target_position -= Vector2(0.0, target_position.x)
-							_update_detector_positions(-Vector2(0.0, target_position.x))
-
-						# \-shaped stairs; vertical movement.
-						3, 5 when direction & VERTICAL:
-							target_position += Vector2(target_position.y, 0.0)
-							_update_detector_positions(Vector2(target_position.y, 0.0))
-
-						# /-shaped stairs; vertical movement.
-						4, 6 when direction & VERTICAL:
-							target_position -= Vector2(target_position.y, 0.0)
-							_update_detector_positions(-Vector2(target_position.y, 0.0))
-
-			collision_detector.force_raycast_update()
+	_update_detectors(direction)
 
 	if collision_detector.is_colliding():
+		return true
+	elif not (surface_detector.get_collider() or can_move_in_vacuum):
 		return true
 	else:
 		return false
