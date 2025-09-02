@@ -147,7 +147,7 @@ func interact() -> void:
 	if accept_events.is_empty():
 		if not is_sitting:
 			await get_tree().physics_frame
-			collision_detector.force_raycast_update()
+			_update_detectors(facing)
 			var collider: Object = collision_detector.get_collider()
 
 			if collider:
