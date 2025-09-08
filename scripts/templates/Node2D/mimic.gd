@@ -18,7 +18,7 @@ extends Node2D
 
 ## A node that follows the properties of the other node.
 
-var mimic_properties: Array[String] = ["position", "visible", "z_index"]
+var mimic_properties: Array[String] = ["global_position", "visible", "z_index"]
 
 var mimic_position_offset: Vector2 = Vector2(0.0, 0.0)
 
@@ -34,7 +34,7 @@ func mimic() -> void:
 	if to_mimic:
 		for property: String in mimic_properties:
 			if property in self:
-				if property == "position":
+				if property == "global_position":
 					set(property, to_mimic.get(property) + mimic_position_offset)
 				elif property == "z_index":
 					set(property, get_global_z_index(to_mimic))
