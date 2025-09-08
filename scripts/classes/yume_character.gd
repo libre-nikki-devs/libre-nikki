@@ -211,3 +211,9 @@ func is_colliding(direction: DIRECTION) -> bool:
 		return true
 	else:
 		return false
+
+func get_opposite_direction(direction: DIRECTION) -> DIRECTION:
+	if direction & HORIZONTAL:
+		return (~direction & ALL) ^ VERTICAL as DIRECTION
+	else:
+		return (~direction & ALL) ^ HORIZONTAL as DIRECTION
