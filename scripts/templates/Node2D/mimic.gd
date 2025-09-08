@@ -36,7 +36,24 @@ func mimic() -> void:
 			if property in self:
 				if property == "position":
 					set(property, to_mimic.get(property) + mimic_position_offset)
+				elif property == "z_index":
+					set(property, get_global_z_index(to_mimic))
+					z_as_relative = false
 				else:
 					set(property, to_mimic.get(property))
 	else:
 		queue_free()
+
+func get_global_z_index(canvas_item: CanvasItem) -> int:
+	var global_z_index: int = canvas_item.z_index
+	var parent: Node = canvas_item.get_parent()
+
+	while parent is CanvasItem:
+		global_z_index += parent.z_index
+
+		if parent.z_as_relative:
+			parent = parent.get_parent()
+		else:
+			return global_z_index
+
+	return global_z_index
