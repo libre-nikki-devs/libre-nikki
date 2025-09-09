@@ -52,4 +52,4 @@ func _move_loop():
 
 func _on_body_interacted(body: Node2D) -> void:
 	if not is_busy:
-		face(body.global_position)
+		facing = face(body.global_position)
