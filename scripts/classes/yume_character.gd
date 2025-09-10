@@ -98,6 +98,14 @@ func _notification(what: int) -> void:
 func _move() -> void:
 	pass
 
+func _get_current_tile_data(tile_map_layer: TileMapLayer) -> TileData:
+	var current_tile: Vector2i = tile_map_layer.local_to_map(global_position + target_position)
+
+	if current_world:
+		current_tile = tile_map_layer.local_to_map(current_world.wrap_around_world(global_position + target_position))
+
+	return tile_map_layer.get_cell_tile_data(current_tile)
+
 func _update_detectors(direction: DIRECTION) -> void:
 	if current_world:
 		target_position = DIRECTIONS[direction] * current_world.tile_size
@@ -115,12 +123,7 @@ func _update_detectors(direction: DIRECTION) -> void:
 
 	if ground and can_use_stairs:
 		if ground is TileMapLayer:
-			var current_tile: Vector2i = ground.local_to_map(surface_detector.global_position + surface_detector.target_position)
-
-			if current_world:
-				current_tile = ground.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
-
-			var tile_data: TileData = ground.get_cell_tile_data(current_tile)
+			var tile_data: TileData = _get_current_tile_data(ground)
 
 			if tile_data:
 				if tile_data.has_custom_data("stair"):
@@ -164,8 +167,21 @@ func move(direction: DIRECTION) -> void:
 	if collider:
 		if collider is YumeInteractable:
 			collider.emit_signal("body_touched", self)
+			return
 
-		return
+		elif collider is TileMapLayer:
+			var tile_data: TileData = _get_current_tile_data(collider)
+
+			if tile_data:
+				if tile_data.has_custom_data("passable"):
+					if not tile_data.get_custom_data("passable"):
+						return
+				else:
+					return
+			else:
+				return
+		else:
+			return
 
 	if ground:
 		if ground is YumeInteractable:
@@ -204,13 +220,23 @@ func move(direction: DIRECTION) -> void:
 
 func is_colliding(direction: DIRECTION) -> bool:
 	_update_detectors(direction)
+	var collider: Object = collision_detector.get_collider()
 
-	if collision_detector.is_colliding():
+	if collider:
+		if collider is TileMapLayer:
+			var tile_data: TileData = _get_current_tile_data(collider)
+
+			if tile_data:
+				if tile_data.has_custom_data("passable"):
+					if tile_data.get_custom_data("passable"):
+						return false
+
 		return true
-	elif not (surface_detector.get_collider() or can_move_in_vacuum):
+
+	if not (surface_detector.is_colliding() or can_move_in_vacuum):
 		return true
-	else:
-		return false
+
+	return false
 
 func get_opposite_direction(direction: DIRECTION) -> DIRECTION:
 	if direction & HORIZONTAL:
