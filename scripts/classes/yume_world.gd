@@ -101,7 +101,7 @@ func _on_child_entered_tree(node: Node):
 					var instance: AnimatedSprite2D = node.duplicate()
 					instance.add_to_group("Duplicate")
 					instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-					instance.mimic_properties.append_array(["animation", "frame", "sprite_frames"])
+					instance.mimic_properties.append_array(["animation", "frame", "global_position", "sprite_frames", "visible", "z_index"])
 					instance.mimic_position_offset += duplicate_position
 					instance.to_mimic = node
 					node.get_parent().add_child.call_deferred(instance)
@@ -111,6 +111,7 @@ func _on_child_entered_tree(node: Node):
 					var instance: AudioStreamPlayer2D = node.duplicate()
 					instance.add_to_group("Duplicate")
 					instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
+					instance.mimic_properties.append("global_position")
 					instance.mimic_position_offset += duplicate_position
 					instance.to_mimic = node
 					node.get_parent().add_child.call_deferred(instance)
@@ -123,6 +124,7 @@ func _on_child_entered_tree(node: Node):
 					var instance: TileMapLayer = node.duplicate()
 					instance.add_to_group("Duplicate")
 					instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
+					instance.mimic_properties.append_array(["global_position", "visible", "z_index"])
 
 					for source_id: int in instance.tile_set.get_source_count():
 						if instance.tile_set.get_source(source_id) is TileSetScenesCollectionSource:
