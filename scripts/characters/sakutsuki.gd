@@ -42,15 +42,15 @@ func _physics_process(delta: float) -> void:
 						return
 
 			if is_sitting:
-				look(direction)
+				#look(direction)
+				pass
 			else:
 				facing = direction
 				move(direction)
 
 func _on_accept_key_held() -> void:
 	if not is_busy:
-		#act()
-		pass
+		act()
 	else:
 		accept_key_hold_time = 0.0
 
@@ -79,9 +79,8 @@ func act() -> void:
 				await animation_player.animation_finished
 				action = "Sit"
 
+			await get_tree().create_timer(0.25, false, true).timeout
 			is_sitting = !is_sitting
 			is_busy = false
-		_:
-			pass
 
 	act_finished.emit(equipped_effect)
