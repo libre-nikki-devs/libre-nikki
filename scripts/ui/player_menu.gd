@@ -22,13 +22,10 @@ extends Control
 @onready var travel_button = get_node("SidePanelContainer/VBoxContainer/TravelButton")
 @onready var settings_button = get_node("SidePanelContainer/VBoxContainer/SettingsButton")
 @onready var quit_button = get_node("SidePanelContainer/VBoxContainer/QuitButton")
-@onready var money_container = get_node("MoneyPanelContainer")
-@onready var money_label = get_node("MoneyPanelContainer/MoneyLabel")
+@onready var money_panel = get_node("MoneyPanel")
 @onready var players_margin_container = get_node("MainPanelContainer/VBoxContainer")
 @onready var effects_grid_container = get_node("MainPanelContainer/EffectsGridContainer")
-@onready var world_container = get_node("WorldHFlowContainer")
-@onready var world_label = get_node("WorldHFlowContainer/PanelContainer2/WorldLabel")
-@onready var depth_label = get_node("WorldHFlowContainer/PanelContainer4/DepthLabel")
+@onready var world_panel = get_node("WorldPanel")
 @onready var player_avatar = get_node("MainPanelContainer/VBoxContainer/HBoxContainer/TextureRect/AnimatedSprite2D")
 @onready var player_label = get_node("MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/PlayerLabel")
 @onready var player_effects_label = get_node("MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/PlayerEffectsLabel")
@@ -51,21 +48,11 @@ func _ready() -> void:
 	var current_scene: Node = get_tree().current_scene
 
 	if current_scene is YumeWorld:
-		world_container.show()
-		depth_label.text = current_scene.depth
-
-		if current_scene.pretty_name.is_empty():
-			world_label.text = current_scene.name
-		else:
-			world_label.text = current_scene.pretty_name
+		world_panel.show()
+		money_panel.anchors_preset = Control.PRESET_BOTTOM_RIGHT
 	else:
-		world_container.hide()
-		money_container.anchors_preset = Control.PRESET_BOTTOM_LEFT
-
-	if Game.persistent_data.has("money"):
-		money_label.text = str(Game.persistent_data["money"]) + "♎"
-	else:
-		money_label.text = "0♎"
+		world_panel.hide()
+		money_panel.anchors_preset = Control.PRESET_BOTTOM_LEFT
 
 	if player.equipped_effect == 0:
 		player_avatar.animation = "down"

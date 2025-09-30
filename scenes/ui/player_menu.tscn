@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://f47u5spls1q4"]
+[gd_scene load_steps=7 format=3 uid="uid://f47u5spls1q4"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_enftr"]
 [ext_resource type="Script" uid="uid://cvkg4u2uux7os" path="res://scripts/ui/player_menu.gd" id="2_01phm"]
 [ext_resource type="Texture2D" uid="uid://rcvhyw1t0f3e" path="res://themes/images/frame.png" id="3_rprfk"]
 [ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="4_r4t8x"]
+[ext_resource type="PackedScene" uid="uid://o018hjpcyot8" path="res://scenes/ui/money_panel.tscn" id="5_pphos"]
+[ext_resource type="PackedScene" uid="uid://cw6cd5pihyy2a" path="res://scenes/ui/world_panel.tscn" id="6_pg55v"]
 
 [node name="PlayerMenu" type="Control" node_paths=PackedStringArray("side_menu")]
 layout_mode = 3
@@ -219,7 +221,7 @@ text = "Quit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MoneyPanelContainer" type="PanelContainer" parent="."]
+[node name="MoneyPanel" parent="." instance=ExtResource("5_pphos")]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -228,46 +230,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -88.0
 offset_top = -24.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="MoneyLabel" type="Label" parent="MoneyPanelContainer"]
-layout_mode = 2
-text = "0♎"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="WorldHFlowContainer" type="HFlowContainer" parent="."]
+[node name="WorldPanel" parent="." instance=ExtResource("6_pg55v")]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_top = -24.0
 offset_right = 232.0
+offset_bottom = 0.0
 grow_vertical = 0
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 0
-
-[node name="PanelContainer2" type="PanelContainer" parent="WorldHFlowContainer"]
-custom_minimum_size = Vector2(64, 24)
-layout_mode = 2
-
-[node name="WorldLabel" type="Label" parent="WorldHFlowContainer/PanelContainer2"]
-layout_mode = 2
-text = "World"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PanelContainer4" type="PanelContainer" parent="WorldHFlowContainer"]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-tooltip_text = "Depth. A distance between the current world and the Nexus."
-
-[node name="DepthLabel" type="Label" parent="WorldHFlowContainer/PanelContainer4"]
-layout_mode = 2
-text = "?"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [connection signal="pressed" from="MainPanelContainer/ActionsGridContainer/PinchCheekButton" to="." method="_on_pinch_cheek_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/VBoxContainer/EffectsButton" to="." method="_on_effects_button_pressed"]

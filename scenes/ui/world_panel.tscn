@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://cw6cd5pihyy2a"]
+
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_4ly1n"]
+[ext_resource type="Script" uid="uid://bdvjx0xgnyp3q" path="res://scripts/ui/world_panel.gd" id="1_gqkp7"]
+
+[node name="WorldPanel" type="HFlowContainer"]
+offset_right = 110.0
+offset_bottom = 24.0
+theme = ExtResource("1_4ly1n")
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+script = ExtResource("1_gqkp7")
+
+[node name="WorldContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(64, 24)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="WorldContainer"]
+layout_mode = 2
+text = "Unknown World"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DepthContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DepthContainer"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
