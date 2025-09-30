@@ -23,13 +23,9 @@ extends Control
 @onready var settings_button = get_node("SidePanelContainer/VBoxContainer/SettingsButton")
 @onready var quit_button = get_node("SidePanelContainer/VBoxContainer/QuitButton")
 @onready var money_panel = get_node("MoneyPanel")
-@onready var players_margin_container = get_node("MainPanelContainer/VBoxContainer")
+@onready var player_container = get_node("MainPanelContainer/VBoxContainer")
 @onready var effects_grid_container = get_node("MainPanelContainer/EffectsGridContainer")
 @onready var world_panel = get_node("WorldPanel")
-@onready var player_avatar = get_node("MainPanelContainer/VBoxContainer/HBoxContainer/TextureRect/AnimatedSprite2D")
-@onready var player_label = get_node("MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/PlayerLabel")
-@onready var player_effects_label = get_node("MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/PlayerEffectsLabel")
-@onready var health_label = get_node("MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/HealthLabel")
 @onready var actions_grid_container = get_node("MainPanelContainer/ActionsGridContainer")
 @onready var player: YumePlayer = get_tree().get_first_node_in_group("Players")
 
@@ -53,23 +49,6 @@ func _ready() -> void:
 	else:
 		world_panel.hide()
 		money_panel.anchors_preset = Control.PRESET_BOTTOM_LEFT
-
-	if player.equipped_effect == 0:
-		player_avatar.animation = "down"
-	else:
-		player_avatar.animation = "down" + YumePlayer.EFFECT.find_key(player.equipped_effect).capitalize()
-
-	player_label.text = player.name
-
-	if Game.persistent_data.has("acquired_effects"):
-		player_effects_label.text = "✨: " + str(Game.persistent_data["acquired_effects"] & 1) + "/" + str(YumePlayer.EFFECT.size() - 1)
-	else:
-		player_effects_label.text = "✨: 0/" + str(YumePlayer.EFFECT.size() - 1)
-
-	if Game.persistent_data.has("health"):
-		health_label.text = "❤️: " + str(Game.persistent_data["health"])
-	else:
-		health_label.text = "❤️: 0"
 
 	if Game.persistent_data.has("acquired_effects"):
 		for effect: YumePlayer.EFFECT in YumePlayer.EFFECT.values():
@@ -107,13 +86,13 @@ func _input(event: InputEvent) -> void:
 		if focus_owner:
 			match focus_owner.get_parent():
 				actions_grid_container:
-					players_margin_container.show()
+					player_container.show()
 					effects_grid_container.hide()
 					actions_grid_container.hide()
 					actions_button.grab_focus()
 
 				effects_grid_container:
-					players_margin_container.show()
+					player_container.show()
 					effects_grid_container.hide()
 					actions_grid_container.hide()
 					effects_button.grab_focus()
@@ -138,7 +117,7 @@ func _on_button_pressed(button: Button) -> void:
 	button_finished.emit()
 
 func _on_actions_button_pressed() -> void:
-	players_margin_container.hide()
+	player_container.hide()
 	effects_grid_container.hide()
 	actions_grid_container.show()
 
@@ -153,7 +132,7 @@ func _on_quit_button_pressed() -> void:
 	queue_free()
 
 func _on_effects_button_pressed() -> void:
-	players_margin_container.hide()
+	player_container.hide()
 	effects_grid_container.show()
 	actions_grid_container.hide()
 	effects_grid_container.get_children()[0].grab_focus()

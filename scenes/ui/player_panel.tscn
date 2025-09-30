@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://icwpnu4canmm"]
+
+[ext_resource type="Script" uid="uid://cij0kdti16hhk" path="res://scripts/ui/player_panel.gd" id="1_udy6i"]
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_y3yhk"]
+[ext_resource type="Texture2D" uid="uid://rcvhyw1t0f3e" path="res://themes/images/frame.png" id="2_lc16r"]
+[ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="3_y3yhk"]
+
+[node name="PlayerPanel" type="HBoxContainer"]
+theme = ExtResource("1_y3yhk")
+script = ExtResource("1_udy6i")
+
+[node name="AvatarFrame" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("2_lc16r")
+stretch_mode = 1
+
+[node name="Avatar" type="AnimatedSprite2D" parent="AvatarFrame"]
+position = Vector2(24, 24)
+sprite_frames = ExtResource("3_y3yhk")
+animation = &"down"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="PlayerLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Sakutsuki"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="EffectsLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "✨: 0/1"
+
+[node name="HealthLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "❤️: 0"
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "PLACEHOLDER"

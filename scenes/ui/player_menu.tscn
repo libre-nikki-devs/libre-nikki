@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://f47u5spls1q4"]
+[gd_scene load_steps=6 format=3 uid="uid://f47u5spls1q4"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_enftr"]
 [ext_resource type="Script" uid="uid://cvkg4u2uux7os" path="res://scripts/ui/player_menu.gd" id="2_01phm"]
-[ext_resource type="Texture2D" uid="uid://rcvhyw1t0f3e" path="res://themes/images/frame.png" id="3_rprfk"]
-[ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="4_r4t8x"]
+[ext_resource type="PackedScene" uid="uid://icwpnu4canmm" path="res://scenes/ui/player_panel.tscn" id="3_pphos"]
 [ext_resource type="PackedScene" uid="uid://o018hjpcyot8" path="res://scenes/ui/money_panel.tscn" id="5_pphos"]
 [ext_resource type="PackedScene" uid="uid://cw6cd5pihyy2a" path="res://scenes/ui/world_panel.tscn" id="6_pg55v"]
 
@@ -36,44 +35,15 @@ grow_horizontal = 0
 [node name="VBoxContainer" type="VBoxContainer" parent="MainPanelContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanelContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MainPanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
-[node name="TextureRect" type="TextureRect" parent="MainPanelContainer/VBoxContainer/HBoxContainer"]
+[node name="PlayerPanel" parent="MainPanelContainer/VBoxContainer/MarginContainer" instance=ExtResource("3_pphos")]
 layout_mode = 2
-texture = ExtResource("3_rprfk")
-stretch_mode = 1
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MainPanelContainer/VBoxContainer/HBoxContainer/TextureRect"]
-position = Vector2(24, 24)
-sprite_frames = ExtResource("4_r4t8x")
-animation = &"down"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainPanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-
-[node name="PlayerLabel" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Sakutsuki"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="PlayerEffectsLabel" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 2
-text = "✨: 0/1"
-
-[node name="HealthLabel" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 10
-text = "❤️: 0"
-
-[node name="Label2" type="Label" parent="MainPanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "PLACEHOLDER"
 
 [node name="ActionsGridContainer" type="GridContainer" parent="MainPanelContainer"]
 visible = false
