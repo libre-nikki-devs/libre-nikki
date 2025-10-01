@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=12 format=3 uid="uid://dudh2k1jjvgdk"]
+[gd_resource type="Theme" load_steps=13 format=3 uid="uid://dudh2k1jjvgdk"]
 
 [ext_resource type="Texture2D" uid="uid://d1lfuju4qxxc5" path="res://themes/images/default.png" id="1_xbnye"]
 [ext_resource type="StyleBox" uid="uid://db1836yw6vlr" path="res://themes/new_style_box_texture.tres" id="2_wrsb0"]
@@ -26,6 +26,8 @@ axis_stretch_vertical = 1
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h5e6a"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8t5h1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lkf7m"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rs5cc"]
 
@@ -65,4 +67,9 @@ MarginContainer/constants/margin_right = 4
 MarginContainer/constants/margin_top = 4
 Panel/styles/panel = ExtResource("2_wrsb0")
 PanelContainer/styles/panel = ExtResource("2_wrsb0")
+RichTextLabel/colors/default_color = Color(1, 1, 1, 1)
+RichTextLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+RichTextLabel/constants/shadow_offset_x = 1
+RichTextLabel/constants/shadow_offset_y = 1
+RichTextLabel/styles/focus = SubResource("StyleBoxEmpty_lkf7m")
 VScrollBar/styles/scroll = SubResource("StyleBoxEmpty_rs5cc")
