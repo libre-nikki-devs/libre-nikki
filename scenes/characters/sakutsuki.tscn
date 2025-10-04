@@ -1685,10 +1685,7 @@ current = true
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(8, 0)
 zoom = Vector2(2, 2)
-limit_left = -2147483647
-limit_top = -2147483647
-limit_right = 2147483647
-limit_bottom = 2147483647
+limit_enabled = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_3qhyl")

@@ -29,15 +29,15 @@ extends Node2D
 		if bounds.has_area():
 			match value:
 				"All Sides":
-					camera_limits = [-2147483647.0, 2147483647.0, -2147483647.0, 2147483647.0]
+					camera_limits = []
 					duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y), Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0), Vector2(bounds.size.x, bounds.size.y), Vector2(bounds.size.x, -bounds.size.y), Vector2(-bounds.size.x, bounds.size.y), Vector2(-bounds.size.x, -bounds.size.y)]
 
 				"Horizontally":
-					camera_limits = [-2147483647.0, bounds.end.y, bounds.position.y, 2147483647.0]
+					camera_limits = [-10000000, bounds.end.y, bounds.position.y, 10000000]
 					duplicate_positions = [Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0)]
 
 				"Vertically":
-					camera_limits = [bounds.position.x, 2147483647.0, -2147483647.0, bounds.end.x]
+					camera_limits = [bounds.position.x, 10000000, -10000000, bounds.end.x]
 					duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y)]
 
 				"None":
@@ -68,7 +68,7 @@ var duplicate_positions: Array[Vector2] = []
 
 ## Limits for the player character's camera. The camera will stop moving after
 ## the limit is reached.
-var camera_limits: Array[float] = []
+var camera_limits: Array[int] = []
 
 func _initialize_node(node: Node):
 	for child: Node in node.get_children():
