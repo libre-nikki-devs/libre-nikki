@@ -31,7 +31,7 @@ func _ready() -> void:
 	player_label.text = player.name
 
 	if Game.persistent_data.has("acquired_effects"):
-		effects_label.text = "✨: " + str(Game.persistent_data["acquired_effects"]) + "/" + str(YumePlayer.EFFECT.size() - 1)
+		effects_label.text = "✨: " + str(_count_ones(Game.persistent_data["acquired_effects"])) + "/" + str(YumePlayer.EFFECT.size() - 1)
 	else:
 		effects_label.text = "✨: 0/" + str(YumePlayer.EFFECT.size() - 1)
 
@@ -39,3 +39,12 @@ func _ready() -> void:
 		health_label.text = "❤️: " + str(Game.persistent_data["health"])
 	else:
 		health_label.text = "❤️: 0"
+
+func _count_ones(number: int) -> int:
+	var ones_count: int = 0
+
+	while number > 0:
+		ones_count += number % 2;
+		number /= 2;
+
+	return ones_count
