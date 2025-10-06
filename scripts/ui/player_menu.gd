@@ -72,6 +72,14 @@ func _ready() -> void:
 
 				effects_grid_container.add_child(button)
 
+	for child: Node in effects_grid_container.get_children():
+		child.focus_neighbor_left = effects_grid_container.get_child((child.get_index() - 1) % effects_grid_container.get_child_count()).get_path()
+		child.focus_neighbor_bottom = effects_grid_container.get_child((child.get_index() + effects_grid_container.columns) % effects_grid_container.get_child_count()).get_path()
+		child.focus_neighbor_top = effects_grid_container.get_child((child.get_index() - effects_grid_container.columns) % effects_grid_container.get_child_count()).get_path()
+		child.focus_neighbor_right = effects_grid_container.get_child((child.get_index() + 1) % effects_grid_container.get_child_count()).get_path()
+		child.focus_previous = child.focus_neighbor_top
+		child.focus_next = child.focus_neighbor_bottom
+
 	if OS.is_debug_build():
 		travel_button.show()
 	else:
