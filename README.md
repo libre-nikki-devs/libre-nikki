@@ -9,7 +9,7 @@ Official builds of the game can be downloaded from the [Libre Nikki's Releases p
 ## Exporting
 
 To export the project to an executable, you will need:
-* [Godot 4.4](https://godotengine.org/releases/4.4) (exact version; C# support is not required),
+* [Godot 4.5](https://godotengine.org/releases/4.5) (exact version; C# support is not required),
 * at least 4 GiB of free disk space.
 
 ### Exporting from GUI:
@@ -33,9 +33,9 @@ To export the project to an executable, you will need:
   ```sh
   cd libre-nikki
   ```
-* Before exporting the project, make sure that you have Godot export templates installed. If they are missing, download the export templates using `wget` and then extract them with `7z` to `$XDG_DATA_HOME/godot/export_templates/4.4.1.stable/`:
+* Before exporting the project, make sure that you have Godot export templates installed. If they are missing, download the export templates using `wget` and then extract them with `7z` to `$XDG_DATA_HOME/godot/export_templates/4.5.stable/`:
   ```sh
-  wget https://github.com/godotengine/godot-builds/releases/download/4.4.1-stable/Godot_v4.4.1-stable_export_templates.tpz && 7z e Godot_v4.4.1-stable_export_templates.tpz -o${XDG_DATA_HOME:-$HOME/.local/share}/godot/export_templates/4.4.1.stable/ && rm Godot_v4.4.1-stable_export_templates.tpz
+  wget https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_export_templates.tpz && 7z e Godot_v4.5-stable_export_templates.tpz -o${XDG_DATA_HOME:-$HOME/.local/share}/godot/export_templates/4.5.stable/ && rm Godot_v4.5-stable_export_templates.tpz
   ```
 * Export the project:
   ```sh
