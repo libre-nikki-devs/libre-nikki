@@ -49,14 +49,18 @@ func _ready() -> void:
 	settings_button.visible = true
 	quit_button.visible = true
 
-	if FileAccess.file_exists("user://save01.libki"):
-		continue_button.disabled = false
-		continue_label.modulate.a = 1.0
-		continue_button.grab_focus()
-	else:
-		continue_button.disabled = true
-		continue_label.modulate.a = 0.5
-		play_button.grab_focus()
+	var save_directory: String = (preload("res://scenes/ui/save_manager.tscn").instantiate().SAVE_DIRECTORY)
+
+	if DirAccess.dir_exists_absolute(save_directory):
+		if not DirAccess.get_files_at(save_directory).is_empty():
+			continue_button.disabled = false
+			continue_label.modulate.a = 1.0
+			continue_button.grab_focus()
+			return
+
+	continue_button.disabled = true
+	continue_label.modulate.a = 0.5
+	play_button.grab_focus()
 
 func _input(event: InputEvent) -> void:
 	if (event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_cancel")) and not get_tree().paused:
@@ -104,8 +108,11 @@ func _on_play_button_pressed() -> void:
 func _on_continue_button_pressed() -> void:
 	_on_button_pressed(continue_button)
 	await button_finished
-	load_game("user://save01.libki")
-	Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
+	var save_manager: VBoxContainer = preload("res://scenes/ui/save_manager.tscn").instantiate()
+	save_manager.focus = continue_button
+	save_manager.mode = save_manager.MODES.LOAD
+	Game.add_child(save_manager)
+	Game.transition_handler.play("fade_in", -1, 10.0)
 
 func _on_settings_button_pressed() -> void:
 	_on_button_pressed(settings_button)
@@ -116,7 +123,3 @@ func _on_quit_button_pressed() -> void:
 	_on_button_pressed(quit_button)
 	await button_finished
 	get_tree().quit()
-
-func load_game(save_path: String):
-	var file = FileAccess.open(save_path, FileAccess.READ)
-	Game.persistent_data = file.get_var()

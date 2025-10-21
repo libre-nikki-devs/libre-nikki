@@ -22,21 +22,26 @@ extends HBoxContainer
 @onready var effects_label: Label = get_node("VBoxContainer/HBoxContainer/EffectsLabel")
 @onready var health_label: Label = get_node("VBoxContainer/HBoxContainer/HealthLabel")
 
+var data: Dictionary = Game.persistent_data
+
 func _ready() -> void:
-	if player.equipped_effect == YumePlayer.EFFECT.DEFAULT:
-		avatar.animation = "down"
-	else:
-		avatar.animation = "down" + YumePlayer.EFFECT.find_key(player.equipped_effect).capitalize()
+	if data.has("player_data"):
+		if data["player_data"].has("equipped_effect"):
+			if data["player_data"]["equipped_effect"] == YumePlayer.EFFECT.DEFAULT:
+				avatar.animation = "down"
+			else:
+				avatar.animation = "down" + YumePlayer.EFFECT.find_key(data["player_data"]["equipped_effect"]).capitalize()
 
-	player_label.text = player.name
+		if data["player_data"].has("name"):
+			player_label.text = data["player_data"]["name"]
 
-	if Game.persistent_data.has("acquired_effects"):
-		effects_label.text = "✨: " + str(_count_ones(Game.persistent_data["acquired_effects"])) + "/" + str(YumePlayer.EFFECT.size() - 1)
+	if data.has("acquired_effects"):
+		effects_label.text = "✨: " + str(_count_ones(data["acquired_effects"])) + "/" + str(YumePlayer.EFFECT.size() - 1)
 	else:
 		effects_label.text = "✨: 0/" + str(YumePlayer.EFFECT.size() - 1)
 
-	if Game.persistent_data.has("health"):
-		health_label.text = "❤️: " + str(Game.persistent_data["health"])
+	if data.has("health"):
+		health_label.text = "❤️: " + str(data["health"])
 	else:
 		health_label.text = "❤️: 0"
 

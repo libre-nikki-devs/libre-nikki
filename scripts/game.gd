@@ -74,7 +74,7 @@ func save_current_scene() -> void:
 		persistent_data["scene_data"][current_scene.scene_file_path] = PackedScene.new()
 		persistent_data["scene_data"][current_scene.scene_file_path].pack(current_scene)
 
-func save_player_data(player: YumePlayer, player_properties: Array[String] = ["accept_events", "cancel_events", "equipped_effect", "facing", "last_step", "speed"]) -> void:
+func save_player_data(player: YumePlayer, player_properties: Array[String] = ["accept_events", "cancel_events", "equipped_effect", "facing", "last_step", "name", "speed"]) -> void:
 	if player:
 		persistent_data["player_data"] = {}
 

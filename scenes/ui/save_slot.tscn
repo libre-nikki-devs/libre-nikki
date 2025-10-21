@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://b460ilvlm5418"]
+
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_l5iig"]
+[ext_resource type="Script" uid="uid://b1ygccqjhw3k3" path="res://scripts/ui/save_slot.gd" id="2_l5iig"]
+
+[node name="SaveSlot" type="PanelContainer"]
+theme = ExtResource("1_l5iig")
+script = ExtResource("2_l5iig")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+text = " "
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Save"
+horizontal_alignment = 1
+vertical_alignment = 1
