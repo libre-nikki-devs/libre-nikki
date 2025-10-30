@@ -49,9 +49,12 @@ func _ready() -> void:
 		var file: FileAccess = FileAccess.open(SAVE_DIRECTORY.path_join("save%02d.libki" % slot), FileAccess.READ)
 
 		if file:
-			var player_panel: HBoxContainer = preload("res://scenes/ui/player_panel.tscn").instantiate()
-			player_panel.data = file.get_var()
-			save_slot.v_box_container.add_child(player_panel)
+			var data: Variant = file.get_var()
+
+			if data is Dictionary:
+				var player_panel: HBoxContainer = preload("res://scenes/ui/player_panel.tscn").instantiate()
+				player_panel.data = data
+				save_slot.v_box_container.add_child(player_panel)
 
 	for child: Control in save_container.get_children():
 		child.button.focus_neighbor_left = child.button.get_path()
@@ -88,21 +91,24 @@ func load_game(slot: int):
 	var file: FileAccess = FileAccess.open(SAVE_DIRECTORY.path_join("save%02d.libki" % (slot)), FileAccess.READ)
 
 	if file:
-		Game.transition_handler.play("fade_out", -1, 10.0)
-		await Game.transition_handler.animation_finished
-		Game.persistent_data = file.get_var()
+		var data: Variant = file.get_var()
 
-		if Game.persistent_data.has("current_world"):
-			Game.change_scene(Game.persistent_data["current_world"])
-		else:
-			Game.persistent_data["player_data"] = {
-				"facing": YumeCharacter.DIRECTION.LEFT,
-				"global_position": Vector2(-56.0, 8.0)
-			}
+		if data is Dictionary:
+			Game.persistent_data = data
+			Game.transition_handler.play("fade_out", -1, 10.0)
+			await Game.transition_handler.animation_finished
 
-			Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
+			if Game.persistent_data.has("current_world"):
+				Game.change_scene(Game.persistent_data["current_world"])
+			else:
+				Game.persistent_data["player_data"] = {
+					"facing": YumeCharacter.DIRECTION.LEFT,
+					"global_position": Vector2(-56.0, 8.0)
+				}
 
-		queue_free()
+				Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
+
+			queue_free()
 
 func close_menu():
 	Game.transition_handler.play("fade_out", -1, 10.0)
