@@ -50,6 +50,7 @@ func _ready() -> void:
 
 		if file:
 			var data: Variant = file.get_var()
+			file.close()
 
 			if data is Dictionary:
 				var player_panel: HBoxContainer = preload("res://scenes/ui/player_panel.tscn").instantiate()
@@ -87,11 +88,14 @@ func save_game(slot: int):
 			Game.save_player_data(player, ["accept_events", "cancel_events", "equipped_effect", "facing", "global_position", "last_step", "name", "speed"])
 			file.store_var(Game.persistent_data)
 
+		file.close()
+
 func load_game(slot: int):
 	var file: FileAccess = FileAccess.open(SAVE_DIRECTORY.path_join("save%02d.libki" % (slot)), FileAccess.READ)
 
 	if file:
 		var data: Variant = file.get_var()
+		file.close()
 
 		if data is Dictionary:
 			Game.persistent_data = data
