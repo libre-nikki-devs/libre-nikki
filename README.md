@@ -46,6 +46,10 @@ To export the project to an executable, you will need:
   ./build/libre_nikki_linux.x86_64
   ```
 
+## Contributing
+
+Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get started with contributing to Libre Nikki.
+
 ## Licensing
 
 Libre Nikki's source code is licensed under the terms of the GNU General Public License Version 3.
