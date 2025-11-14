@@ -58,21 +58,29 @@ func _count_playtime() -> void:
 
 func change_scene(path: String) -> void:
 	persistent_data["entered_from"] = get_tree().current_scene.scene_file_path
-
+	if persistent_data["entered_from"] == "":
+		persistent_data["entered_from"] = persistent_data["current_scene"]
+	
 	if persistent_data.has("scene_data"):
 		if persistent_data["scene_data"].has(path):
 			get_tree().change_scene_to_packed(persistent_data["scene_data"][path])
+			persistent_data["current_scene"] = path
+			return
 
 	get_tree().change_scene_to_file(path)
+	persistent_data["current_scene"] = path
 
 func save_current_scene() -> void:
 	var current_scene: Node = get_tree().current_scene
+	var scene_path = current_scene.scene_file_path
+	if scene_path == "":
+		scene_path = persistent_data["current_scene"]
 
 	if not persistent_data.has("scene_data"):
 		persistent_data["scene_data"] = {}
-
-		persistent_data["scene_data"][current_scene.scene_file_path] = PackedScene.new()
-		persistent_data["scene_data"][current_scene.scene_file_path].pack(current_scene)
+	
+	persistent_data["scene_data"][scene_path] = PackedScene.new()
+	persistent_data["scene_data"][scene_path].pack(current_scene)
 
 func save_player_data(player: YumePlayer, player_properties: Array[String] = ["accept_events", "cancel_events", "equipped_effect", "facing", "last_step", "name", "speed"]) -> void:
 	if player:
