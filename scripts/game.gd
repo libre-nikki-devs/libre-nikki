@@ -71,10 +71,16 @@ func change_scene(path: String) -> void:
 	persistent_data["current_scene"] = path
 
 func save_current_scene() -> void:
-	var current_scene: Node = get_tree().current_scene
+	var scene_tree: SceneTree = get_tree()
+	var current_scene: Node = scene_tree.current_scene
 	var scene_path = current_scene.scene_file_path
 	if scene_path == "":
 		scene_path = persistent_data["current_scene"]
+
+	for tween: Tween in scene_tree.get_processed_tweens():
+		if tween.is_running():
+			tween.custom_step(INF)
+			tween.kill()
 
 	if not persistent_data.has("scene_data"):
 		persistent_data["scene_data"] = {}

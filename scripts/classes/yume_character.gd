@@ -188,7 +188,7 @@ func move(direction: DIRECTION) -> void:
 	is_busy = true
 	is_moving = true
 	_move()
-	var tween: Tween = TransitionableTween.create_tween(self)
+	var tween: Tween = create_tween()
 	tween.tween_property(self, "pixel_position", Vector2i(target_position), 0.25 / speed).as_relative()
 	var collision_shapes: Array[CollisionShape2D]
 
