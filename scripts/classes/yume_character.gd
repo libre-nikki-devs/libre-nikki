@@ -189,7 +189,14 @@ func move(direction: DIRECTION) -> void:
 	is_moving = true
 	_move()
 	var tween: Tween = create_tween()
-	tween.tween_property(self, "pixel_position", Vector2i(target_position), 0.25 / speed).as_relative()
+	
+	var tween_length = .25/speed
+	var end_tween_early = func(_animation):
+		tween.custom_step(tween_length)
+	
+	Game.transition_handler.current_animation_changed.connect(end_tween_early)
+	
+	tween.tween_property(self, "pixel_position", Vector2i(target_position), tween_length).as_relative()
 	var collision_shapes: Array[CollisionShape2D]
 
 	for shape_owner: int in get_shape_owners():
@@ -198,9 +205,10 @@ func move(direction: DIRECTION) -> void:
 	for collision_shape: CollisionShape2D in collision_shapes:
 		collision_shape.position += target_position
 		tween.parallel()
-		tween.tween_property(collision_shape, "position", -target_position, 0.25 / speed).as_relative()
+		tween.tween_property(collision_shape, "position", -target_position, tween_length).as_relative()
 
 	await tween.finished
+	Game.transition_handler.current_animation_changed.disconnect(end_tween_early)
 	is_busy = false
 	is_moving = false
 	moved.emit()
