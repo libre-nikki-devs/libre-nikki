@@ -81,7 +81,6 @@ func save_game(slot: int):
 	var file: FileAccess = FileAccess.open(SAVE_DIRECTORY.path_join("save%02d.libki" % (slot)), FileAccess.WRITE)
 
 	if file:
-		Game.persistent_data["current_world"] = get_tree().current_scene.scene_file_path
 		var player: YumePlayer = get_tree().get_first_node_in_group("Players")
 
 		if player:
@@ -102,8 +101,8 @@ func load_game(slot: int):
 			Game.transition_handler.play("fade_out", -1, 10.0)
 			await Game.transition_handler.animation_finished
 
-			if Game.persistent_data.has("current_world"):
-				Game.change_scene(Game.persistent_data["current_world"])
+			if Game.persistent_data.has("current_scene"):
+				Game.change_scene(Game.persistent_data["current_scene"])
 			else:
 				Game.persistent_data["player_data"] = {
 					"facing": YumeCharacter.DIRECTION.LEFT,
