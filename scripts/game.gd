@@ -63,10 +63,8 @@ func _count_playtime() -> void:
 			persistent_data["playtime"] = 0
 
 func change_scene(path: String) -> void:
-	persistent_data["entered_from"] = get_tree().current_scene.scene_file_path
-	if persistent_data["entered_from"] == "":
-		persistent_data["entered_from"] = persistent_data["current_scene"]
-	
+	persistent_data["entered_from"] = persistent_data["current_scene"]
+
 	if persistent_data.has("scene_data"):
 		if persistent_data["scene_data"].has(path):
 			get_tree().change_scene_to_packed(persistent_data["scene_data"][path])
@@ -74,7 +72,6 @@ func change_scene(path: String) -> void:
 			return
 
 	get_tree().change_scene_to_file(path)
-	persistent_data["current_scene"] = path
 
 func save_current_scene() -> void:
 	var scene_tree: SceneTree = get_tree()
