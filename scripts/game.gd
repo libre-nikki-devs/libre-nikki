@@ -32,27 +32,26 @@ var settings: Dictionary = {
 }
 
 func _ready() -> void:
-	var current_scene: Node = get_tree().current_scene
-	persistent_data["current_scene"] = current_scene.scene_file_path
-	_on_scene_tree_node_added(current_scene)
-	get_tree().connect("node_added", _on_scene_tree_node_added)
+	_on_scene_changed()
+	get_tree().connect("scene_changed", _on_scene_changed)
 	get_window().min_size = Vector2i(640, 480)
 	_count_playtime()
 
-func _on_scene_tree_node_added(node: Node) -> void:
-	if node == get_tree().current_scene:
-		var scene_path: String = node.scene_file_path
+func _on_scene_changed() -> void:
+	var scene_path: String = get_tree().current_scene.scene_file_path
 
-		if scene_path.is_empty():
-			scene_path = persistent_data["current_scene"]
+	if scene_path.is_empty():
+		scene_path = persistent_data["current_scene"]
+	else:
+		persistent_data["current_scene"] = scene_path
 
-		if not persistent_data.has("scene_visits"):
-			persistent_data["scene_visits"] = {}
+	if not persistent_data.has("scene_visits"):
+		persistent_data["scene_visits"] = {}
 
-		if persistent_data["scene_visits"].has(scene_path):
-			persistent_data["scene_visits"][scene_path] += 1
-		else:
-			persistent_data["scene_visits"][scene_path] = 1
+	if persistent_data["scene_visits"].has(scene_path):
+		persistent_data["scene_visits"][scene_path] += 1
+	else:
+		persistent_data["scene_visits"][scene_path] = 1
 
 func _count_playtime() -> void:
 	while true:
