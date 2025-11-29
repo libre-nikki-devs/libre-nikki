@@ -141,6 +141,7 @@ func sleep() -> void:
 func wake_up() -> void:
 	persistent_data["player_data"] = {}
 	persistent_data["scene_data"] = {}
+	var scene_tree: SceneTree = get_tree()
 	var tween: Tween
 
 	if music_player.playing:
@@ -148,8 +149,9 @@ func wake_up() -> void:
 		tween.tween_property(music_player, "volume_db", linear_to_db(0.01), 5.0)
 
 	transition_handler.play("pixelate_out")
-	get_tree().paused = true
+	scene_tree.paused = true
 	await transition_handler.animation_finished
+	scene_tree.paused = false
 	change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
 
 	if tween:

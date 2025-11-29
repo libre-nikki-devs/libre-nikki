@@ -3,10 +3,10 @@ extends YumeWorld
 @onready var player: YumePlayer = get_node("Sakutsuki")
 
 func _ready() -> void:
-	get_tree().paused = true
+	process_mode = Node.PROCESS_MODE_DISABLED
 	Game.transition_handler.play("pixelate_in")
 	await Game.transition_handler.animation_finished
-	get_tree().paused = false
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func save_game(save_path: String):
 	var file = FileAccess.open(save_path, FileAccess.WRITE)
@@ -14,10 +14,10 @@ func save_game(save_path: String):
 
 func _on_bed_body_interacted(body: Node2D) -> void:
 	if body is YumePlayer:
-		get_tree().paused = true
+		process_mode = Node.PROCESS_MODE_DISABLED
 		Game.transition_handler.play("pixelate_out")
 		await Game.transition_handler.animation_finished
-		get_tree().paused = false
+		process_mode = Node.PROCESS_MODE_PAUSABLE
 
 		if Game.persistent_data.has("player_data"):
 			Game.persistent_data["player_data"] = {}

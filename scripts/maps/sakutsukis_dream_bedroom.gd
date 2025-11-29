@@ -8,14 +8,14 @@ func _ready() -> void:
 			player.position = Vector2(48, -48)
 			player.facing = YumeCharacter.DIRECTION.DOWN
 
-	get_tree().paused = true
+	process_mode = Node.PROCESS_MODE_DISABLED
 	Game.transition_handler.play("pixelate_in")
 	await Game.transition_handler.animation_finished
-	get_tree().paused = false
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _on_door_opened() -> void:
 	Game.transition_handler.play("fade_out")
-	get_tree().paused = true
+	process_mode = Node.PROCESS_MODE_DISABLED
 	await Game.transition_handler.animation_finished
 	Game.save_player_data(player)
 	Game.change_scene("res://scenes/maps/nexus.tscn")
