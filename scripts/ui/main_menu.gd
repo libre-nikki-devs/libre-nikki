@@ -29,7 +29,6 @@ extends Control
 signal button_finished
 
 func _ready() -> void:
-	Game.persistent_data.clear()
 	menu_container.visible = false
 	play_button.visible = false
 	continue_button.visible = false
@@ -73,7 +72,9 @@ func _input(event: InputEvent) -> void:
 					Game.transition_handler.play("fade_out")
 					await Game.transition_handler.animation_finished
 					greeting.visible = false
+					get_tree().paused = false
 					Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
+					Game.persistent_data.clear()
 
 func _on_button_pressed(button: Button) -> void:
 	for child: Control in button.get_parent().get_children():
