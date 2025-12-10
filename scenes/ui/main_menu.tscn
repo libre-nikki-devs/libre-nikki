@@ -167,7 +167,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="GreetingLabel" type="Label" parent="Greeting"]
+[node name="GreetingLabel" type="RichTextLabel" parent="Greeting"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -178,20 +178,22 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 focus_mode = 2
 theme = ExtResource("1_fe2o3")
-text = "Libre Nikki is not affiliated with Kikiyama
-or Yume Nikki. It is purely a fan game.
+bbcode_enabled = true
+text = "Libre Nikki is undergoing early stage of development. Some areas might be in unfinished state.
 
-Libre Nikki is still in early development.
-If you are an artist, a composer or a programmer
-and if you are willing to improve Libre Nikki,
-I recommend to contribute to the project 
-through Github. All contributions are welcome.
+Libre Nikki is open for collaboration and looking for contributors! If you are an artist, a composer or a programmer and would want to support the project, please see:
 
-Thank you for reading and enjoy Libre Nikki!"
+[url]https://github.com/libre-nikki-devs/libre-nikki/blob/main/CONTRIBUTING.md[/url]
+
+Thank you in advance and enjoy Libre Nikki!"
 horizontal_alignment = 1
 vertical_alignment = 1
+meta_underlined = false
 
 [connection signal="pressed" from="MenuContainer/ButtonContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MenuContainer/ButtonContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="MenuContainer/ButtonContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="MenuContainer/ButtonContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="meta_clicked" from="Greeting/GreetingLabel" to="." method="_on_greeting_label_meta_clicked"]
+[connection signal="meta_hover_ended" from="Greeting/GreetingLabel" to="." method="_on_greeting_label_meta_hover_ended"]
+[connection signal="meta_hover_started" from="Greeting/GreetingLabel" to="." method="_on_greeting_label_meta_hover_started"]

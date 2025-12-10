@@ -24,9 +24,11 @@ extends Control
 @onready var quit_button: Button = get_node("MenuContainer/ButtonContainer/QuitButton")
 @onready var version_label: Label = get_node("VersionLabel")
 @onready var greeting: Control = get_node("Greeting")
-@onready var greeting_label: Label = get_node("Greeting/GreetingLabel")
+@onready var greeting_label: RichTextLabel = get_node("Greeting/GreetingLabel")
 
 signal button_finished
+
+var url_hovered: bool = false
 
 func _ready() -> void:
 	menu_container.visible = false
@@ -68,13 +70,14 @@ func _input(event: InputEvent) -> void:
 		if focus_owner:
 			match focus_owner.get_parent():
 				greeting:
-					get_tree().paused = true
-					Game.transition_handler.play("fade_out")
-					await Game.transition_handler.animation_finished
-					greeting.visible = false
-					get_tree().paused = false
-					Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
-					Game.persistent_data.clear()
+					if not event.is_action_pressed("ui_accept") or not url_hovered:
+						get_tree().paused = true
+						Game.transition_handler.play("fade_out")
+						await Game.transition_handler.animation_finished
+						greeting.visible = false
+						get_tree().paused = false
+						Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
+						Game.persistent_data.clear()
 
 func _on_button_pressed(button: Button) -> void:
 	for child: Control in button.get_parent().get_children():
@@ -124,3 +127,12 @@ func _on_quit_button_pressed() -> void:
 	_on_button_pressed(quit_button)
 	await button_finished
 	get_tree().quit()
+
+func _on_greeting_label_meta_clicked(meta: Variant) -> void:
+	OS.shell_open(meta)
+
+func _on_greeting_label_meta_hover_started(meta: Variant) -> void:
+	url_hovered = true
+
+func _on_greeting_label_meta_hover_ended(meta: Variant) -> void:
+	url_hovered = false
