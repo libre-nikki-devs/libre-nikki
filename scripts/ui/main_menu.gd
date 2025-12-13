@@ -70,7 +70,7 @@ func _input(event: InputEvent) -> void:
 		if focus_owner:
 			match focus_owner.get_parent():
 				greeting:
-					if not event.is_action_pressed("ui_accept") or not url_hovered:
+					if not event.is_action_pressed("ui_accept") or not url_hovered or not event is InputEventMouseButton:
 						get_tree().paused = true
 						Game.transition_handler.play("fade_out")
 						await Game.transition_handler.animation_finished
