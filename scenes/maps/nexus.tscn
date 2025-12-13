@@ -119,6 +119,24 @@ animation = &"open"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
 shape = SubResource("RectangleShape2D_yuqbu")
 
+[node name="AmberCorridorsDoor" type="CharacterBody2D" parent="." node_paths=PackedStringArray("animated_sprite")]
+z_index = 1
+y_sort_enabled = true
+position = Vector2(104, -88)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("4_y2428")
+animated_sprite = NodePath("AnimatedSprite2D")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="AmberCorridorsDoor"]
+modulate = Color(1, 0.69411767, 0, 1)
+position = Vector2(0, -8)
+sprite_frames = SubResource("SpriteFrames_5xw31")
+animation = &"open"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AmberCorridorsDoor"]
+shape = SubResource("RectangleShape2D_yuqbu")
+
 [node name="Debugtsuki" parent="." instance=ExtResource("6_dsb3x")]
 z_index = 1
 position = Vector2(-136, -136)
@@ -140,4 +158,5 @@ sprite_frames = SubResource("SpriteFrames_76nev")
 shape = SubResource("RectangleShape2D_2kjem")
 
 [connection signal="opened" from="Door" to="." method="_on_door_opened"]
+[connection signal="opened" from="AmberCorridorsDoor" to="." method="_on_amber_corridors_door_opened"]
 [connection signal="body_interacted" from="Bike" to="." method="_on_bike_body_interacted"]

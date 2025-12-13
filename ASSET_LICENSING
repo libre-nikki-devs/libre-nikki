@@ -13,5 +13,6 @@ Copyright (C) 2024-2025 boot <bootovy@proton.me>. All rights reserved.
 Following files are licensed under the terms of the
 Creative Commons Attribution 4.0 International Public License:
 
-sounds/boot_steel_door_close-1.wav, sounds/boot_steel_door_close-2.wav,
-sounds/boot_steel_door_locked-1.wav, sounds/boot_steel_door_open-1.wav.
+tilesets/images/boot_amber_corridors.png, sounds/boot_steel_door_close-1.wav,
+sounds/boot_steel_door_close-2.wav, sounds/boot_steel_door_locked-1.wav,
+sounds/boot_steel_door_open-1.wav.
