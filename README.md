@@ -2,6 +2,12 @@
 
 Libre Nikki is a surreal walking simulator running on Godot Engine, heavily inspired by Yume Nikki and open for collaboration.
 
+## Screenshots
+
+| Amber Corridors                                  | Player Menu                                 |
+|--------------------------------------------------|---------------------------------------------|
+| ![Amber Corridors](./misc/screenshots/amber.png) | ![Player Menu](./misc/screenshots/menu.png) |
+
 ## Downloading
 
 Official builds of the game can be downloaded from the [Libre Nikki's Releases page](https://github.com/libre-nikki-devs/libre-nikki/releases/latest).
