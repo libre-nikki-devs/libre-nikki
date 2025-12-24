@@ -48,10 +48,16 @@ func _pre_close() -> void:
 	await Game.transition_handler.animation_finished
 	Game.transition_handler.play("fade_in", -1, 10.0)
 
-func open(menu_path: String) -> void:
+func open(menu_path: String, menu_property_list: Dictionary[String, Variant] = {}) -> void:
 	await _pre_open()
-	var menu: PackedScene = load(menu_path)
-	add_child(menu.instantiate())
+
+	var menu: YumeMenu = load(menu_path).instantiate()
+
+	for property: String in menu_property_list.keys():
+		if property in menu:
+			menu.set(property, menu_property_list[property])
+
+	add_child(menu)
 
 func close() -> void:
 	await _pre_close()
