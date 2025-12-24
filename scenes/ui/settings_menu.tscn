@@ -4,11 +4,15 @@
 [ext_resource type="Script" uid="uid://dj2ddgsj5qt4e" path="res://scripts/ui/settings_menu.gd" id="2_s2d1y"]
 
 [node name="Settings" type="Control"]
+top_level = true
 layout_mode = 3
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -320.0
+offset_bottom = -240.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(2, 2)
 theme = ExtResource("1_7i3iu")
 script = ExtResource("2_s2d1y")
 
@@ -116,7 +120,7 @@ grow_vertical = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 visible = false
-layout_mode = 2
+layout_mode = 0
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 316.0
