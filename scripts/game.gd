@@ -158,11 +158,3 @@ func wake_up() -> void:
 		if tween.is_running():
 			await tween.finished
 			music_player.stop()
-
-## Open settings menu.
-func open_settings(focus):
-	var settings_menu: Control
-	settings_menu = preload("res://scenes/ui/settings_menu.tscn").instantiate()
-	settings_menu.focus = focus
-	add_child(settings_menu)
-	transition_handler.play("fade_in", -1, 10.0)

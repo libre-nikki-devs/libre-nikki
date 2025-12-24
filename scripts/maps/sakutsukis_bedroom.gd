@@ -29,7 +29,7 @@ func _on_desk_body_interacted(body: Node2D) -> void:
 		get_tree().paused = true
 		Game.transition_handler.play("fade_out", -1, 10.0)
 		await Game.transition_handler.animation_finished
-		var save_manager: VBoxContainer = preload("res://scenes/ui/save_manager.tscn").instantiate()
+		var save_manager: YumeMenu = preload("res://scenes/ui/save_manager.tscn").instantiate()
 		save_manager.mode = save_manager.MODES.SAVE
 		Game.add_child(save_manager)
 		Game.transition_handler.play("fade_in", -1, 10.0)

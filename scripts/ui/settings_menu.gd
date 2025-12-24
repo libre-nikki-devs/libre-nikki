@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License along with
 # Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends Control
+extends YumeMenu
 
 # WIP
 
@@ -443,11 +443,8 @@ The GNU General Public License does not permit incorporating your program into p
 @onready var scroll = get_node("ScrollContainer")
 @onready var margin_container = get_node("ScrollContainer/MarginContainer")
 
-var focus
-
 func _ready() -> void:
 	licenses_menu.show()
-	licenses_button.grab_focus()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_go_back"):
@@ -465,14 +462,10 @@ func _input(event: InputEvent) -> void:
 				licenses_menu:
 					licenses_button.grab_focus()
 				side_menu:
-					close_menu()
+					close()
 
-func close_menu():
-	Game.transition_handler.play("fade_out", -1, 10.0)
-	await Game.transition_handler.animation_finished
-	Game.transition_handler.play("fade_in", -1, 10.0)
-	focus.grab_focus()
-	queue_free()
+func _grab_focus() -> void:
+	licenses_button.grab_focus()
 
 func _on_licenses_button_pressed() -> void:
 	licenses_menu.show()

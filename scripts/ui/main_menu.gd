@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License along with
 # Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends Control
+extends YumeMenu
 
 @onready var menu_container: Container = get_node("MenuContainer")
 @onready var play_button: Button = get_node("MenuContainer/ButtonContainer/PlayButton")
@@ -26,8 +26,6 @@ extends Control
 @onready var greeting: Control = get_node("Greeting")
 @onready var greeting_label: RichTextLabel = get_node("Greeting/GreetingLabel")
 
-signal button_finished
-
 var url_hovered: bool = false
 
 func _ready() -> void:
@@ -37,18 +35,6 @@ func _ready() -> void:
 	settings_button.visible = false
 	quit_button.visible = false
 	version_label.text = ProjectSettings.get_setting("application/config/version")
-	Game.transition_handler.play("fade_in", -1, 2.0)
-	await Game.transition_handler.animation_finished
-	menu_container.visible = true
-	var tween: Tween = create_tween()
-	tween.tween_property(menu_container, "size", Vector2(72, 72), 0.15)
-	tween.parallel()
-	tween.tween_property(menu_container, "position", menu_container.position - Vector2(0, 36), 0.15)
-	await tween.finished
-	play_button.visible = true
-	continue_button.visible = true
-	settings_button.visible = true
-	quit_button.visible = true
 
 	var save_directory: String = (preload("res://scenes/ui/save_manager.tscn").instantiate().SAVE_DIRECTORY)
 
@@ -62,6 +48,20 @@ func _ready() -> void:
 	continue_button.disabled = true
 	continue_label.modulate.a = 0.5
 	play_button.grab_focus()
+
+func _post_open() -> void:
+	Game.transition_handler.play("fade_in", -1, 2.0)
+	await Game.transition_handler.animation_finished
+	menu_container.visible = true
+	var tween: Tween = create_tween()
+	tween.tween_property(menu_container, "size", Vector2(72, 72), 0.15)
+	tween.parallel()
+	tween.tween_property(menu_container, "position", menu_container.position - Vector2(0, 36), 0.15)
+	await tween.finished
+	play_button.visible = true
+	continue_button.visible = true
+	settings_button.visible = true
+	quit_button.visible = true
 
 func _input(event: InputEvent) -> void:
 	if (event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_cancel")) and not get_tree().paused:
@@ -79,29 +79,9 @@ func _input(event: InputEvent) -> void:
 						Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
 						Game.persistent_data.clear()
 
-func _on_button_pressed(button: Button) -> void:
-	for child: Control in button.get_parent().get_children():
-		if child != button:
-			child.focus_mode = Control.FOCUS_NONE
-			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	if button != quit_button:
-		Game.transition_handler.play("fade_out", -1, 10.0)
-	else:
-		Game.transition_handler.play("fade_out", -1, 2.0)
-
-	await Game.transition_handler.animation_finished
-
-	for child: Control in button.get_parent().get_children():
-		if child != button:
-			child.focus_mode = Control.FOCUS_ALL
-			child.mouse_filter = Control.MOUSE_FILTER_STOP
-
-	button_finished.emit()
-
 func _on_play_button_pressed() -> void:
-	_on_button_pressed(play_button)
-	await button_finished
+	Game.transition_handler.play("fade_out", -1, 10.0)
+	await Game.transition_handler.animation_finished
 	get_tree().paused = true
 	greeting.visible = true
 	greeting_label.grab_focus()
@@ -110,22 +90,14 @@ func _on_play_button_pressed() -> void:
 	get_tree().paused = false
 
 func _on_continue_button_pressed() -> void:
-	_on_button_pressed(continue_button)
-	await button_finished
-	var save_manager: VBoxContainer = preload("res://scenes/ui/save_manager.tscn").instantiate()
-	save_manager.focus = continue_button
-	save_manager.mode = save_manager.MODES.LOAD
-	Game.add_child(save_manager)
-	Game.transition_handler.play("fade_in", -1, 10.0)
+	open("res://scenes/ui/save_manager.tscn", { "mode": preload("res://scenes/ui/save_manager.tscn").instantiate().MODES.LOAD })
 
 func _on_settings_button_pressed() -> void:
-	_on_button_pressed(settings_button)
-	await button_finished
-	Game.open_settings(settings_button)
+	open("res://scenes/ui/settings_menu.tscn")
 
 func _on_quit_button_pressed() -> void:
-	_on_button_pressed(quit_button)
-	await button_finished
+	Game.transition_handler.play("fade_out", -1, 2.0)
+	await Game.transition_handler.animation_finished
 	get_tree().quit()
 
 func _on_greeting_label_meta_clicked(meta: Variant) -> void:

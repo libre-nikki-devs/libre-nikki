@@ -16,6 +16,7 @@ grow_vertical = 2
 scale = Vector2(2, 2)
 theme = ExtResource("1_kk08f")
 script = ExtResource("2_ii56h")
+metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1

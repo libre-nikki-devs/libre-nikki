@@ -6,6 +6,7 @@
 [node name="Settings" type="Control"]
 top_level = true
 layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -320.0
@@ -15,6 +16,7 @@ grow_vertical = 2
 scale = Vector2(2, 2)
 theme = ExtResource("1_7i3iu")
 script = ExtResource("2_s2d1y")
+metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License along with
 # Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends VBoxContainer
+extends YumeMenu
 
 enum MODES { SAVE = 0, LOAD = 1 }
 
@@ -22,13 +22,11 @@ const SAVE_SLOTS: int = 16
 
 const SAVE_DIRECTORY: String = "user://saves"
 
-@onready var save_container: VBoxContainer = get_node("SaveContainer/ScrollContainer/VBoxContainer")
+@onready var save_container: VBoxContainer = get_node("VBoxContainer/SaveContainer/ScrollContainer/VBoxContainer")
 
-@onready var label: Label = get_node("LabelContainer/Label")
+@onready var label: Label = get_node("VBoxContainer/LabelContainer/Label")
 
 var mode: MODES = MODES.SAVE
-
-var focus
 
 func _ready() -> void:
 	if mode == MODES.SAVE:
@@ -65,14 +63,16 @@ func _ready() -> void:
 		child.button.focus_previous = child.button.focus_neighbor_top
 		child.button.focus_next = child.button.focus_neighbor_bottom
 
-	save_container.get_child(0).button.grab_focus()
-
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_go_back"):
 		var focus_owner: Control = get_viewport().gui_get_focus_owner()
 
 		if focus_owner:
-			close_menu()
+			get_tree().paused = false
+			close()
+
+func _grab_focus() -> void:
+	save_container.get_child(0).button.grab_focus()
 
 func save_game(slot: int):
 	if not DirAccess.dir_exists_absolute(SAVE_DIRECTORY):
@@ -113,20 +113,10 @@ func load_game(slot: int):
 
 			queue_free()
 
-func close_menu():
-	Game.transition_handler.play("fade_out", -1, 10.0)
-	await Game.transition_handler.animation_finished
-	Game.transition_handler.play("fade_in", -1, 10.0)
-	get_tree().paused = false
-
-	if focus:
-		focus.grab_focus()
-
-	queue_free()
-
 func _on_save_button_pressed(slot):
 	save_game(slot)
-	close_menu()
+	get_tree().paused = false
+	close()
 
 func _on_load_button_pressed(slot):
 	load_game(slot)

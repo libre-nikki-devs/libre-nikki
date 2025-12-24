@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License along with
 # Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends Control
+extends YumeMenu
 
 @onready var effects_button = get_node("SidePanelContainer/VBoxContainer/EffectsButton")
 @onready var effects_label = get_node("SidePanelContainer/VBoxContainer/EffectsButton/EffectsLabel")
@@ -35,11 +35,9 @@ func _ready() -> void:
 	if Game.persistent_data.has("acquired_effects"):
 		effects_button.disabled = false
 		effects_label.modulate.a = 1.0
-		effects_button.grab_focus()
 	else:
 		effects_button.disabled = true
 		effects_label.modulate.a = 0.5
-		actions_button.grab_focus()
 
 	var current_scene: Node = get_tree().current_scene
 
@@ -106,23 +104,14 @@ func _input(event: InputEvent) -> void:
 					effects_button.grab_focus()
 
 				side_menu:
-					close_menu()
+					await close()
+					get_tree().paused = false
 
-func _on_button_pressed(button: Button) -> void:
-	for child: Control in button.get_parent().get_children():
-		if child != button:
-			child.focus_mode = Control.FOCUS_NONE
-			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	Game.transition_handler.play("fade_out", -1, 10.0)
-	await Game.transition_handler.animation_finished
-
-	for child: Control in button.get_parent().get_children():
-		if child != button:
-			child.focus_mode = Control.FOCUS_ALL
-			child.mouse_filter = Control.MOUSE_FILTER_STOP
-
-	button_finished.emit()
+func _grab_focus() -> void:
+	if Game.persistent_data.has("acquired_effects"):
+		effects_button.grab_focus()
+	else:
+		actions_button.grab_focus()
 
 func _on_actions_button_pressed() -> void:
 	player_container.hide()
@@ -133,11 +122,9 @@ func _on_actions_button_pressed() -> void:
 		actions_grid_container.get_children()[0].grab_focus()
 
 func _on_quit_button_pressed() -> void:
-	_on_button_pressed(quit_button)
-	await button_finished
+	await close()
 	get_tree().paused = false
 	Game.change_scene("res://scenes/ui/main_menu.tscn")
-	queue_free()
 
 func _on_effects_button_pressed() -> void:
 	player_container.hide()
@@ -146,7 +133,8 @@ func _on_effects_button_pressed() -> void:
 	effects_grid_container.get_children()[0].grab_focus()
 
 func _on_effect_button_pressed(effect: YumePlayer.EFFECT) -> void:
-	close_menu()
+	await close()
+	get_tree().paused = false
 
 	if player.equipped_effect == effect:
 		player.equip()
@@ -154,25 +142,12 @@ func _on_effect_button_pressed(effect: YumePlayer.EFFECT) -> void:
 		player.equip(effect)
 
 func _on_settings_button_pressed() -> void:
-	_on_button_pressed(settings_button)
-	await button_finished
-	Game.open_settings(settings_button)
-
-func close_menu():
-	Game.transition_handler.play("fade_out", -1, 10.0)
-	await Game.transition_handler.animation_finished
-	Game.transition_handler.play("fade_in", -1, 10.0)
-	get_tree().paused = false
-	queue_free()
+	open("res://scenes/ui/settings_menu.tscn")
 
 func _on_pinch_cheek_button_pressed() -> void:
-	close_menu()
+	await close()
+	get_tree().paused = false
 	player.pinch_cheek()
 
 func _on_travel_button_pressed() -> void:
-	_on_button_pressed(travel_button)
-	await button_finished
-	var travel_menu: Node = preload("res://scenes/ui/travel_menu.tscn").instantiate()
-	travel_menu.focus = travel_button
-	add_child(travel_menu)
-	Game.transition_handler.play("fade_in", -1, 10.0)
+	open("res://scenes/ui/travel_menu.tscn")

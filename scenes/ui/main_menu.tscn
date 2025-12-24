@@ -17,6 +17,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_fe2o3")
 script = ExtResource("2_1g8jr")
+metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
 [node name="MenuContainer" type="PanelContainer" parent="."]
 layout_mode = 1
