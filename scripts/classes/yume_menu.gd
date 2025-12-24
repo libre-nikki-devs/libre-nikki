@@ -17,8 +17,6 @@
 class_name YumeMenu
 extends Control
 
-@export var initially_focused: Control = null
-
 var previously_focused: Control = null
 
 func _notification(what: int) -> void:
@@ -32,10 +30,11 @@ func _notification(what: int) -> void:
 				if focus_owner:
 					previously_focused = focus_owner
 
-			if initially_focused:
-				initially_focused.call_deferred("grab_focus")
-
+			_grab_focus()
 			_post_open()
+
+func _grab_focus() -> void:
+	pass
 
 func _pre_open() -> void:
 	Game.transition_handler.play("fade_out", -1, 10.0)
