@@ -17,6 +17,8 @@
 class_name YumeMenu
 extends Control
 
+enum FLAGS { NONE = 0, IGNORE_PRE_FUNCTIONS = 1 }
+
 var previously_focused: Control = null
 
 func _notification(what: int) -> void:
@@ -48,8 +50,9 @@ func _pre_close() -> void:
 	await Game.transition_handler.animation_finished
 	Game.transition_handler.play("fade_in", -1, 10.0)
 
-func open(menu_path: String, menu_property_list: Dictionary[String, Variant] = {}) -> void:
-	await _pre_open()
+func open(menu_path: String, menu_property_list: Dictionary[String, Variant] = {}, flags: FLAGS = FLAGS.NONE) -> void:
+	if flags & FLAGS.IGNORE_PRE_FUNCTIONS == 0:
+		await _pre_open()
 
 	var menu: YumeMenu = load(menu_path).instantiate()
 
@@ -59,15 +62,16 @@ func open(menu_path: String, menu_property_list: Dictionary[String, Variant] = {
 
 	add_child(menu)
 
-func close() -> void:
-	await _pre_close()
+func close(flags: FLAGS = FLAGS.NONE) -> void:
+	if flags & FLAGS.IGNORE_PRE_FUNCTIONS == 0:
+		await _pre_close()
 
 	if previously_focused:
 		previously_focused.call_deferred("grab_focus")
 
 	queue_free()
 
-func close_all() -> void:
+func close_all(flags: FLAGS = FLAGS.NONE) -> void:
 	var menu: YumeMenu = self
 
 	while true:
@@ -78,4 +82,4 @@ func close_all() -> void:
 
 		menu = parent
 
-	menu.close()
+	menu.close(flags)
