@@ -37,7 +37,7 @@ const MOVEMENT_KEYS: Dictionary[String, DIRECTION] = {
 		equipped_effect = value
 		set_animation()
 
-@export var menu: PackedScene = preload("res://scenes/ui/player_menu.tscn")
+@export var menu_path: StringName = "res://scenes/ui/player_menu.tscn"
 
 var accept_events: Array[Callable] = []
 
@@ -220,10 +220,7 @@ func revoke_effect(effect: EFFECT) -> void:
 func open_menu() -> void:
 	if cancel_events.is_empty():
 		get_tree().paused = true
-		Game.transition_handler.play("fade_out", -1, 10.0)
-		await Game.transition_handler.animation_finished
-		Game.add_child(menu.instantiate())
-		Game.transition_handler.play("fade_in", -1, 10.0)
+		Game.open_menu(menu_path)
 	else:
 		if cancel_events.front().get_argument_count() > 0:
 			cancel_events.front().call(self)

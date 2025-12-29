@@ -90,10 +90,10 @@ func _on_play_button_pressed() -> void:
 	get_tree().paused = false
 
 func _on_continue_button_pressed() -> void:
-	open("res://scenes/ui/save_manager.tscn", { "mode": preload("res://scenes/ui/save_manager.tscn").instantiate().MODES.LOAD })
+	Game.open_menu("res://scenes/ui/save_manager.tscn", { "mode": preload("res://scenes/ui/save_manager.tscn").instantiate().MODES.LOAD })
 
 func _on_settings_button_pressed() -> void:
-	open("res://scenes/ui/settings_menu.tscn")
+	Game.open_menu("res://scenes/ui/settings_menu.tscn")
 
 func _on_quit_button_pressed() -> void:
 	Game.transition_handler.play("fade_out", -1, 2.0)
