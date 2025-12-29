@@ -126,6 +126,16 @@ func play_sound_everywhere(sound: AudioStream, pitch: float = 1.0, volume_offset
 		await audio_stream_player.finished
 		audio_stream_player.queue_free()
 
+func open_menu(menu_path: StringName, menu_property_list: Dictionary[String, Variant] = {}):
+	var menu: YumeMenu = load(menu_path).instantiate()
+	await menu._pre_open()
+
+	for property: String in menu_property_list.keys():
+		if property in menu:
+			menu.set(property, menu_property_list[property])
+
+	add_child(menu)
+
 ## Start the dream session.
 func sleep() -> void:
 	persistent_data["random"] = RandomNumberGenerator.new().randi_range(0, 255)
