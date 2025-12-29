@@ -51,10 +51,10 @@ func _pre_close() -> void:
 	Game.transition_handler.play("fade_in", -1, 10.0)
 
 func open(menu_path: String, menu_property_list: Dictionary[String, Variant] = {}, flags: FLAGS = FLAGS.NONE) -> void:
-	if flags & FLAGS.IGNORE_PRE_FUNCTIONS == 0:
-		await _pre_open()
-
 	var menu: YumeMenu = load(menu_path).instantiate()
+
+	if flags & FLAGS.IGNORE_PRE_FUNCTIONS == 0:
+		await menu._pre_open()
 
 	for property: String in menu_property_list.keys():
 		if property in menu:
