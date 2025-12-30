@@ -14,15 +14,13 @@
 # You should have received a copy of the GNU General Public License along with
 # Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends Control
+extends YumeMenu
 
 const MAP_DIRECTORY: String = "res://scenes/maps"
 
 @onready var filter_bar: LineEdit = get_node("FilterBar")
 
 @onready var map_container: VBoxContainer = get_node("PanelContainer/MapContainer")
-
-var focus
 
 func _ready() -> void:
 	var maps: PackedStringArray = ResourceLoader.list_directory(MAP_DIRECTORY)
@@ -65,8 +63,6 @@ func _ready() -> void:
 		child.focus_previous = child.focus_neighbor_top
 		child.focus_next = child.focus_neighbor_bottom
 
-	_focus_first_visible_button()
-
 func _input(event: InputEvent) -> void:
 	var focus_owner: Control = get_viewport().gui_get_focus_owner()
 
@@ -80,15 +76,18 @@ func _input(event: InputEvent) -> void:
 		if event.is_action_pressed("ui_go_back"):
 			match focus_owner:
 				map_container:
-					close_menu()
+					close()
 
 			match focus_owner.get_parent():
 				map_container:
-					close_menu()
+					close()
 
 	if Input.is_key_pressed(KEY_SLASH):
 		await get_tree().process_frame
 		filter_bar.edit()
+
+func _grab_focus() -> void:
+	_focus_first_visible_button()
 
 func _focus_first_visible_button() -> void:
 	for child_id in map_container.get_child_count():
@@ -108,7 +107,7 @@ func _on_map_button_pressed(scene: String) -> void:
 	Game.transition_handler.stop()
 	get_tree().paused = false
 	Game.change_scene(scene)
-	get_parent().queue_free()
+	close_all(FLAGS.IGNORE_PRE_FUNCTIONS)
 
 func _on_filter_bar_focus_entered() -> void:
 	filter_bar.placeholder_text = "Filter..."
@@ -125,10 +124,3 @@ func _on_filter_bar_text_changed(new_text: String) -> void:
 				child.show()
 			else:
 				child.hide()
-
-func close_menu():
-	Game.transition_handler.play("fade_out", -1, 10.0)
-	await Game.transition_handler.animation_finished
-	Game.transition_handler.play("fade_in", -1, 10.0)
-	focus.grab_focus()
-	queue_free()

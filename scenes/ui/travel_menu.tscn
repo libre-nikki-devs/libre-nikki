@@ -4,14 +4,19 @@
 [ext_resource type="Script" uid="uid://d1ofgp8iifwmr" path="res://scripts/ui/travel_menu.gd" id="2_ii56h"]
 
 [node name="TravelMenu" type="Control"]
+top_level = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -320.0
+offset_bottom = -240.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(2, 2)
 theme = ExtResource("1_kk08f")
 script = ExtResource("2_ii56h")
+metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1

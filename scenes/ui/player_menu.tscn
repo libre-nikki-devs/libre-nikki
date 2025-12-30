@@ -7,12 +7,18 @@
 [ext_resource type="PackedScene" uid="uid://cw6cd5pihyy2a" path="res://scenes/ui/world_panel.tscn" id="6_pg55v"]
 
 [node name="PlayerMenu" type="Control" node_paths=PackedStringArray("side_menu")]
+top_level = true
 layout_mode = 3
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -320.0
+offset_bottom = -240.0
+scale = Vector2(2, 2)
 theme = ExtResource("1_enftr")
 script = ExtResource("2_01phm")
 side_menu = NodePath("SidePanelContainer/VBoxContainer")
+metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
