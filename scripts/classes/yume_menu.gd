@@ -17,8 +17,6 @@
 class_name YumeMenu
 extends Control
 
-enum FLAGS { NONE = 0, IGNORE_PRE_FUNCTIONS = 1 }
-
 var previously_focused: Control = null
 
 func _notification(what: int) -> void:
@@ -63,11 +61,9 @@ func get_root_menu() -> YumeMenu:
 
 	return menu
 
-func open(menu_path: String, menu_property_list: Dictionary[String, Variant] = {}, flags: FLAGS = FLAGS.NONE) -> void:
+func open(menu_path: String, menu_property_list: Dictionary[String, Variant] = {}) -> void:
 	var menu: YumeMenu = load(menu_path).instantiate()
-
-	if flags & FLAGS.IGNORE_PRE_FUNCTIONS == 0:
-		await menu._pre_open()
+	await menu._pre_open()
 
 	for property: String in menu_property_list.keys():
 		if property in menu:
@@ -75,9 +71,8 @@ func open(menu_path: String, menu_property_list: Dictionary[String, Variant] = {
 
 	add_child(menu)
 
-func close(flags: FLAGS = FLAGS.NONE) -> void:
-	if flags & FLAGS.IGNORE_PRE_FUNCTIONS == 0:
-		await _pre_close()
+func close() -> void:
+	await _pre_close()
 
 	if previously_focused:
 		previously_focused.call_deferred("grab_focus")
