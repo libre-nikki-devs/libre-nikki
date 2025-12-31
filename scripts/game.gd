@@ -19,6 +19,8 @@ extends CanvasLayer
 ## An autoload singleton that handles the game's most important data as well as
 ## it provides functions specific to Libre Nikki.
 
+const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
+
 @onready var music_player: AudioStreamPlayer = get_node("MusicPlayer")
 
 @onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
@@ -36,6 +38,18 @@ func _ready() -> void:
 	get_tree().connect("scene_changed", _on_scene_changed)
 	get_window().min_size = Vector2i(640, 480)
 	_count_playtime()
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("screenshot"):
+		var screenshot: Image = await take_screenshot()
+
+		if screenshot:
+			if not DirAccess.dir_exists_absolute(SCREENSHOTS_DIRECTORY):
+				DirAccess.make_dir_absolute(SCREENSHOTS_DIRECTORY)
+
+			var date: Dictionary = Time.get_datetime_dict_from_system()
+			var process_frames: int = Engine.get_process_frames()
+			screenshot.save_png(SCREENSHOTS_DIRECTORY.path_join(str("%d%02d%02d_%02d%02d%02d_%d.png" % [date.year, date.month, date.day, date.hour, date.minute, date.second, process_frames])))
 
 func _on_scene_changed() -> void:
 	var scene_path: String = get_tree().current_scene.scene_file_path
@@ -125,6 +139,15 @@ func play_sound_everywhere(sound: AudioStream, pitch: float = 1.0, volume_offset
 		add_child(audio_stream_player)
 		await audio_stream_player.finished
 		audio_stream_player.queue_free()
+
+func take_screenshot() -> Image:
+	var viewport: Viewport = get_viewport()
+
+	if viewport:
+		await RenderingServer.frame_post_draw
+		return viewport.get_texture().get_image()
+
+	return null
 
 func open_menu(menu_path: StringName, menu_property_list: Dictionary[String, Variant] = {}):
 	var menu: YumeMenu = load(menu_path).instantiate()
