@@ -107,7 +107,7 @@ func _on_map_button_pressed(scene: String) -> void:
 	Game.transition_handler.stop()
 	get_tree().paused = false
 	Game.change_scene(scene)
-	close_all(FLAGS.IGNORE_PRE_FUNCTIONS)
+	get_root_menu().queue_free()
 
 func _on_filter_bar_focus_entered() -> void:
 	filter_bar.placeholder_text = "Filter..."

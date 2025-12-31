@@ -50,6 +50,19 @@ func _pre_close() -> void:
 	await Game.transition_handler.animation_finished
 	Game.transition_handler.play("fade_in", -1, 10.0)
 
+func get_root_menu() -> YumeMenu:
+	var menu: YumeMenu = self
+
+	while true:
+		var parent: Node = menu.get_parent()
+
+		if not parent or parent is not YumeMenu:
+			break
+
+		menu = parent
+
+	return menu
+
 func open(menu_path: String, menu_property_list: Dictionary[String, Variant] = {}, flags: FLAGS = FLAGS.NONE) -> void:
 	var menu: YumeMenu = load(menu_path).instantiate()
 
@@ -70,16 +83,3 @@ func close(flags: FLAGS = FLAGS.NONE) -> void:
 		previously_focused.call_deferred("grab_focus")
 
 	queue_free()
-
-func close_all(flags: FLAGS = FLAGS.NONE) -> void:
-	var menu: YumeMenu = self
-
-	while true:
-		var parent: Node = menu.get_parent()
-
-		if not parent or parent is not YumeMenu:
-			break
-
-		menu = parent
-
-	menu.close(flags)
