@@ -1,4 +1,4 @@
-# Copyright (C) 2024-2025 Libre Nikki Developers.
+# Copyright (C) 2024-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -21,6 +21,8 @@ extends CanvasLayer
 
 const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 
+@onready var mouse_timer: Timer = get_node("MouseTimer")
+
 @onready var music_player: AudioStreamPlayer = get_node("MusicPlayer")
 
 @onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
@@ -40,6 +42,10 @@ func _ready() -> void:
 	_count_playtime()
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventMouse:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		mouse_timer.start(5.0)
+
 	if event.is_action_pressed("screenshot"):
 		var screenshot: Image = await take_screenshot()
 
@@ -191,3 +197,6 @@ func wake_up() -> void:
 		if tween.is_running():
 			await tween.finished
 			music_player.stop()
+
+func _on_mouse_timer_timeout() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)

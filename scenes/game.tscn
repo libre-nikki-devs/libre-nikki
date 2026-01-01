@@ -247,6 +247,11 @@ offset_bottom = 22.0
 grow_horizontal = 0
 scale = Vector2(2, 2)
 
+[node name="MouseTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+ignore_time_scale = true
+
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 volume_db = -40.0
 max_polyphony = 2
@@ -266,3 +271,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[connection signal="timeout" from="MouseTimer" to="." method="_on_mouse_timer_timeout"]
