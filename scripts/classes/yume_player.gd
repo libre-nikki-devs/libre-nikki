@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -219,7 +219,6 @@ func revoke_effect(effect: EFFECT) -> void:
 
 func open_menu() -> void:
 	if cancel_events.is_empty():
-		get_tree().paused = true
 		Game.open_menu(menu_path)
 	else:
 		if cancel_events.front().get_argument_count() > 0:

@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -68,7 +68,6 @@ func _input(event: InputEvent) -> void:
 		var focus_owner: Control = get_viewport().gui_get_focus_owner()
 
 		if focus_owner:
-			get_tree().paused = false
 			close()
 
 func _grab_focus() -> void:
@@ -115,7 +114,6 @@ func load_game(slot: int):
 
 func _on_save_button_pressed(slot):
 	save_game(slot)
-	get_tree().paused = false
 	close()
 
 func _on_load_button_pressed(slot):

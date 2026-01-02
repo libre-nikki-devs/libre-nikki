@@ -157,6 +157,13 @@ func take_screenshot() -> Image:
 
 func open_menu(menu_path: StringName, menu_property_list: Dictionary[String, Variant] = {}):
 	var menu: YumeMenu = load(menu_path).instantiate()
+	var scene_tree: SceneTree = get_tree()
+
+	if scene_tree:
+		if not scene_tree.paused:
+			scene_tree.paused = true
+			menu.connect("tree_exited", _on_menu_tree_exited)
+
 	await menu._pre_open()
 
 	for property: String in menu_property_list.keys():
@@ -200,3 +207,9 @@ func wake_up() -> void:
 
 func _on_mouse_timer_timeout() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
+func _on_menu_tree_exited() -> void:
+	var scene_tree: SceneTree = get_tree()
+
+	if scene_tree:
+		scene_tree.paused = false

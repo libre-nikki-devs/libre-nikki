@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -105,7 +105,6 @@ func _on_map_button_pressed(scene: String) -> void:
 	await Game.transition_handler.animation_finished
 	Game.transition_handler.seek(0.0, true)
 	Game.transition_handler.stop()
-	get_tree().paused = false
 	Game.change_scene(scene)
 	get_root_menu().queue_free()
 

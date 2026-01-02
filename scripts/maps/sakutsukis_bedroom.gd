@@ -26,5 +26,4 @@ func _on_bed_body_interacted(body: Node2D) -> void:
 
 func _on_desk_body_interacted(body: Node2D) -> void:
 	if body is YumePlayer:
-		get_tree().paused = true
 		Game.open_menu("res://scenes/ui/save_manager.tscn")

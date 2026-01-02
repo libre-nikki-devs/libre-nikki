@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -104,8 +104,7 @@ func _input(event: InputEvent) -> void:
 					effects_button.grab_focus()
 
 				side_menu:
-					await close()
-					get_tree().paused = false
+					close()
 
 func _grab_focus() -> void:
 	if Game.persistent_data.has("acquired_effects"):
@@ -123,7 +122,6 @@ func _on_actions_button_pressed() -> void:
 
 func _on_quit_button_pressed() -> void:
 	await close()
-	get_tree().paused = false
 	Game.change_scene("res://scenes/ui/main_menu.tscn")
 
 func _on_effects_button_pressed() -> void:
@@ -134,7 +132,6 @@ func _on_effects_button_pressed() -> void:
 
 func _on_effect_button_pressed(effect: YumePlayer.EFFECT) -> void:
 	await close()
-	get_tree().paused = false
 
 	if player.equipped_effect == effect:
 		player.equip()
@@ -146,7 +143,6 @@ func _on_settings_button_pressed() -> void:
 
 func _on_pinch_cheek_button_pressed() -> void:
 	await close()
-	get_tree().paused = false
 	player.pinch_cheek()
 
 func _on_travel_button_pressed() -> void:
