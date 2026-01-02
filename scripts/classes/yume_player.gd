@@ -112,6 +112,9 @@ func _notification(what: int) -> void:
 			else:
 				cancel_key_hold_time = 0.0
 
+		NOTIFICATION_PAUSED:
+			current_movement_keys.clear()
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") and not is_busy:
 		interact()
