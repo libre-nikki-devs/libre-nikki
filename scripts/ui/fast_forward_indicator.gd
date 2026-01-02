@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -21,7 +21,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if OS.is_debug_build():
-		if Input.is_key_pressed(KEY_F):
+		if Input.is_action_pressed("fast_forward"):
 			if Engine.time_scale == 1.0:
 				show()
 
