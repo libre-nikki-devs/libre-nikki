@@ -114,7 +114,7 @@ func load_game(slot: int):
 
 func _on_save_button_pressed(slot):
 	save_game(slot)
-	close()
+	get_root_menu().close()
 
 func _on_load_button_pressed(slot):
 	load_game(slot)
