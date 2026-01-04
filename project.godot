@@ -49,6 +49,10 @@ window/stretch/scale_mode="integer"
 script/templates_search_path="res://scripts/templates"
 naming/script_name_casing=2
 
+[global_group]
+
+Persist=""
+
 [input]
 
 ui_accept={

@@ -870,10 +870,11 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0we4y"]
 size = Vector2(16, 16)
 
-[node name="Debugtsuki" type="CharacterBody2D" node_paths=PackedStringArray("animation_player")]
+[node name="Debugtsuki" type="CharacterBody2D" node_paths=PackedStringArray("animation_player") groups=["Persist"]]
 y_sort_enabled = true
 script = ExtResource("1_g35pp")
 animation_player = NodePath("AnimationPlayer")
+metadata/persistent_properties = ["facing", "global_position", "last_step", "name", "speed"]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("2_yhhfb")

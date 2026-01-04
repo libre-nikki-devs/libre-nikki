@@ -81,9 +81,10 @@ loop = "All Sides"
 depth = "0"
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 
-[node name="Parallax2D" type="Parallax2D" parent="."]
+[node name="Parallax2D" type="Parallax2D" parent="." groups=["Persist"]]
 repeat_size = Vector2(512, 512)
 autoscroll = Vector2(8, 8)
+metadata/persistent_properties = ["scroll_offset"]
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D"]
 scale = Vector2(0.5, 0.5)
