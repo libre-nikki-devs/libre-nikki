@@ -81,6 +81,30 @@ func save_game(slot: int):
 
 	if file:
 		var player: YumePlayer = get_tree().get_first_node_in_group("Players")
+		Game.save_current_scene()
+
+		for scene_name: String in Game.scene_data:
+			var scene: Node = Game.scene_data[scene_name].instantiate()
+
+			for child: Node in scene.get_children():
+				if child.has_meta("persistent_properties"):
+					var persistent_properties: Variant = child.get_meta("persistent_properties")
+
+					if child.is_in_group("Persist") and persistent_properties is Array:
+						if not Game.persistent_data.has("scene_data"):
+							Game.persistent_data["scene_data"] = {}
+
+						if not Game.persistent_data["scene_data"].has(scene_name):
+							Game.persistent_data["scene_data"][scene_name] = {}
+
+						var child_path: NodePath = scene.get_path_to(child)
+
+						if not Game.persistent_data["scene_data"][scene_name].has(child_path):
+							Game.persistent_data["scene_data"][scene_name][child_path] = {}
+
+						for property: Variant in persistent_properties:
+							if property is String and property in child:
+								Game.persistent_data["scene_data"][scene_name][child_path].set(property, child.get(property))
 
 		if player:
 			Game.save_player_data(player, ["accept_events", "cancel_events", "equipped_effect", "facing", "global_position", "last_step", "name", "speed"])
@@ -96,6 +120,21 @@ func load_game(slot: int):
 		file.close()
 
 		if data is Dictionary:
+			if data.has("scene_data"):
+				for scene_name: String in data["scene_data"]:
+					var scene: Resource = load(scene_name)
+					var instance: Node = scene.instantiate()
+
+					if data["scene_data"].has(scene_name):
+						for child_path: NodePath in data["scene_data"][scene_name]:
+							var child: Node = instance.get_node(child_path)
+
+							for property in data["scene_data"][scene_name][child_path]:
+								child.set(property, data["scene_data"][scene_name][child_path][property])
+
+					Game.scene_data[scene_name] = PackedScene.new()
+					Game.scene_data[scene_name].pack(instance)
+
 			Game.persistent_data = data
 			Game.transition_handler.play("fade_out", -1, 10.0)
 			await Game.transition_handler.animation_finished
