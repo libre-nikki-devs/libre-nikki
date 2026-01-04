@@ -136,6 +136,7 @@ func load_game(slot: int):
 					Game.scene_data[scene_name].pack(instance)
 
 			Game.persistent_data = data
+			Game.persistent_data["loaded_from_file"] = true
 			Game.transition_handler.play("fade_out", -1, 10.0)
 			await Game.transition_handler.animation_finished
 

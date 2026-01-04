@@ -67,6 +67,10 @@ func _on_scene_changed() -> void:
 	else:
 		persistent_data["current_scene"] = scene_path
 
+	if persistent_data.get("loaded_from_file", false):
+		persistent_data["loaded_from_file"] = false
+		return
+
 	if not persistent_data.has("scene_visits"):
 		persistent_data["scene_visits"] = {}
 
@@ -85,7 +89,8 @@ func _count_playtime() -> void:
 			persistent_data["playtime"] = 0
 
 func change_scene(path: String) -> void:
-	persistent_data["entered_from"] = persistent_data["current_scene"]
+	if not persistent_data.get("loaded_from_file", false):
+		persistent_data["entered_from"] = persistent_data["current_scene"]
 
 	if scene_data.has(path):
 		get_tree().change_scene_to_packed(scene_data[path])
