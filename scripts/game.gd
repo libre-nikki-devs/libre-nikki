@@ -30,6 +30,8 @@ const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 ## Contains data that are preserved in a save file.
 var persistent_data: Dictionary = {}
 
+var scene_data: Dictionary[String, PackedScene] = {}
+
 ## Contains settings data.
 var settings: Dictionary = {
 	"key_hold_time" = 0.5
@@ -85,11 +87,10 @@ func _count_playtime() -> void:
 func change_scene(path: String) -> void:
 	persistent_data["entered_from"] = persistent_data["current_scene"]
 
-	if persistent_data.has("scene_data"):
-		if persistent_data["scene_data"].has(path):
-			get_tree().change_scene_to_packed(persistent_data["scene_data"][path])
-			persistent_data["current_scene"] = path
-			return
+	if scene_data.has(path):
+		get_tree().change_scene_to_packed(scene_data[path])
+		persistent_data["current_scene"] = path
+		return
 
 	get_tree().change_scene_to_file(path)
 
@@ -105,11 +106,8 @@ func save_current_scene() -> void:
 			tween.custom_step(INF)
 			tween.kill()
 
-	if not persistent_data.has("scene_data"):
-		persistent_data["scene_data"] = {}
-	
-	persistent_data["scene_data"][scene_path] = PackedScene.new()
-	persistent_data["scene_data"][scene_path].pack(current_scene)
+	scene_data[scene_path] = PackedScene.new()
+	scene_data[scene_path].pack(current_scene)
 
 func save_player_data(player: YumePlayer, player_properties: Array[String] = ["accept_events", "cancel_events", "equipped_effect", "facing", "last_step", "name", "speed"]) -> void:
 	if player:
@@ -186,7 +184,7 @@ func sleep() -> void:
 ## End the dream session.
 func wake_up() -> void:
 	persistent_data["player_data"] = {}
-	persistent_data["scene_data"] = {}
+	scene_data.clear()
 	var scene_tree: SceneTree = get_tree()
 	var tween: Tween
 
