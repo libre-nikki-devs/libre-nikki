@@ -27,7 +27,7 @@ extends YumeMenu
 @onready var effects_grid_container = get_node("MainPanelContainer/EffectsGridContainer")
 @onready var world_panel = get_node("WorldPanel")
 @onready var actions_grid_container = get_node("MainPanelContainer/ActionsGridContainer")
-@onready var player: YumePlayer = get_tree().get_first_node_in_group("Players")
+@onready var player: YumePlayer
 
 signal button_finished
 

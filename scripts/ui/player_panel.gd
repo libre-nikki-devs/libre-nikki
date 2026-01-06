@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -16,7 +16,6 @@
 
 extends HBoxContainer
 
-@onready var player: YumePlayer = get_tree().get_first_node_in_group("Players")
 @onready var player_label: Label = get_node("VBoxContainer/PlayerLabel")
 @onready var avatar: AnimatedSprite2D = get_node("AvatarFrame/Avatar")
 @onready var effects_label: Label = get_node("VBoxContainer/HBoxContainer/EffectsLabel")
