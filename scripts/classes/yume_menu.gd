@@ -61,7 +61,7 @@ func get_root_menu() -> YumeMenu:
 
 	return menu
 
-func open(menu_path: String, menu_property_list: Dictionary[String, Variant] = {}) -> void:
+func open_submenu(menu_path: String, menu_property_list: Dictionary[String, Variant] = {}) -> void:
 	var menu: YumeMenu = load(menu_path).instantiate()
 	await menu._pre_open()
 

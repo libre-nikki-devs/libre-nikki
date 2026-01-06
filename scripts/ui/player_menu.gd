@@ -139,11 +139,11 @@ func _on_effect_button_pressed(effect: YumePlayer.EFFECT) -> void:
 		player.equip(effect)
 
 func _on_settings_button_pressed() -> void:
-	open("res://scenes/ui/settings_menu.tscn")
+	open_submenu("res://scenes/ui/settings_menu.tscn")
 
 func _on_pinch_cheek_button_pressed() -> void:
 	await close()
 	player.pinch_cheek()
 
 func _on_travel_button_pressed() -> void:
-	open("res://scenes/ui/travel_menu.tscn")
+	open_submenu("res://scenes/ui/travel_menu.tscn")
