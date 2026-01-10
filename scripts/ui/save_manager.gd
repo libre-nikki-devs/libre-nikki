@@ -80,12 +80,13 @@ func save_game(slot: int):
 	var file: FileAccess = FileAccess.open(SAVE_DIRECTORY.path_join("save%02d.libki" % (slot)), FileAccess.WRITE)
 
 	if file:
+		var data: Dictionary = Game.persistent_data.duplicate_deep()
 		var player: YumePlayer = get_tree().get_first_node_in_group("Players")
-		Game.save_current_scene()
+		Game.save_current_scene(data)
 
 		if player:
 			Game.save_player_data(player, ["accept_events", "cancel_events", "equipped_effect", "facing", "global_position", "last_step", "name", "speed"])
-			file.store_var(Game.persistent_data)
+			file.store_var(data)
 
 		file.close()
 

@@ -99,7 +99,7 @@ func change_scene(path: String) -> void:
 
 	get_tree().change_scene_to_file(path)
 
-func save_current_scene() -> void:
+func save_current_scene(destination: Dictionary = persistent_data) -> void:
 	var scene_tree: SceneTree = get_tree()
 	var current_scene: Node = scene_tree.current_scene
 	var scene_path = current_scene.scene_file_path
@@ -111,28 +111,29 @@ func save_current_scene() -> void:
 			tween.custom_step(INF)
 			tween.kill()
 
-	scene_data[scene_path] = PackedScene.new()
-	scene_data[scene_path].pack(current_scene)
+	if is_same(destination, persistent_data):
+		scene_data[scene_path] = PackedScene.new()
+		scene_data[scene_path].pack(current_scene)
 
 	for child: Node in scene_tree.get_nodes_in_group("Persist"):
 		if child.has_meta("persistent_properties"):
 			var persistent_properties: Variant = child.get_meta("persistent_properties")
 
 			if persistent_properties is Array:
-				if not persistent_data.has("scene_data"):
-					persistent_data["scene_data"] = {}
+				if not destination.has("scene_data"):
+					destination["scene_data"] = {}
 
-				if not persistent_data["scene_data"].has(scene_path):
-					persistent_data["scene_data"][scene_path] = {}
+				if not destination["scene_data"].has(scene_path):
+					destination["scene_data"][scene_path] = {}
 
 				var child_path: NodePath = current_scene.get_path_to(child)
 
-				if not persistent_data["scene_data"][scene_path].has(child_path):
-					persistent_data["scene_data"][scene_path][child_path] = {}
+				if not destination["scene_data"][scene_path].has(child_path):
+					destination["scene_data"][scene_path][child_path] = {}
 
 				for property: Variant in persistent_properties:
 					if property is String and property in child:
-						persistent_data["scene_data"][scene_path][child_path].set(property, child.get(property))
+						destination["scene_data"][scene_path][child_path].set(property, child.get(property))
 
 func save_player_data(player: YumePlayer, player_properties: Array[String] = ["accept_events", "cancel_events", "equipped_effect", "facing", "last_step", "name", "speed"]) -> void:
 	if player:
