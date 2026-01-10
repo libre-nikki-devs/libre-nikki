@@ -874,7 +874,7 @@ size = Vector2(16, 16)
 y_sort_enabled = true
 script = ExtResource("1_g35pp")
 animation_player = NodePath("AnimationPlayer")
-metadata/persistent_properties = ["facing", "global_position", "last_step", "name", "speed"]
+metadata/persistent_properties = ["facing", "global_position", "last_step", "name", "speed", "wait_time"]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("2_yhhfb")
