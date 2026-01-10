@@ -209,6 +209,7 @@ func sleep() -> void:
 ## End the dream session.
 func wake_up() -> void:
 	persistent_data["player_data"] = {}
+	persistent_data["scene_data"] = {}
 	scene_data.clear()
 	var scene_tree: SceneTree = get_tree()
 	var tween: Tween
