@@ -131,9 +131,31 @@ func save_current_scene(destination: Dictionary = persistent_data) -> void:
 				if not destination["scene_data"][scene_path].has(child_path):
 					destination["scene_data"][scene_path][child_path] = {}
 
-				for property: Variant in persistent_properties:
+				if not destination["scene_data"][scene_path][child_path]:
+					destination["scene_data"][scene_path][child_path] = {}
+
+				for property: Variant in persistent_properties + ["scene_file_path"]:
 					if property is String and property in child:
 						destination["scene_data"][scene_path][child_path].set(property, child.get(property))
+
+	var scene: Node = load(scene_path).instantiate()
+
+	var get_persistent_node_paths: Callable = func (node: Node, _recursion: Callable) -> Array[NodePath]:
+		var node_paths: Array[NodePath] = []
+
+		if node.is_in_group("Persist"):
+			node_paths.append(scene.get_path_to(node))
+
+		for child: Node in node.get_children():
+			node_paths += _recursion.call(child, _recursion)
+
+		return node_paths
+
+	var persistent_node_paths: Array[NodePath] = get_persistent_node_paths.call(scene, get_persistent_node_paths)
+
+	for child_path: NodePath in persistent_node_paths:
+		if not current_scene.has_node(child_path):
+			destination["scene_data"][scene_path][child_path] = null
 
 func save_player_data(player: YumePlayer, player_properties: Array[String] = ["accept_events", "cancel_events", "equipped_effect", "facing", "last_step", "name", "speed"]) -> void:
 	if player:

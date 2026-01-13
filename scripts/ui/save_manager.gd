@@ -99,19 +99,32 @@ func load_game(slot: int):
 
 		if data is Dictionary:
 			if data.has("scene_data"):
-				for scene_name: String in data["scene_data"]:
-					var scene: Resource = load(scene_name)
-					var instance: Node = scene.instantiate()
+				for scene_path: String in data["scene_data"]:
+					var scene: Node = load(scene_path).instantiate()
 
-					if data["scene_data"].has(scene_name):
-						for child_path: NodePath in data["scene_data"][scene_name]:
-							var child: Node = instance.get_node(child_path)
+					if data["scene_data"].has(scene_path):
+						for child_path: NodePath in data["scene_data"][scene_path]:
+							var child: Node = scene.get_node_or_null(child_path)
 
-							for property in data["scene_data"][scene_name][child_path]:
-								child.set(property, data["scene_data"][scene_name][child_path][property])
+							if child:
+								if not data["scene_data"][scene_path][child_path]:
+									scene.remove_child(child)
+									continue
+							else:
+								var child_file_path: String = data["scene_data"][scene_path][child_path].get("scene_file_path", "")
 
-					Game.scene_data[scene_name] = PackedScene.new()
-					Game.scene_data[scene_name].pack(instance)
+								if child_file_path.is_empty():
+									continue
+								else:
+									child = load(child_file_path).instantiate()
+									scene.add_child(child)
+									child.owner = scene
+
+							for property: String in data["scene_data"][scene_path][child_path]:
+								child.set(property, data["scene_data"][scene_path][child_path][property])
+
+					Game.scene_data[scene_path] = PackedScene.new()
+					Game.scene_data[scene_path].pack(scene)
 
 			Game.persistent_data = data
 			Game.persistent_data["loaded_from_file"] = true
