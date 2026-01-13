@@ -1664,7 +1664,7 @@ script = ExtResource("1_5uo7l")
 camera = NodePath("Camera2D")
 animation_player = NodePath("AnimationPlayer")
 metadata/_custom_type_script = "uid://3tw0tkifql18"
-metadata/persistent_properties = ["accept_events", "cancel_events", "equipped_effect", "facing", "global_posiition", "last_step", "name", "speed"]
+metadata/persistent_properties = ["accept_events", "cancel_events", "collision_layer", "collision_mask", "equipped_effect", "facing", "global_position", "last_step", "name", "speed", "z_index"]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("3_l5dwh")
