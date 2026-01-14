@@ -6,8 +6,6 @@ extends YumeWorld
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
-	player.facing = YumeCharacter.DIRECTION.DOWN
-	player.position = Vector2(424.0, 584.0)
 	Game.transition_handler.play("fade_in")
 	await Game.transition_handler.animation_finished
 	process_mode = Node.PROCESS_MODE_PAUSABLE
