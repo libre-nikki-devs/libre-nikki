@@ -19,6 +19,8 @@ extends CanvasLayer
 ## An autoload singleton that handles the game's most important data as well as
 ## it provides functions specific to Libre Nikki.
 
+enum SCENE_STATES { DEFAULT = 0, PACKED = 1, FROM_FILE = 2 }
+
 const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 
 @onready var mouse_timer: Timer = get_node("MouseTimer")
@@ -26,6 +28,10 @@ const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 @onready var music_player: AudioStreamPlayer = get_node("MusicPlayer")
 
 @onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
+
+var current_scene_state: SCENE_STATES = SCENE_STATES.DEFAULT
+
+var is_current_scene_loaded_from_file: bool = false
 
 ## Contains data that are preserved in a save file.
 var persistent_data: Dictionary = {}
@@ -36,6 +42,8 @@ var scene_data: Dictionary[String, PackedScene] = {}
 var settings: Dictionary = {
 	"key_hold_time" = 0.5
 }
+
+signal scene_changed
 
 func _ready() -> void:
 	_on_scene_changed()
@@ -60,16 +68,28 @@ func _input(event: InputEvent) -> void:
 			screenshot.save_png(SCREENSHOTS_DIRECTORY.path_join(str("%d%02d%02d_%02d%02d%02d_%d.png" % [date.year, date.month, date.day, date.hour, date.minute, date.second, process_frames])))
 
 func _on_scene_changed() -> void:
-	var scene_path: String = get_tree().current_scene.scene_file_path
+	var current_scene: Node = get_tree().current_scene
+	var scene_path: String = current_scene.scene_file_path
+
+	var emit_scene_changed: Callable = func ():
+		if not current_scene.is_node_ready():
+			await current_scene.ready
+
+		scene_changed.emit()
 
 	if scene_path.is_empty():
 		scene_path = persistent_data["current_scene"]
+
+		if is_current_scene_loaded_from_file:
+			current_scene_state = SCENE_STATES.FROM_FILE
+			is_current_scene_loaded_from_file = false
+			emit_scene_changed.call()
+			return
+		else:
+			current_scene_state = SCENE_STATES.PACKED
 	else:
 		persistent_data["current_scene"] = scene_path
-
-	if persistent_data.get("loaded_from_file", false):
-		persistent_data["loaded_from_file"] = false
-		return
+		current_scene_state = SCENE_STATES.DEFAULT
 
 	if not persistent_data.has("scene_visits"):
 		persistent_data["scene_visits"] = {}
@@ -78,6 +98,8 @@ func _on_scene_changed() -> void:
 		persistent_data["scene_visits"][scene_path] += 1
 	else:
 		persistent_data["scene_visits"][scene_path] = 1
+
+	emit_scene_changed.call()
 
 func _count_playtime() -> void:
 	while true:
@@ -89,7 +111,7 @@ func _count_playtime() -> void:
 			persistent_data["playtime"] = 0
 
 func change_scene(path: String) -> void:
-	if not persistent_data.get("loaded_from_file", false):
+	if not is_current_scene_loaded_from_file:
 		persistent_data["entered_from"] = persistent_data["current_scene"]
 
 	if scene_data.has(path):
