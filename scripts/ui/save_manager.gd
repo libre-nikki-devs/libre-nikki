@@ -94,6 +94,8 @@ func load_game(slot: int):
 
 		if data is Dictionary:
 			if data.has("scene_data"):
+				Game.scene_data.clear()
+
 				if OS.is_debug_build():
 					for scene_path: String in data["scene_data"]:
 						var scene: Node = load(scene_path).instantiate()
@@ -156,7 +158,6 @@ func load_game(slot: int):
 						for property: String in player_defaults:
 							player.set(property, player_defaults[property])
 
-					Game.scene_data.clear()
 					Game.scene_data[SAKUTSUKIS_BEDROOM_PATH] = PackedScene.new()
 					Game.scene_data[SAKUTSUKIS_BEDROOM_PATH].pack(scene)
 
