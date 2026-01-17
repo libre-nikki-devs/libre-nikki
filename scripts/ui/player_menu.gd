@@ -149,7 +149,7 @@ func _on_pinch_cheek_button_pressed() -> void:
 	player.pinch_cheek()
 
 func _on_travel_button_pressed() -> void:
-  open_submenu("res://scenes/ui/travel_menu.tscn")
+	open_submenu("res://scenes/ui/travel_menu.tscn")
 
 func _on_save_button_pressed() -> void:
 	open_submenu("res://scenes/ui/save_manager.tscn")
