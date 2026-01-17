@@ -28,7 +28,7 @@ extends YumeMenu
 @onready var effects_grid_container = get_node("MainPanelContainer/EffectsGridContainer")
 @onready var world_panel = get_node("WorldPanel")
 @onready var actions_grid_container = get_node("MainPanelContainer/ActionsGridContainer")
-@onready var player: YumePlayer = get_tree().get_first_node_in_group("Players")
+@onready var player: YumePlayer
 
 signal button_finished
 
@@ -142,14 +142,14 @@ func _on_effect_button_pressed(effect: YumePlayer.EFFECT) -> void:
 		player.equip(effect)
 
 func _on_settings_button_pressed() -> void:
-	open("res://scenes/ui/settings_menu.tscn")
+	open_submenu("res://scenes/ui/settings_menu.tscn")
 
 func _on_pinch_cheek_button_pressed() -> void:
 	await close()
 	player.pinch_cheek()
 
 func _on_travel_button_pressed() -> void:
-	open("res://scenes/ui/travel_menu.tscn")
+  open_submenu("res://scenes/ui/travel_menu.tscn")
 
 func _on_save_button_pressed() -> void:
-	open("res://scenes/ui/save_manager.tscn")
+	open_submenu("res://scenes/ui/save_manager.tscn")

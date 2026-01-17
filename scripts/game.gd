@@ -223,7 +223,7 @@ func take_screenshot() -> Image:
 
 	return null
 
-func open_menu(menu_path: StringName, menu_property_list: Dictionary[String, Variant] = {}):
+func open_menu(menu_path: String, menu_property_list: Dictionary = {}) -> void:
 	var menu: YumeMenu = load(menu_path).instantiate()
 	var scene_tree: SceneTree = get_tree()
 

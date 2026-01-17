@@ -59,7 +59,6 @@ signal equipped(effect: EFFECT)
 
 func _init() -> void:
 	super()
-	add_to_group("Players")
 	set_process(true)
 
 func _notification(what: int) -> void:
@@ -224,7 +223,7 @@ func revoke_effect(effect: EFFECT) -> void:
 
 func open_menu() -> void:
 	if cancel_events.is_empty():
-		Game.open_menu(menu_path)
+		Game.open_menu(menu_path, { "player": self })
 	else:
 		if cancel_events.front().get_argument_count() > 0:
 			cancel_events.front().call(self)
