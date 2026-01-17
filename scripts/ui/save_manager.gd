@@ -70,8 +70,8 @@ func _input(event: InputEvent) -> void:
 		if focus_owner:
 			close()
 
-func _grab_focus() -> void:
-	save_container.get_child(0).button.grab_focus()
+func _get_focus_grabber() -> Control:
+	return save_container.get_child(0).button
 
 func save_game(slot: int):
 	if not DirAccess.dir_exists_absolute(SAVE_DIRECTORY):

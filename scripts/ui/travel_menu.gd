@@ -70,8 +70,7 @@ func _input(event: InputEvent) -> void:
 		if event.is_action_pressed("ui_cancel") or event.is_action_pressed("ui_text_submit"):
 			match focus_owner:
 				filter_bar:
-					await get_tree().process_frame
-					_focus_first_visible_button()
+					_get_focus_grabber().call_deferred("grab_focus")
 
 		if event.is_action_pressed("ui_go_back"):
 			match focus_owner:
@@ -83,21 +82,16 @@ func _input(event: InputEvent) -> void:
 					close()
 
 	if Input.is_key_pressed(KEY_SLASH):
-		await get_tree().process_frame
-		filter_bar.edit()
+		filter_bar.call_deferred("edit")
 
-func _grab_focus() -> void:
-	_focus_first_visible_button()
-
-func _focus_first_visible_button() -> void:
+func _get_focus_grabber() -> Control:
 	for child_id in map_container.get_child_count():
 		var current_child: Node = map_container.get_child(child_id)
 
 		if current_child is Control and current_child.visible:
-			current_child.grab_focus()
-			return
+			return current_child
 
-	map_container.grab_focus()
+	return map_container
 
 func _on_map_button_pressed(scene: String) -> void:
 	Game.save_player_data(get_tree().get_first_node_in_group("Players"))

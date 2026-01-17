@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -30,11 +30,15 @@ func _notification(what: int) -> void:
 				if focus_owner:
 					previously_focused = focus_owner
 
-			_grab_focus()
+			var focus_grabber: Control = _get_focus_grabber()
+
+			if focus_grabber:
+				focus_grabber.call_deferred("grab_focus")
+
 			_post_open()
 
-func _grab_focus() -> void:
-	pass
+func _get_focus_grabber() -> Control:
+	return null
 
 func _pre_open() -> void:
 	Game.transition_handler.play("fade_out", -1, 10.0)

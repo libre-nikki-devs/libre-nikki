@@ -109,11 +109,11 @@ func _input(event: InputEvent) -> void:
 				side_menu:
 					close()
 
-func _grab_focus() -> void:
+func _get_focus_grabber() -> Control:
 	if Game.persistent_data.has("acquired_effects"):
-		effects_button.grab_focus()
-	else:
-		actions_button.grab_focus()
+		return effects_button
+
+	return actions_button
 
 func _on_actions_button_pressed() -> void:
 	player_container.hide()

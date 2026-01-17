@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -464,8 +464,8 @@ func _input(event: InputEvent) -> void:
 				side_menu:
 					close()
 
-func _grab_focus() -> void:
-	licenses_button.grab_focus()
+func _get_focus_grabber() -> Control:
+	return licenses_button
 
 func _on_licenses_button_pressed() -> void:
 	licenses_menu.show()
