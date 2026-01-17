@@ -45,6 +45,7 @@ focus_neighbor_bottom = NodePath(".")
 focus_next = NodePath(".")
 focus_previous = NodePath(".")
 focus_mode = 2
+mouse_filter = 2
 
 [node name="FilterBar" type="LineEdit" parent="."]
 layout_mode = 1
