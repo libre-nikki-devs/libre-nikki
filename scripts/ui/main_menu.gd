@@ -78,6 +78,7 @@ func _input(event: InputEvent) -> void:
 						get_tree().paused = false
 						Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
 						Game.persistent_data.clear()
+						Game.scene_data.clear()
 
 func _on_play_button_pressed() -> void:
 	Game.transition_handler.play("fade_out", -1, 10.0)

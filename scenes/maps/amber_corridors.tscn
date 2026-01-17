@@ -54,9 +54,10 @@ bounds = Rect2(0, 0, 2704, 2256)
 loop = "All Sides"
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 
-[node name="Parallax2D" type="Parallax2D" parent="."]
+[node name="Parallax2D" type="Parallax2D" parent="." groups=["Persist"]]
 repeat_size = Vector2(1352, 1128)
 autoscroll = Vector2(4, 4)
+metadata/persistent_properties = ["scroll_offset"]
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D"]
 z_index = -100

@@ -20,6 +20,7 @@ extends YumeMenu
 @onready var effects_label = get_node("SidePanelContainer/VBoxContainer/EffectsButton/EffectsLabel")
 @onready var actions_button = get_node("SidePanelContainer/VBoxContainer/ActionsButton")
 @onready var travel_button = get_node("SidePanelContainer/VBoxContainer/TravelButton")
+@onready var save_button = get_node("SidePanelContainer/VBoxContainer/SaveButton")
 @onready var settings_button = get_node("SidePanelContainer/VBoxContainer/SettingsButton")
 @onready var quit_button = get_node("SidePanelContainer/VBoxContainer/QuitButton")
 @onready var money_panel = get_node("MoneyPanel")
@@ -80,8 +81,10 @@ func _ready() -> void:
 
 	if OS.is_debug_build():
 		travel_button.show()
+		save_button.show()
 	else:
 		travel_button.hide()
+		save_button.hide()
 
 @export var side_menu: Control
 
@@ -146,4 +149,7 @@ func _on_pinch_cheek_button_pressed() -> void:
 	player.pinch_cheek()
 
 func _on_travel_button_pressed() -> void:
-	open_submenu("res://scenes/ui/travel_menu.tscn")
+  open_submenu("res://scenes/ui/travel_menu.tscn")
+
+func _on_save_button_pressed() -> void:
+	open_submenu("res://scenes/ui/save_manager.tscn")

@@ -3,8 +3,10 @@ extends YumeWorld
 @onready var player: YumePlayer = get_node("Sakutsuki")
 
 func _ready() -> void:
-	if Game.persistent_data.has("entered_from"):
-		match Game.persistent_data["entered_from"]:
+	await Game.scene_changed
+
+	if Game.current_scene_state != Game.SCENE_STATES.FROM_FILE:
+		match Game.persistent_data.get("entered_from", false):
 			"res://scenes/maps/amber_corridors.tscn":
 				player.facing = YumeCharacter.DIRECTION.DOWN
 				player.position = Vector2(104.0, -72.0)

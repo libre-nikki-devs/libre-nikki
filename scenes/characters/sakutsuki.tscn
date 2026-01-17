@@ -1658,12 +1658,13 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qhyl"]
 size = Vector2(16, 16)
 
-[node name="Sakutsuki" type="CharacterBody2D" node_paths=PackedStringArray("camera", "animation_player")]
+[node name="Sakutsuki" type="CharacterBody2D" node_paths=PackedStringArray("camera", "animation_player") groups=["Persist"]]
 y_sort_enabled = true
 script = ExtResource("1_5uo7l")
 camera = NodePath("Camera2D")
 animation_player = NodePath("AnimationPlayer")
 metadata/_custom_type_script = "uid://3tw0tkifql18"
+metadata/persistent_properties = ["accept_events", "cancel_events", "collision_layer", "collision_mask", "equipped_effect", "facing", "global_position", "last_step", "name", "speed", "z_index"]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("3_l5dwh")

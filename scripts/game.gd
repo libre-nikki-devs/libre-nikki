@@ -19,6 +19,8 @@ extends CanvasLayer
 ## An autoload singleton that handles the game's most important data as well as
 ## it provides functions specific to Libre Nikki.
 
+enum SCENE_STATES { DEFAULT = 0, PACKED = 1, FROM_FILE = 2 }
+
 const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 
 @onready var mouse_timer: Timer = get_node("MouseTimer")
@@ -27,13 +29,21 @@ const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 
 @onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
 
+var current_scene_state: SCENE_STATES = SCENE_STATES.DEFAULT
+
+var is_current_scene_loaded_from_file: bool = false
+
 ## Contains data that are preserved in a save file.
 var persistent_data: Dictionary = {}
+
+var scene_data: Dictionary[String, PackedScene] = {}
 
 ## Contains settings data.
 var settings: Dictionary = {
 	"key_hold_time" = 0.5
 }
+
+signal scene_changed
 
 func _ready() -> void:
 	_on_scene_changed()
@@ -58,12 +68,28 @@ func _input(event: InputEvent) -> void:
 			screenshot.save_png(SCREENSHOTS_DIRECTORY.path_join(str("%d%02d%02d_%02d%02d%02d_%d.png" % [date.year, date.month, date.day, date.hour, date.minute, date.second, process_frames])))
 
 func _on_scene_changed() -> void:
-	var scene_path: String = get_tree().current_scene.scene_file_path
+	var current_scene: Node = get_tree().current_scene
+	var scene_path: String = current_scene.scene_file_path
+
+	var emit_scene_changed: Callable = func ():
+		if not current_scene.is_node_ready():
+			await current_scene.ready
+
+		scene_changed.emit()
 
 	if scene_path.is_empty():
 		scene_path = persistent_data["current_scene"]
+
+		if is_current_scene_loaded_from_file:
+			current_scene_state = SCENE_STATES.FROM_FILE
+			is_current_scene_loaded_from_file = false
+			emit_scene_changed.call()
+			return
+		else:
+			current_scene_state = SCENE_STATES.PACKED
 	else:
 		persistent_data["current_scene"] = scene_path
+		current_scene_state = SCENE_STATES.DEFAULT
 
 	if not persistent_data.has("scene_visits"):
 		persistent_data["scene_visits"] = {}
@@ -72,6 +98,8 @@ func _on_scene_changed() -> void:
 		persistent_data["scene_visits"][scene_path] += 1
 	else:
 		persistent_data["scene_visits"][scene_path] = 1
+
+	emit_scene_changed.call()
 
 func _count_playtime() -> void:
 	while true:
@@ -83,17 +111,17 @@ func _count_playtime() -> void:
 			persistent_data["playtime"] = 0
 
 func change_scene(path: String) -> void:
-	persistent_data["entered_from"] = persistent_data["current_scene"]
+	if not is_current_scene_loaded_from_file:
+		persistent_data["entered_from"] = persistent_data["current_scene"]
 
-	if persistent_data.has("scene_data"):
-		if persistent_data["scene_data"].has(path):
-			get_tree().change_scene_to_packed(persistent_data["scene_data"][path])
-			persistent_data["current_scene"] = path
-			return
+	if scene_data.has(path):
+		get_tree().change_scene_to_packed(scene_data[path])
+		persistent_data["current_scene"] = path
+		return
 
 	get_tree().change_scene_to_file(path)
 
-func save_current_scene() -> void:
+func save_current_scene(destination: Dictionary = persistent_data) -> void:
 	var scene_tree: SceneTree = get_tree()
 	var current_scene: Node = scene_tree.current_scene
 	var scene_path = current_scene.scene_file_path
@@ -105,11 +133,51 @@ func save_current_scene() -> void:
 			tween.custom_step(INF)
 			tween.kill()
 
-	if not persistent_data.has("scene_data"):
-		persistent_data["scene_data"] = {}
-	
-	persistent_data["scene_data"][scene_path] = PackedScene.new()
-	persistent_data["scene_data"][scene_path].pack(current_scene)
+	if is_same(destination, persistent_data):
+		scene_data[scene_path] = PackedScene.new()
+		scene_data[scene_path].pack(current_scene)
+
+	for child: Node in scene_tree.get_nodes_in_group("Persist"):
+		if child.has_meta("persistent_properties"):
+			var persistent_properties: Variant = child.get_meta("persistent_properties")
+
+			if persistent_properties is Array:
+				if not destination.has("scene_data"):
+					destination["scene_data"] = {}
+
+				if not destination["scene_data"].has(scene_path):
+					destination["scene_data"][scene_path] = {}
+
+				var child_path: NodePath = current_scene.get_path_to(child)
+
+				if not destination["scene_data"][scene_path].has(child_path):
+					destination["scene_data"][scene_path][child_path] = {}
+
+				if not destination["scene_data"][scene_path][child_path]:
+					destination["scene_data"][scene_path][child_path] = {}
+
+				for property: Variant in persistent_properties + ["scene_file_path"]:
+					if property is String and property in child:
+						destination["scene_data"][scene_path][child_path].set(property, child.get(property))
+
+	var scene: Node = load(scene_path).instantiate()
+
+	var get_persistent_node_paths: Callable = func (node: Node, _recursion: Callable) -> Array[NodePath]:
+		var node_paths: Array[NodePath] = []
+
+		if node.is_in_group("Persist"):
+			node_paths.append(scene.get_path_to(node))
+
+		for child: Node in node.get_children():
+			node_paths += _recursion.call(child, _recursion)
+
+		return node_paths
+
+	var persistent_node_paths: Array[NodePath] = get_persistent_node_paths.call(scene, get_persistent_node_paths)
+
+	for child_path: NodePath in persistent_node_paths:
+		if not current_scene.has_node(child_path):
+			destination["scene_data"][scene_path][child_path] = null
 
 func save_player_data(player: YumePlayer, player_properties: Array[String] = ["accept_events", "cancel_events", "equipped_effect", "facing", "last_step", "name", "speed"]) -> void:
 	if player:
@@ -187,6 +255,7 @@ func sleep() -> void:
 func wake_up() -> void:
 	persistent_data["player_data"] = {}
 	persistent_data["scene_data"] = {}
+	scene_data.clear()
 	var scene_tree: SceneTree = get_tree()
 	var tween: Tween
 

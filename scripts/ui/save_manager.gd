@@ -80,12 +80,9 @@ func save_game(slot: int):
 	var file: FileAccess = FileAccess.open(SAVE_DIRECTORY.path_join("save%02d.libki" % (slot)), FileAccess.WRITE)
 
 	if file:
-		var player: YumePlayer = get_tree().get_first_node_in_group("Players")
-
-		if player:
-			Game.save_player_data(player, ["accept_events", "cancel_events", "equipped_effect", "facing", "global_position", "last_step", "name", "speed"])
-			file.store_var(Game.persistent_data)
-
+		var data: Dictionary = Game.persistent_data.duplicate_deep()
+		Game.save_current_scene(data)
+		file.store_var(data)
 		file.close()
 
 func load_game(slot: int):
@@ -96,25 +93,84 @@ func load_game(slot: int):
 		file.close()
 
 		if data is Dictionary:
-			Game.persistent_data = data
-			Game.transition_handler.play("fade_out", -1, 10.0)
-			await Game.transition_handler.animation_finished
+			if data.has("scene_data"):
+				Game.scene_data.clear()
 
-			if Game.persistent_data.has("current_scene"):
+				if OS.is_debug_build():
+					for scene_path: String in data["scene_data"]:
+						var scene: Node = load(scene_path).instantiate()
+
+						for child_path: NodePath in data["scene_data"][scene_path]:
+							var child: Node = scene.get_node_or_null(child_path)
+
+							if child:
+								if not data["scene_data"][scene_path][child_path]:
+									scene.remove_child(child)
+									continue
+							else:
+								var child_file_path: String = data["scene_data"][scene_path][child_path].get("scene_file_path", "")
+
+								if child_file_path.is_empty():
+									continue
+								else:
+									child = load(child_file_path).instantiate()
+									scene.add_child(child)
+									child.owner = scene
+
+							for property: String in data["scene_data"][scene_path][child_path]:
+								child.set(property, data["scene_data"][scene_path][child_path][property])
+
+						Game.scene_data[scene_path] = PackedScene.new()
+						Game.scene_data[scene_path].pack(scene)
+
+				else:
+					const SAKUTSUKIS_BEDROOM_PATH: String = "res://scenes/maps/sakutsukis_bedroom.tscn"
+
+					var player_defaults: Dictionary = {
+						"global_position": Vector2(-56.0, 8.0),
+						"facing": YumeCharacter.DIRECTION.LEFT
+					}
+
+					data["current_scene"] = SAKUTSUKIS_BEDROOM_PATH
+
+					if data["scene_data"].has(SAKUTSUKIS_BEDROOM_PATH):
+						var player_data: Variant = data["scene_data"][SAKUTSUKIS_BEDROOM_PATH].get(^"Sakutsuki", false)
+
+						if player_data is Dictionary:
+							if player_data.has("global_position"):
+								match player_data["global_position"]:
+									Vector2(-72.0, -8.0):
+										player_defaults = {
+											"global_position": Vector2(-72.0, -8.0),
+											"facing": YumeCharacter.DIRECTION.DOWN
+										}
+
+									Vector2(-72.0, 24.0):
+										player_defaults = {
+											"global_position": Vector2(-72.0, 24.0),
+											"facing": YumeCharacter.DIRECTION.UP
+										}
+
+					var scene: Node = preload(SAKUTSUKIS_BEDROOM_PATH).instantiate()
+					var player: Node = scene.get_node_or_null(^"Sakutsuki")
+
+					if player:
+						for property: String in player_defaults:
+							player.set(property, player_defaults[property])
+
+					Game.scene_data[SAKUTSUKIS_BEDROOM_PATH] = PackedScene.new()
+					Game.scene_data[SAKUTSUKIS_BEDROOM_PATH].pack(scene)
+
+				Game.persistent_data = data
+				Game.is_current_scene_loaded_from_file = true
+				Game.transition_handler.play("fade_out", -1, 10.0)
+				await Game.transition_handler.animation_finished
 				Game.change_scene(Game.persistent_data["current_scene"])
-			else:
-				Game.persistent_data["player_data"] = {
-					"facing": YumeCharacter.DIRECTION.LEFT,
-					"global_position": Vector2(-56.0, 8.0)
-				}
-
-				Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
-
-			queue_free()
+				queue_free()
 
 func _on_save_button_pressed(slot):
 	save_game(slot)
-	close()
+	get_root_menu().close()
 
 func _on_load_button_pressed(slot):
 	load_game(slot)

@@ -79,7 +79,9 @@ func _notification(what: int) -> void:
 						camera.limit_right = floor(current_world.camera_limits[3] - camera.offset.x)
 
 		NOTIFICATION_READY:
-			if Game.persistent_data.has("player_data"):
+			await Game.scene_changed
+
+			if Game.persistent_data.has("player_data") and Game.current_scene_state != Game.SCENE_STATES.FROM_FILE:
 				for property: String in Game.persistent_data["player_data"].keys():
 					set(property, Game.persistent_data["player_data"][property])
 
