@@ -26,6 +26,8 @@ extends YumeMenu
 @onready var greeting: Control = get_node("Greeting")
 @onready var greeting_label: RichTextLabel = get_node("Greeting/GreetingLabel")
 
+var focus_button: Control = null
+
 var url_hovered: bool = false
 
 func _ready() -> void:
@@ -42,12 +44,12 @@ func _ready() -> void:
 		if not DirAccess.get_files_at(save_directory).is_empty():
 			continue_button.disabled = false
 			continue_label.modulate.a = 1.0
-			continue_button.grab_focus()
+			focus_button = continue_button
 			return
 
 	continue_button.disabled = true
 	continue_label.modulate.a = 0.5
-	play_button.grab_focus()
+	focus_button = play_button
 
 func _post_open() -> void:
 	Game.transition_handler.play("fade_in", -1, 2.0)
@@ -62,6 +64,7 @@ func _post_open() -> void:
 	continue_button.visible = true
 	settings_button.visible = true
 	quit_button.visible = true
+	focus_button.grab_focus()
 
 func _input(event: InputEvent) -> void:
 	if (event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_cancel")) and not get_tree().paused:
