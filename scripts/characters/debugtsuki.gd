@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -23,6 +23,9 @@ extends YumeHumanoid
 @export var wait_time: float = 2.0
 
 func _ready() -> void:
+	if not is_connected("body_interacted", _on_body_interacted):
+		connect("body_interacted", _on_body_interacted)
+
 	_move_loop()
 
 func _move_loop():

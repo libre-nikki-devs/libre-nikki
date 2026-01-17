@@ -890,5 +890,3 @@ libraries = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_0we4y")
-
-[connection signal="body_interacted" from="." to="." method="_on_body_interacted"]
