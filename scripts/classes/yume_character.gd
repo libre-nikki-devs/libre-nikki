@@ -202,7 +202,8 @@ func move(direction: DIRECTION) -> void:
 
 					var shape: Shape2D = collision_shape.shape
 					var current_shape: Shape2D = current_collision_shape.shape
-					var target_transform := Transform2D(collision_shape.global_transform.x, collision_shape.global_transform.y, collision_shape.global_transform.origin + target_origin)
+					var target_transform := Transform2D(collision_shape.global_transform)
+					target_transform.origin += target_origin
 
 					if not shape.collide_and_get_contacts(target_transform, current_shape, current_collision_shape.global_transform).is_empty():
 						current_collision_shape_parent.emit_signal("body_touched", self)
@@ -267,7 +268,8 @@ func is_colliding(direction: DIRECTION) -> bool:
 
 					var shape: Shape2D = collision_shape.shape
 					var current_shape: Shape2D = current_collision_shape.shape
-					var target_transform = Transform2D(collision_shape.global_transform.x, collision_shape.global_transform.y, collision_shape.global_transform.origin + target_origin)
+					var target_transform := Transform2D(collision_shape.global_transform)
+					target_transform.origin += target_origin
 
 					if not shape.collide_and_get_contacts(target_transform, current_shape, current_collision_shape.global_transform).is_empty():
 						return true
