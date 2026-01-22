@@ -193,7 +193,7 @@ func move(direction: DIRECTION) -> void:
 		for current_collision_shape: CollisionShape2D in current_collisions:
 			var current_collision_shape_parent: YumeCharacter = current_collision_shape.get_parent()
 
-			if collision_mask & current_collision_shape_parent.collision_layer:
+			if collision_mask & current_collision_shape_parent.collision_layer and not current_collision_shape.disabled:
 				for collision_shape: CollisionShape2D in collision_shapes:
 					var target_origin: Vector2 = target_position
 
@@ -259,7 +259,7 @@ func is_colliding(direction: DIRECTION) -> bool:
 		for current_collision_shape: CollisionShape2D in current_collisions:
 			var current_collision_shape_parent: YumeCharacter = current_collision_shape.get_parent()
 
-			if collision_mask & current_collision_shape_parent.collision_layer:
+			if collision_mask & current_collision_shape_parent.collision_layer and not current_collision_shape.disabled:
 				for collision_shape: CollisionShape2D in collision_shapes:
 					var target_origin: Vector2 = target_position
 
