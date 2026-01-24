@@ -157,8 +157,9 @@ func save_current_scene(destination: Dictionary = persistent_data) -> void:
 					destination["scene_data"][scene_path][child_path] = {}
 
 				for property: Variant in persistent_properties + ["scene_file_path"]:
-					if property is String and property in child:
-						destination["scene_data"][scene_path][child_path].set(property, child.get(property))
+					if property is String:
+						if property in child:
+							destination["scene_data"][scene_path][child_path].set(property, child.get(property))
 
 	var scene: Node = load(scene_path).instantiate()
 
