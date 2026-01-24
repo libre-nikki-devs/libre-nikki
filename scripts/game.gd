@@ -236,12 +236,7 @@ func open_menu(menu_path: String, menu_property_list: Dictionary = {}) -> void:
 ## Start the dream session.
 func sleep() -> void:
 	persistent_data["random"] = RandomNumberGenerator.new().randi_range(0, 255)
-
-	if not persistent_data.has("times_slept"):
-		persistent_data["times_slept"] = 1
-	else:
-		persistent_data["times_slept"] += 1
-
+	persistent_data["times_slept"] = persistent_data.get("times_slept", 0) + 1
 	change_scene("res://scenes/maps/sakutsukis_dream_bedroom.tscn")
 
 ## End the dream session.
