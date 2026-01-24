@@ -37,7 +37,6 @@ func _on_nexus_door_opened() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 	await Game.transition_handler.animation_finished
 	Game.save_current_scene()
-	Game.save_player_data(player)
 	Game.change_scene("res://scenes/maps/nexus.tscn")
 
 func _on_snowflake_door_opened() -> void:

@@ -39,6 +39,8 @@ const MOVEMENT_KEYS: Dictionary[String, DIRECTION] = {
 
 @export var menu_path: StringName = "res://scenes/ui/player_menu.tscn"
 
+@export var shared_properties: Array[String] = []
+
 var accept_events: Array[Callable] = []
 
 var cancel_events: Array[Callable] = []
@@ -50,6 +52,8 @@ var accept_key_hold_time: float = 0.0
 var cancel_key_hold_time: float = 0.0
 
 var menu_queued: bool = false
+
+static var shared_data: Dictionary[String, Variant] = {}
 
 signal accept_key_held()
 signal cancel_key_held()
@@ -63,6 +67,18 @@ func _init() -> void:
 
 func _notification(what: int) -> void:
 	match what:
+		NOTIFICATION_ENTER_TREE:
+			for property: String in shared_properties:
+				if property in self and shared_data.has(property):
+					set(property, shared_data[property])
+
+		NOTIFICATION_EXIT_TREE:
+			shared_data.clear()
+
+			for property: String in shared_properties:
+				if property in self:
+					shared_data[property] = get(property)
+
 		NOTIFICATION_PARENTED:
 			if camera and current_world:
 				if current_world.bounds.has_area():
@@ -77,13 +93,6 @@ func _notification(what: int) -> void:
 						camera.limit_bottom = floor(current_world.camera_limits[1] - camera.offset.y)
 						camera.limit_top = floor(current_world.camera_limits[2] - camera.offset.y)
 						camera.limit_right = floor(current_world.camera_limits[3] - camera.offset.x)
-
-		NOTIFICATION_READY:
-			await Game.scene_changed
-
-			if Game.persistent_data.has("player_data") and Game.current_scene_state != Game.SCENE_STATES.FROM_FILE:
-				for property: String in Game.persistent_data["player_data"].keys():
-					set(property, Game.persistent_data["player_data"][property])
 
 		NOTIFICATION_PROCESS:
 			for movement_key: StringName in MOVEMENT_KEYS.keys():

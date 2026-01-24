@@ -1,7 +1,5 @@
 extends YumeWorld
 
-@onready var player: YumePlayer = get_node("Sakutsuki")
-
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 	Game.transition_handler.play("pixelate_in")
@@ -18,10 +16,6 @@ func _on_bed_body_interacted(body: Node2D) -> void:
 		Game.transition_handler.play("pixelate_out")
 		await Game.transition_handler.animation_finished
 		process_mode = Node.PROCESS_MODE_PAUSABLE
-
-		if Game.persistent_data.has("player_data"):
-			Game.persistent_data["player_data"] = {}
-
 		Game.sleep()
 
 func _on_desk_body_interacted(body: Node2D) -> void:

@@ -95,6 +95,7 @@ func load_game(slot: int):
 		if data is Dictionary:
 			if data.has("scene_data"):
 				Game.scene_data.clear()
+				YumePlayer.shared_data.clear()
 
 				if OS.is_debug_build():
 					for scene_path: String in data["scene_data"]:

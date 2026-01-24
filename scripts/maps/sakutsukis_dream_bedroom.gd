@@ -19,5 +19,4 @@ func _on_door_opened() -> void:
 	Game.transition_handler.play("fade_out")
 	process_mode = Node.PROCESS_MODE_DISABLED
 	await Game.transition_handler.animation_finished
-	Game.save_player_data(player)
 	Game.change_scene("res://scenes/maps/nexus.tscn")

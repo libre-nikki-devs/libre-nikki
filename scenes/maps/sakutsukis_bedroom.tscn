@@ -114,6 +114,7 @@ z_index = 1
 position = Vector2(-8, 8)
 collision_layer = 2
 collision_mask = 2
+shared_properties = Array[String]([])
 can_move_in_vacuum = false
 
 [node name="Desk" type="CharacterBody2D" parent="."]

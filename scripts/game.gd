@@ -179,14 +179,6 @@ func save_current_scene(destination: Dictionary = persistent_data) -> void:
 		if not current_scene.has_node(child_path):
 			destination["scene_data"][scene_path][child_path] = null
 
-func save_player_data(player: YumePlayer, player_properties: Array[String] = ["accept_events", "cancel_events", "equipped_effect", "facing", "last_step", "name", "speed"]) -> void:
-	if player:
-		persistent_data["player_data"] = {}
-
-		for property: String in player_properties:
-			if property in player:
-				persistent_data["player_data"][property] = player.get(property)
-
 func play_sound(sound: AudioStream, parent: Node2D, distance: int = 256, pitch: float = 1.0, volume_offset: float = 0.0) -> void:
 	if sound:
 		var audio_stream_player = AudioStreamPlayer2D.new()
@@ -253,7 +245,6 @@ func sleep() -> void:
 
 ## End the dream session.
 func wake_up() -> void:
-	persistent_data["player_data"] = {}
 	persistent_data["scene_data"] = {}
 	scene_data.clear()
 	var scene_tree: SceneTree = get_tree()
