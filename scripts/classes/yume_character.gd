@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -58,6 +58,10 @@ var target_position: Vector2
 var surface_detector: RayCast2D = RayCast2D.new()
 
 var collision_detector: RayCast2D = RayCast2D.new()
+
+static var current_collisions: Array[CollisionShape2D] = []
+
+static var collisions_last_checked: int = 0
 
 ## Emitted when the character has moved.
 signal moved
@@ -162,7 +166,6 @@ func _update_detector_positions(target_vector: Vector2) -> void:
 func move(direction: DIRECTION) -> void:
 	_update_detectors(direction)
 	var collider: Object = collision_detector.get_collider()
-	var ground: Object = surface_detector.get_collider()
 
 	if collider:
 		if collider is YumeInteractable:
@@ -170,12 +173,47 @@ func move(direction: DIRECTION) -> void:
 
 		return
 
+	var ground: Object = surface_detector.get_collider()
+
 	if ground:
 		if ground is YumeInteractable:
 			ground.emit_signal("body_stepped_on", self)
 
 	elif not can_move_in_vacuum:
 		return
+
+	var collision_shapes: Array[CollisionShape2D]
+
+	for shape_owner: int in get_shape_owners():
+		collision_shapes.append(shape_owner_get_owner(shape_owner))
+
+	var physics_frames: int = Engine.get_physics_frames()
+
+	if collisions_last_checked == physics_frames:
+		for current_collision_shape: CollisionShape2D in current_collisions:
+			var current_collision_shape_parent: YumeCharacter = current_collision_shape.get_parent()
+
+			if collision_mask & current_collision_shape_parent.collision_layer and not current_collision_shape.disabled:
+				for collision_shape: CollisionShape2D in collision_shapes:
+					var target_origin: Vector2 = target_position
+
+					if current_world:
+						target_origin = current_world.wrap_around_world(collision_shape.global_transform.origin + target_origin) - collision_shape.global_transform.origin
+
+					var shape: Shape2D = collision_shape.shape
+					var current_shape: Shape2D = current_collision_shape.shape
+					var target_transform := Transform2D(collision_shape.global_transform)
+					target_transform.origin += target_origin
+
+					if not shape.collide_and_get_contacts(target_transform, current_shape, current_collision_shape.global_transform).is_empty():
+						current_collision_shape_parent.emit_signal("body_touched", self)
+						return
+	else:
+		current_collisions.clear()
+		collisions_last_checked = physics_frames
+
+	for collision_shape: CollisionShape2D in collision_shapes:
+		current_collisions.append(collision_shape)
 
 	if current_world:
 		var previous_position: Vector2 = global_position
@@ -190,10 +228,6 @@ func move(direction: DIRECTION) -> void:
 	_move()
 	var tween: Tween = create_tween()
 	tween.tween_property(self, "pixel_position", Vector2i(target_position), 0.25 / speed).as_relative()
-	var collision_shapes: Array[CollisionShape2D]
-
-	for shape_owner: int in get_shape_owners():
-		collision_shapes.append(shape_owner_get_owner(shape_owner))
 
 	for collision_shape: CollisionShape2D in collision_shapes:
 		collision_shape.position += target_position
@@ -213,6 +247,35 @@ func is_colliding(direction: DIRECTION) -> bool:
 
 	if not (surface_detector.is_colliding() or can_move_in_vacuum):
 		return true
+
+	var collision_shapes: Array[CollisionShape2D]
+
+	for shape_owner: int in get_shape_owners():
+		collision_shapes.append(shape_owner_get_owner(shape_owner))
+
+	var physics_frames: int = Engine.get_physics_frames()
+
+	if collisions_last_checked == physics_frames:
+		for current_collision_shape: CollisionShape2D in current_collisions:
+			var current_collision_shape_parent: YumeCharacter = current_collision_shape.get_parent()
+
+			if collision_mask & current_collision_shape_parent.collision_layer and not current_collision_shape.disabled:
+				for collision_shape: CollisionShape2D in collision_shapes:
+					var target_origin: Vector2 = target_position
+
+					if current_world:
+						target_origin = current_world.wrap_around_world(collision_shape.global_transform.origin + target_origin) - collision_shape.global_transform.origin
+
+					var shape: Shape2D = collision_shape.shape
+					var current_shape: Shape2D = current_collision_shape.shape
+					var target_transform := Transform2D(collision_shape.global_transform)
+					target_transform.origin += target_origin
+
+					if not shape.collide_and_get_contacts(target_transform, current_shape, current_collision_shape.global_transform).is_empty():
+						return true
+	else:
+		current_collisions.clear()
+		collisions_last_checked = physics_frames
 
 	return false
 
