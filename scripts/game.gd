@@ -94,11 +94,7 @@ func _on_scene_changed() -> void:
 	if not persistent_data.has("scene_visits"):
 		persistent_data["scene_visits"] = {}
 
-	if persistent_data["scene_visits"].has(scene_path):
-		persistent_data["scene_visits"][scene_path] += 1
-	else:
-		persistent_data["scene_visits"][scene_path] = 1
-
+	persistent_data["scene_visits"][scene_path] = persistent_data["scene_visits"].get(scene_path, 0) + 1
 	emit_scene_changed.call()
 
 func _count_playtime() -> void:
