@@ -4,8 +4,10 @@ extends YumeWorld
 
 @onready var duplicates: Node2D = get_node("SubViewport/Duplicates")
 
-func _ready() -> void:
+func _init() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
+
+func _ready() -> void:
 	Game.transition_handler.play("fade_in")
 	await Game.transition_handler.animation_finished
 	process_mode = Node.PROCESS_MODE_PAUSABLE

@@ -2,6 +2,9 @@ extends YumeWorld
 
 @onready var player: YumePlayer = get_node("Sakutsuki")
 
+func _init() -> void:
+	process_mode = Node.PROCESS_MODE_DISABLED
+
 func _ready() -> void:
 	await Game.scene_changed
 
@@ -15,7 +18,6 @@ func _ready() -> void:
 				player.facing = YumeCharacter.DIRECTION.DOWN
 				player.position = Vector2(8.0, 24.0)
 
-	process_mode = Node.PROCESS_MODE_DISABLED
 	Game.transition_handler.play("fade_in")
 	await Game.transition_handler.animation_finished
 	process_mode = Node.PROCESS_MODE_PAUSABLE

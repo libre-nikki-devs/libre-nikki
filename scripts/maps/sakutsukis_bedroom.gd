@@ -1,7 +1,9 @@
 extends YumeWorld
 
-func _ready() -> void:
+func _init() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
+
+func _ready() -> void:
 	Game.transition_handler.play("pixelate_in")
 	await Game.transition_handler.animation_finished
 	process_mode = Node.PROCESS_MODE_PAUSABLE
