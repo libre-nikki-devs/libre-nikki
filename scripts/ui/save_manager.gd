@@ -108,11 +108,11 @@ func load_game(slot: int) -> Error:
 	if data is not Dictionary:
 		return ERR_INVALID_DATA
 
-	if data.has("scene_data"):
-		Game.scene_data.clear()
-		YumePlayer.shared_data.clear()
+	if OS.is_debug_build():
+		if data.has("scene_data"):
+			Game.scene_data.clear()
+			YumePlayer.shared_data.clear()
 
-		if OS.is_debug_build():
 			for scene_path: String in data["scene_data"]:
 				var scene: Node = load(scene_path).instantiate()
 
@@ -139,40 +139,40 @@ func load_game(slot: int) -> Error:
 				Game.scene_data[scene_path] = PackedScene.new()
 				Game.scene_data[scene_path].pack(scene)
 
-		else:
-			const SAKUTSUKIS_BEDROOM_PATH: String = "res://scenes/maps/sakutsukis_bedroom.tscn"
+	else:
+		const SAKUTSUKIS_BEDROOM_PATH: String = "res://scenes/maps/sakutsukis_bedroom.tscn"
 
-			var player_defaults: Dictionary = {
-				"global_position": Vector2(-56.0, 8.0),
-				"facing": YumeCharacter.DIRECTION.LEFT
-			}
+		var player_defaults: Dictionary = {
+			"global_position": Vector2(-56.0, 8.0),
+			"facing": YumeCharacter.DIRECTION.LEFT
+		}
 
-			data["current_scene"] = SAKUTSUKIS_BEDROOM_PATH
+		data["current_scene"] = SAKUTSUKIS_BEDROOM_PATH
 
+		if data.has("scene_data"):
 			if data["scene_data"].has(SAKUTSUKIS_BEDROOM_PATH):
 				var player_data: Variant = data["scene_data"][SAKUTSUKIS_BEDROOM_PATH].get(^"Sakutsuki", false)
 
 				if player_data is Dictionary:
-					if player_data.has("global_position"):
-						match player_data["global_position"]:
-							Vector2(-72.0, -8.0):
-								player_defaults = {
-									"global_position": Vector2(-72.0, -8.0),
-									"facing": YumeCharacter.DIRECTION.DOWN
-								}
+					match player_data.get("global_position", false):
+						Vector2(-72.0, -8.0):
+							player_defaults = {
+								"global_position": Vector2(-72.0, -8.0),
+								"facing": YumeCharacter.DIRECTION.DOWN
+							}
 
-							Vector2(-72.0, 24.0):
-								player_defaults = {
-									"global_position": Vector2(-72.0, 24.0),
-									"facing": YumeCharacter.DIRECTION.UP
-								}
+						Vector2(-72.0, 24.0):
+							player_defaults = {
+								"global_position": Vector2(-72.0, 24.0),
+								"facing": YumeCharacter.DIRECTION.UP
+							}
 
-			var scene: Node = preload(SAKUTSUKIS_BEDROOM_PATH).instantiate()
-			var player: Node = scene.get_node_or_null(^"Sakutsuki")
+		var scene: Node = preload(SAKUTSUKIS_BEDROOM_PATH).instantiate()
+		var player: Node = scene.get_node_or_null(^"Sakutsuki")
 
-			if player:
-				for property: String in player_defaults:
-					player.set(property, player_defaults[property])
+		if player:
+			for property: String in player_defaults:
+				player.set(property, player_defaults[property])
 
 			Game.scene_data[SAKUTSUKIS_BEDROOM_PATH] = PackedScene.new()
 			Game.scene_data[SAKUTSUKIS_BEDROOM_PATH].pack(scene)
