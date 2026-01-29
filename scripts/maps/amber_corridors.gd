@@ -8,6 +8,12 @@ func _init() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 
 func _ready() -> void:
+	await Game.scene_changed
+
+	if Game.current_scene_state != Game.SCENE_STATES.FROM_FILE:
+		player.facing = YumeCharacter.DIRECTION.DOWN
+		player.position = Vector2(424.0, 584.0)
+
 	Game.transition_handler.play("fade_in")
 	await Game.transition_handler.animation_finished
 	process_mode = Node.PROCESS_MODE_PAUSABLE
