@@ -16,18 +16,20 @@
 
 extends PanelContainer
 
-func _ready() -> void:
-	hide()
+func _init() -> void:
+	if OS.is_debug_build():
+		hide()
+	else:
+		queue_free()
 
 func _process(delta: float) -> void:
-	if OS.is_debug_build():
-		if Input.is_action_pressed("fast_forward"):
-			if Engine.time_scale == 1.0:
-				show()
+	if Input.is_action_pressed("fast_forward"):
+		if Engine.time_scale == 1.0:
+			show()
 
-			Engine.time_scale = 3.0
-		else:
-			if Engine.time_scale == 3.0:
-				hide()
+		Engine.time_scale = 3.0
+	else:
+		if Engine.time_scale == 3.0:
+			hide()
 
-			Engine.time_scale = 1.0
+		Engine.time_scale = 1.0
