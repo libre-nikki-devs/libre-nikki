@@ -435,8 +435,8 @@ You should also get your employer (if you work as a programmer) or school, if an
 
 The GNU General Public License does not permit incorporating your program into proprietary programs. If your program is a subroutine library, you may consider it more useful to permit linking proprietary applications with the library. If this is what you want to do, use the GNU Lesser General Public License instead of this License. But first, please read <https://www.gnu.org/licenses/why-not-lgpl.html>."
 
-@onready var licenses_button: Button = get_node("SidePanelContainer/SideVBoxContainer/LicensesButton")
-@onready var licenses_menu: Control = get_node("MainPanelContainer/LicensesVBoxContainer")
+@onready var about_button := $SidePanelContainer/SideVBoxContainer/AboutButton
+@onready var about_menu := $MainPanelContainer/AboutVBoxContainer
 @onready var side_menu: Control = get_node("SidePanelContainer/SideVBoxContainer")
 @onready var license_thingy = get_node("LicensePanelContainer")
 @onready var license_label = get_node("ScrollContainer/MarginContainer/LicenseLabel")
@@ -444,7 +444,7 @@ The GNU General Public License does not permit incorporating your program into p
 @onready var margin_container = get_node("ScrollContainer/MarginContainer")
 
 func _ready() -> void:
-	licenses_menu.show()
+	about_menu.show()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_go_back"):
@@ -457,21 +457,25 @@ func _input(event: InputEvent) -> void:
 					await Game.transition_handler.animation_finished
 					license_thingy.hide()
 					scroll.hide()
-					licenses_button.grab_focus()
+					about_button.grab_focus()
 					Game.transition_handler.play("fade_in", -1, 10.0)
-				licenses_menu:
-					licenses_button.grab_focus()
+
+				about_menu:
+					about_button.grab_focus()
+
 				side_menu:
 					close()
 
 func _get_focus_grabber() -> Control:
-	return licenses_button
+	return about_button
 
 func _on_licenses_button_pressed() -> void:
-	licenses_menu.show()
+	about_menu.show()
 
-	if licenses_menu.get_child_count() > 0:
-		licenses_menu.get_child(0).grab_focus()
+	for child: Node in about_menu.get_children():
+		if child is Button:
+			child.grab_focus()
+			break
 
 func _on_license_pressed(license: String) -> void:
 	Game.transition_handler.play("fade_out", -1, 10.0)
