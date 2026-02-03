@@ -56,3 +56,6 @@ func _on_cc_button_pressed() -> void:
 
 func _on_gpl_button_pressed() -> void:
 	open_submenu("res://scenes/ui/license_menu.tscn", { "license_text": preload("res://scenes/ui/license_menu.tscn").instantiate().GPL_FORMATTED })
+
+func _on_update_button_pressed() -> void:
+	open_submenu("res://scenes/ui/update_checker.tscn")
