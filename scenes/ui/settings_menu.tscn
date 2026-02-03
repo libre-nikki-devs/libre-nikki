@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_7i3iu"]
 [ext_resource type="Script" uid="uid://dj2ddgsj5qt4e" path="res://scripts/ui/settings_menu.gd" id="2_s2d1y"]
 
-[node name="Settings" type="Control"]
+[node name="SettingsMenu" type="Control"]
 top_level = true
 layout_mode = 3
 anchors_preset = 15
@@ -117,37 +117,6 @@ text = "About"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LicensePanelContainer" type="PanelContainer" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
-visible = false
-layout_mode = 0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 316.0
-offset_bottom = 236.0
-horizontal_scroll_mode = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
-
-[node name="LicenseLabel" type="RichTextLabel" parent="ScrollContainer/MarginContainer"]
-custom_minimum_size = Vector2(312, 232)
-layout_mode = 2
-focus_mode = 2
-bbcode_enabled = true
-
 [connection signal="pressed" from="MainPanelContainer/AboutVBoxContainer/CCButton" to="." method="_on_cc_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/AboutVBoxContainer/GPLButton" to="." method="_on_gpl_button_pressed"]
-[connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/AboutButton" to="." method="_on_licenses_button_pressed"]
+[connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/AboutButton" to="." method="_on_about_button_pressed"]
