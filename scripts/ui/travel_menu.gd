@@ -94,7 +94,6 @@ func _get_focus_grabber() -> Control:
 	return map_container
 
 func _on_map_button_pressed(scene: String) -> void:
-	Game.save_player_data(get_tree().get_first_node_in_group("Players"))
 	Game.transition_handler.play("fade_out", -1, 10.0)
 	await Game.transition_handler.animation_finished
 	Game.transition_handler.seek(0.0, true)
