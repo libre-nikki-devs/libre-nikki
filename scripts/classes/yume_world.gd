@@ -133,6 +133,16 @@ func _on_child_entered_tree(node: Node):
 					instance.to_mimic = node
 					node.get_parent().add_child.call_deferred(instance)
 
+			"Camera2D":
+				if camera_limits.is_empty():
+					node.limit_enabled = false
+				else:
+					node.limit_enabled = true
+					node.limit_left = floor(camera_limits[0] - node.offset.x)
+					node.limit_bottom = floor(camera_limits[1] - node.offset.y)
+					node.limit_top = floor(camera_limits[2] - node.offset.y)
+					node.limit_right = floor(camera_limits[3] - node.offset.x)
+
 			"Parallax2D":
 				node.add_to_group("Parallax")
 

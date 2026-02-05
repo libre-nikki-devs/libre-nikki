@@ -28,9 +28,6 @@ const MOVEMENT_KEYS: Dictionary[String, DIRECTION] = {
 	"ui_right": DIRECTION.RIGHT
 }
 
-## [Camera2D] node that follows the character.
-@export var camera: Camera2D
-
 ## Currently equipped effect.
 @export var equipped_effect: EFFECT = EFFECT.DEFAULT:
 	set(value):
@@ -78,21 +75,6 @@ func _notification(what: int) -> void:
 			for property: String in shared_properties:
 				if property in self:
 					shared_data[property] = get(property)
-
-		NOTIFICATION_PARENTED:
-			if camera and current_world:
-				if current_world.bounds.has_area():
-					if not current_world.is_node_ready():
-						await current_world.ready
-
-					if current_world.camera_limits.is_empty():
-						camera.limit_enabled = false
-					else:
-						camera.limit_enabled = true
-						camera.limit_left = floor(current_world.camera_limits[0] - camera.offset.x)
-						camera.limit_bottom = floor(current_world.camera_limits[1] - camera.offset.y)
-						camera.limit_top = floor(current_world.camera_limits[2] - camera.offset.y)
-						camera.limit_right = floor(current_world.camera_limits[3] - camera.offset.x)
 
 		NOTIFICATION_PROCESS:
 			for movement_key: StringName in MOVEMENT_KEYS.keys():
