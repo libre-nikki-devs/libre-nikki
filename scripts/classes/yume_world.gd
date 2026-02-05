@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -21,32 +21,31 @@ extends Node2D
 
 ## Indicates the playable area of the world. Can be left empty for infinite
 ## worlds.
-@export var bounds: Rect2
+@export var bounds: Rect2:
+	set(value):
+		if is_node_ready():
+			_recursive_call(self, _on_child_exiting_tree)
+
+		if not value.has_area():
+			loop = "None"
+
+		bounds = value
+		_update_duplicate_positions()
+		_recursive_call(self, _on_child_entered_tree)
 
 ## Indicates if the world should loop.
 @export_enum("All Sides", "Horizontally", "Vertically", "None") var loop: String = "None":
 	set(value):
+		if is_node_ready():
+			_recursive_call(self, _on_child_exiting_tree)
+
 		if bounds.has_area():
-			match value:
-				"All Sides":
-					camera_limits = []
-					duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y), Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0), Vector2(bounds.size.x, bounds.size.y), Vector2(bounds.size.x, -bounds.size.y), Vector2(-bounds.size.x, bounds.size.y), Vector2(-bounds.size.x, -bounds.size.y)]
-
-				"Horizontally":
-					camera_limits = [-10000000, bounds.end.y, bounds.position.y, 10000000]
-					duplicate_positions = [Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0)]
-
-				"Vertically":
-					camera_limits = [bounds.position.x, 10000000, -10000000, bounds.end.x]
-					duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y)]
-
-				"None":
-					camera_limits = [bounds.position.x, bounds.end.y, bounds.position.y, bounds.end.x]
-
 			loop = value
-
 		else:
 			loop = "None"
+
+		_update_duplicate_positions()
+		_recursive_call(self, _on_child_entered_tree)
 
 ## The distance between this world and the Nexus measured in the amount of
 ## worlds required to visit. Optionally, value in brackets is the distance with
@@ -70,11 +69,29 @@ var duplicate_positions: Array[Vector2] = []
 ## the limit is reached.
 var camera_limits: Array[int] = []
 
-func _initialize_node(node: Node):
+func _recursive_call(node: Node, method: Callable):
 	for child: Node in node.get_children():
 		if child is not YumeWorld:
-			_on_child_entered_tree(child)
-			_initialize_node(child)
+			method.call(child)
+			_recursive_call(child, method)
+
+func _update_duplicate_positions() -> void:
+	match loop:
+		"All Sides":
+			camera_limits = []
+			duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y), Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0), Vector2(bounds.size.x, bounds.size.y), Vector2(bounds.size.x, -bounds.size.y), Vector2(-bounds.size.x, bounds.size.y), Vector2(-bounds.size.x, -bounds.size.y)]
+
+		"Horizontally":
+			camera_limits = [-10000000, bounds.end.y, bounds.position.y, 10000000]
+			duplicate_positions = [Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0)]
+
+		"Vertically":
+			camera_limits = [bounds.position.x, 10000000, -10000000, bounds.end.x]
+			duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y)]
+
+		"None":
+			camera_limits = [bounds.position.x, bounds.end.y, bounds.position.y, bounds.end.x]
+			duplicate_positions = []
 
 func _notification(what: int) -> void:
 	match what:
@@ -85,7 +102,7 @@ func _notification(what: int) -> void:
 			if loop == "None":
 				loop = loop
 
-			_initialize_node(self)
+			_recursive_call(self, _on_child_entered_tree)
 
 func _on_child_entered_tree(node: Node):
 	if not node.is_connected("child_entered_tree", _on_child_entered_tree):
