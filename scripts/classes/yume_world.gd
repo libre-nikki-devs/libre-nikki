@@ -56,6 +56,12 @@ extends Node2D
 ## footsteps.
 @export var default_footstep_sound: AudioStream = preload("res://sounds/あるく1.wav") # placeholder
 
+@export var default_mimic_data: Dictionary[String, Array] = {
+	"AnimatedSprite2D": ["animation", "frame", "global_position", "sprite_frames", "visible", "z_index"],
+	"AudioStreamPlayer2D": ["global_position"],
+	"TileMapLayer": []
+}
+
 ## True, if this is a dream world.
 @export var dreaming: bool = true
 
@@ -112,27 +118,9 @@ func _on_child_entered_tree(node: Node):
 		node.connect("child_exiting_tree", _on_child_exiting_tree)
 
 	if not node.is_in_group("Duplicate"):
-		match node.get_class():
-			"AnimatedSprite2D":
-				for duplicate_position: Vector2 in duplicate_positions:
-					var instance: AnimatedSprite2D = node.duplicate()
-					instance.add_to_group("Duplicate")
-					instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-					instance.mimic_properties.append_array(["animation", "frame", "global_position", "sprite_frames", "visible", "z_index"])
-					instance.mimic_position_offset += duplicate_position
-					instance.to_mimic = node
-					node.get_parent().add_child.call_deferred(instance)
+		var node_class: String = node.get_class()
 
-			"AudioStreamPlayer2D":
-				for duplicate_position: Vector2 in duplicate_positions:
-					var instance: AudioStreamPlayer2D = node.duplicate()
-					instance.add_to_group("Duplicate")
-					instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-					instance.mimic_properties.append("global_position")
-					instance.mimic_position_offset += duplicate_position
-					instance.to_mimic = node
-					node.get_parent().add_child.call_deferred(instance)
-
+		match node_class:
 			"Camera2D":
 				if camera_limits.is_empty():
 					node.limit_enabled = false
@@ -146,26 +134,46 @@ func _on_child_entered_tree(node: Node):
 			"Parallax2D":
 				node.add_to_group("Parallax")
 
-			"TileMapLayer":
-				for duplicate_position: Vector2 in duplicate_positions:
-					var instance: TileMapLayer = node.duplicate()
-					instance.add_to_group("Duplicate")
+		if node.has_meta("mimic_properties") or default_mimic_data.has(node_class):
+			var mimic_properties: Variant = node.get_meta("mimic_properties", [])
+
+			if mimic_properties is not Array:
+				mimic_properties = []
+
+			if mimic_properties.is_empty():
+				mimic_properties = default_mimic_data.get(node_class, [])
+
+			for property: Variant in mimic_properties:
+				if property is not String:
+					mimic_properties.erase(property)
+
+			var template: Node = node.duplicate(0)
+			template.add_to_group("Duplicate")
+
+			for child: Node in template.get_children():
+				remove_child(child)
+
+			if template is TileMapLayer:
+				var tile_set: TileSet = template.tile_set
+				template.collision_enabled = false
+
+				if tile_set:
+					for source_id: int in tile_set.get_source_count():
+						if template.tile_set.get_source(source_id) is TileSetScenesCollectionSource:
+							for cell: Vector2i in template.get_used_cells_by_id(source_id):
+								template.erase_cell(cell)
+
+			for duplicate_position: Vector2 in duplicate_positions:
+				var instance: Node = template.duplicate(2)
+				instance.global_position += duplicate_position
+
+				if not mimic_properties.is_empty():
 					instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-					instance.mimic_properties.append_array(["global_position", "visible", "z_index"])
-
-					for source_id: int in instance.tile_set.get_source_count():
-						if instance.tile_set.get_source(source_id) is TileSetScenesCollectionSource:
-							for cell: Vector2i in instance.get_used_cells_by_id(source_id):
-								instance.erase_cell(cell)
-
-					instance.collision_enabled = false
+					instance.mimic_properties.append_array(mimic_properties)
 					instance.mimic_position_offset += duplicate_position
 					instance.to_mimic = node
 
-					for child: Node in instance.get_children():
-						instance.remove_child(child)
-
-					node.get_parent().add_child.call_deferred(instance)
+				node.get_parent().add_child.call_deferred(instance)
 
 func _on_child_exiting_tree(node: Node):
 	if node.is_connected("child_entered_tree", _on_child_entered_tree):
