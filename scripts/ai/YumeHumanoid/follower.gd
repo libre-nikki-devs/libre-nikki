@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -24,12 +24,23 @@ extends YumeHumanoid
 ## Amount of time (in seconds) to wait before attempting to move.
 @export var wait_time: float = 2.0
 
+var wait_timer: float = randf_range(0.0, wait_time)
+
+signal waited
+
 func _ready() -> void:
 	_move_loop()
 
+func _physics_process(delta: float) -> void:
+	wait_timer += delta
+
+	if wait_timer >= wait_time:
+		wait_timer = 0.0
+		waited.emit()
+
 func _move_loop():
 	while true:
-		await get_tree().create_timer(wait_time, false, true).timeout
+		await waited
 
 		if follow and not is_busy:
 			var direction: DIRECTION = face(follow.global_position)
