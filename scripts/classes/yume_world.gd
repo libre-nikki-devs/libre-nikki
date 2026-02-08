@@ -134,6 +134,22 @@ func _on_child_entered_tree(node: Node):
 			"Parallax2D":
 				node.add_to_group("Parallax")
 
+			"TileMapLayer":
+				var tile_set: TileSet = node.tile_set
+
+				if tile_set:
+					for source_id: int in tile_set.get_source_count():
+						var source: TileSetSource = node.tile_set.get_source(source_id)
+
+						if source is TileSetScenesCollectionSource:
+							for cell: Vector2i in node.get_used_cells_by_id(source_id):
+								var alt_id: int = node.get_cell_alternative_tile(cell)
+								var instance: Node = source.get_scene_tile_scene(alt_id).instantiate()
+								instance.position = node.map_to_local(cell)
+								node.add_child.call_deferred(instance)
+								instance.set_owner.call_deferred(self)
+								node.erase_cell(cell)
+
 		if node.has_meta("mimic_properties") or default_mimic_data.has(node_class):
 			var mimic_properties: Variant = node.get_meta("mimic_properties", [])
 
@@ -151,17 +167,7 @@ func _on_child_entered_tree(node: Node):
 			template.add_to_group("Duplicate")
 
 			for child: Node in template.get_children():
-				remove_child(child)
-
-			if template is TileMapLayer:
-				var tile_set: TileSet = template.tile_set
-				template.collision_enabled = false
-
-				if tile_set:
-					for source_id: int in tile_set.get_source_count():
-						if template.tile_set.get_source(source_id) is TileSetScenesCollectionSource:
-							for cell: Vector2i in template.get_used_cells_by_id(source_id):
-								template.erase_cell(cell)
+				child.free()
 
 			for duplicate_position: Vector2 in duplicate_positions:
 				var instance: Node = template.duplicate(2)

@@ -41,17 +41,7 @@ func _on_child_entered_tree(node: Node):
 			instance.position = node.global_position
 
 			for child: Node in instance.get_children():
-				remove_child(child)
-
-			if instance is TileMapLayer:
-				var tile_set: TileSet = instance.tile_set
-				instance.collision_enabled = false
-
-				if tile_set:
-					for source_id: int in tile_set.get_source_count():
-						if instance.tile_set.get_source(source_id) is TileSetScenesCollectionSource:
-							for cell: Vector2i in instance.get_used_cells_by_id(source_id):
-								instance.erase_cell(cell)
+				child.free()
 
 			if not mimic_properties.is_empty():
 				instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
