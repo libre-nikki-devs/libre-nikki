@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://bcn3nvodg7gq5"]
+[gd_scene load_steps=15 format=4 uid="uid://bcn3nvodg7gq5"]
 
 [ext_resource type="Script" uid="uid://dv0k48ajxdkl4" path="res://scripts/maps/amber_corridors.gd" id="1_8u0t7"]
 [ext_resource type="TileSet" uid="uid://b1skvxc5ssinq" path="res://tilesets/amber_corridors.tres" id="2_h3nb6"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/characters/sakutsuki.tscn" id="3_8u0t7"]
 [ext_resource type="Script" uid="uid://cwerewsxa8758" path="res://scripts/props/door.gd" id="3_2464w"]
 [ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="4_arc2g"]
+[ext_resource type="Script" uid="uid://d1fy5qfo5j0he" path="res://scripts/classes/yume_world.gd" id="7_arc2g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_njbgn"]
 shader = ExtResource("2_hwbim")
@@ -147,8 +148,13 @@ snap_2d_transforms_to_pixel = true
 size = Vector2i(2704, 2256)
 render_target_update_mode = 4
 
-[node name="Duplicates" type="Node2D" parent="SubViewport"]
+[node name="ParallaxWorld" type="Node2D" parent="SubViewport"]
 y_sort_enabled = true
+script = ExtResource("7_arc2g")
+pretty_name = "Parallax World"
+bounds = Rect2(0, 0, 2704, 2256)
+loop = "All Sides"
+metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 
 [connection signal="opened" from="NexusDoor" to="." method="_on_nexus_door_opened"]
 [connection signal="opened" from="SnowflakeDoor" to="." method="_on_snowflake_door_opened"]
