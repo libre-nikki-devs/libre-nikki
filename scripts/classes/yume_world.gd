@@ -150,6 +150,9 @@ func _on_child_entered_tree(node: Node):
 								instance.set_owner.call_deferred(self)
 								node.erase_cell(cell)
 
+		if loop == "None":
+			return
+
 		if not node.has_meta("mimic_properties") and not default_mimic_data.has(node_class):
 			return
 

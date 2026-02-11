@@ -21,6 +21,9 @@ func _ready() -> void:
 func _on_child_entered_tree(node: Node):
 	super(node)
 
+	if loop == "None":
+		return
+
 	if not node.is_in_group("Duplicate"):
 		var node_class: String = node.get_class()
 
