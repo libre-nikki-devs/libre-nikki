@@ -150,36 +150,38 @@ func _on_child_entered_tree(node: Node):
 								instance.set_owner.call_deferred(self)
 								node.erase_cell(cell)
 
-		if node.has_meta("mimic_properties") or default_mimic_data.has(node_class):
-			var mimic_properties: Variant = node.get_meta("mimic_properties", [])
+		if not node.has_meta("mimic_properties") and not default_mimic_data.has(node_class):
+			return
 
-			if mimic_properties is not Array:
-				mimic_properties = []
+		var mimic_properties: Variant = node.get_meta("mimic_properties", [])
 
-			if mimic_properties.is_empty():
-				mimic_properties = default_mimic_data.get(node_class, [])
+		if mimic_properties is not Array:
+			mimic_properties = []
 
-			for property: Variant in mimic_properties:
-				if property is not String:
-					mimic_properties.erase(property)
+		if mimic_properties.is_empty():
+			mimic_properties = default_mimic_data.get(node_class, [])
 
-			var template: Node = node.duplicate(0)
-			template.add_to_group("Duplicate")
+		for property: Variant in mimic_properties:
+			if property is not String:
+				mimic_properties.erase(property)
 
-			for child: Node in template.get_children():
-				child.free()
+		var template: Node = node.duplicate(0)
+		template.add_to_group("Duplicate")
 
-			for duplicate_position: Vector2 in duplicate_positions:
-				var instance: Node = template.duplicate(2)
-				instance.global_position += duplicate_position
+		for child: Node in template.get_children():
+			child.free()
 
-				if not mimic_properties.is_empty():
-					instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-					instance.mimic_properties.append_array(mimic_properties)
-					instance.mimic_position_offset += duplicate_position
-					instance.to_mimic = node
+		for duplicate_position: Vector2 in duplicate_positions:
+			var instance: Node = template.duplicate(2)
+			instance.global_position += duplicate_position
 
-				node.get_parent().add_child.call_deferred(instance)
+			if not mimic_properties.is_empty():
+				instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
+				instance.mimic_properties.append_array(mimic_properties)
+				instance.mimic_position_offset += duplicate_position
+				instance.to_mimic = node
+
+			node.get_parent().add_child.call_deferred(instance)
 
 func _on_child_exiting_tree(node: Node):
 	if node.is_connected("child_entered_tree", _on_child_entered_tree):
