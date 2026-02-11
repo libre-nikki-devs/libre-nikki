@@ -138,8 +138,9 @@ func _on_child_entered_tree(node: Node):
 				var tile_set: TileSet = node.tile_set
 
 				if tile_set:
-					for source_id: int in tile_set.get_source_count():
-						var source: TileSetSource = node.tile_set.get_source(source_id)
+					for index: int in tile_set.get_source_count():
+						var source_id: int = tile_set.get_source_id(index)
+						var source: TileSetSource = tile_set.get_source(source_id)
 
 						if source is TileSetScenesCollectionSource:
 							for cell: Vector2i in node.get_used_cells_by_id(source_id):
@@ -148,7 +149,8 @@ func _on_child_entered_tree(node: Node):
 								instance.position = node.map_to_local(cell)
 								node.add_child.call_deferred(instance)
 								instance.set_owner.call_deferred(self)
-								node.erase_cell(cell)
+
+							tile_set.remove_source(source_id)
 
 		if loop == "None":
 			return
