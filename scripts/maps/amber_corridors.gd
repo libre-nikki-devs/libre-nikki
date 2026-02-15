@@ -2,7 +2,7 @@ extends YumeWorld
 
 @onready var player: YumePlayer = get_node("Sakutsuki")
 
-@onready var duplicates: Node2D = get_node("SubViewport/Duplicates")
+@onready var parallax_world := $SubViewport/ParallaxWorld
 
 func _init() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
@@ -21,24 +21,39 @@ func _ready() -> void:
 func _on_child_entered_tree(node: Node):
 	super(node)
 
-	if not node.is_in_group("Duplicate") and not node.is_in_group("SubViewport"):
-		match node.get_class():
-			"AnimatedSprite2D":
-				var instance: AnimatedSprite2D = node.duplicate()
-				instance.add_to_group("SubViewport")
-				instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-				instance.mimic_properties.append_array(["animation", "frame", "global_position", "sprite_frames", "visible", "z_index"])
-				instance.to_mimic = node
-				duplicates.add_child.call_deferred(instance)
+	if loop == "None":
+		return
 
-			"TileMapLayer":
-				var instance: TileMapLayer = node.duplicate()
-				instance.add_to_group("SubViewport")
-				instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-				instance.mimic_properties.append_array(["global_position", "visible", "z_index"])
-				instance.collision_enabled = false
-				instance.to_mimic = node
-				duplicates.add_child.call_deferred(instance)
+	if not node.is_in_group("Duplicate"):
+		var node_class: String = node.get_class()
+
+		if not node.has_meta("mimic_properties") and not default_mimic_data.has(node_class):
+			return
+
+		var mimic_properties: Variant = node.get_meta("mimic_properties", [])
+
+		if mimic_properties is not Array:
+			mimic_properties = []
+
+		if mimic_properties.is_empty():
+			mimic_properties = default_mimic_data.get(node_class, [])
+
+		for property: Variant in mimic_properties:
+			if property is not String:
+				mimic_properties.erase(property)
+
+		var instance: Node = node.duplicate(0)
+		instance.position = node.global_position
+
+		for child: Node in instance.get_children():
+			child.free()
+
+		if not mimic_properties.is_empty():
+			instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
+			instance.mimic_properties.append_array(mimic_properties)
+			instance.to_mimic = node
+
+		parallax_world.add_child.call_deferred(instance)
 
 func _on_nexus_door_opened() -> void:
 	Game.transition_handler.play("fade_out")
