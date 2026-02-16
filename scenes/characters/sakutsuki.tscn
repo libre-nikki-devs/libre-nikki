@@ -1,6 +1,7 @@
-[gd_scene load_steps=55 format=3 uid="uid://8wulc2ysaubr"]
+[gd_scene load_steps=56 format=3 uid="uid://8wulc2ysaubr"]
 
 [ext_resource type="Script" uid="uid://bwl57hfy2vtfs" path="res://scripts/characters/sakutsuki.gd" id="1_5uo7l"]
+[ext_resource type="Script" uid="uid://ca1j8ttrmv1bp" path="res://scripts/classes/yume_camera.gd" id="3_hvtgg"]
 [ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="3_l5dwh"]
 
 [sub_resource type="Animation" id="Animation_ptolu"]
@@ -1683,10 +1684,11 @@ libraries = {
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
 current = true
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_3qhyl")
+
+[node name="YumeCamera" type="Camera2D" parent="."]
 offset = Vector2(8, 0)
 zoom = Vector2(2, 2)
 limit_enabled = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_3qhyl")
+script = ExtResource("3_hvtgg")
