@@ -66,6 +66,9 @@ static var collisions_last_checked: int = 0
 ## Emitted when the character has moved.
 signal moved
 
+## Emitted when the character has been wrapped around [member current_world].
+signal wrapped(previous_position: Vector2)
+
 func _init() -> void:
 	collision_detector.name = "CollisionDetector"
 	collision_detector.enabled = false
@@ -216,12 +219,12 @@ func move(direction: DIRECTION) -> void:
 		current_collisions.append(collision_shape)
 
 	if current_world:
-		var previous_position: Vector2 = global_position
-		global_position = current_world.wrap_around_world(global_position + target_position) - target_position
+		var wrapped_position: Vector2 = current_world.wrap_around_world(global_position + target_position) - target_position
 
-		if self == get_viewport().get_camera_2d().get_parent():
-			for parallax: Parallax2D in get_tree().get_nodes_in_group("Parallax"):
-				parallax.scroll_offset -= previous_position - global_position
+		if global_position != wrapped_position:
+			var previous_position: Vector2 = global_position
+			global_position = wrapped_position
+			wrapped.emit(previous_position)
 
 	is_busy = true
 	is_moving = true

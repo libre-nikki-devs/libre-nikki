@@ -75,6 +75,8 @@ var duplicate_positions: Array[Vector2] = []
 ## the limit is reached.
 var camera_limits: Array[int] = []
 
+var parallaxes: Array[Parallax2D] = []
+
 func _recursive_call(node: Node, method: Callable):
 	for child: Node in node.get_children():
 		if child is not YumeWorld:
@@ -132,7 +134,7 @@ func _on_child_entered_tree(node: Node):
 					node.limit_right = floor(camera_limits[3] - node.offset.x)
 
 			"Parallax2D":
-				node.add_to_group("Parallax")
+				parallaxes.append(node)
 
 			"TileMapLayer":
 				var tile_set: TileSet = node.tile_set
@@ -197,6 +199,10 @@ func _on_child_exiting_tree(node: Node):
 
 	if node.is_in_group("Duplicate"):
 		node.queue_free()
+
+	if node is Parallax2D:
+		if parallaxes.has(node):
+			parallaxes.erase(node)
 
 func wrap_around_world(value: Vector2) -> Vector2:
 	if bounds.has_area():
