@@ -39,7 +39,7 @@ const DIRECTIONS: Dictionary[DIRECTION, Vector2] = {
 @export_group("Movement")
 
 ## Character's movement speed.
-@export_range(0, 10, 0.5) var speed: float = 1.0
+@export_range(0, 10) var speed: float = 1.0
 
 ## If true, the character is able to move if there are no surfaces below.
 @export var can_move_in_vacuum: bool = true
