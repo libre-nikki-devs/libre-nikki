@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Libre Nikki"
 config/description="Collaborative, free and open-source Yume Nikki fan game running on Godot Engine."
-config/version="0.0.3"
+config/version="0.0.4"
 run/main_scene="res://scenes/ui/main_menu.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="libre_nikki"
