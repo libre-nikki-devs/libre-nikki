@@ -122,6 +122,17 @@ func _input(event: InputEvent) -> void:
 		else:
 			open_menu()
 
+	if event.is_action_pressed("mapshot") and OS.is_debug_build() and current_world:
+		var mapshot: Image = await Game.take_mapshot(current_world)
+
+		if not mapshot:
+			return
+
+		if not DirAccess.dir_exists_absolute(Game.MAPSHOTS_DIRECTORY):
+			DirAccess.make_dir_absolute(Game.MAPSHOTS_DIRECTORY)
+
+		mapshot.save_png(Game.MAPSHOTS_DIRECTORY.path_join(Game.get_timestamp() + ".png"))
+
 func _move() -> void:
 	super()
 

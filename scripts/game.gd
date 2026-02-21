@@ -23,6 +23,8 @@ enum SCENE_STATES { DEFAULT = 0, PACKED = 1, FROM_FILE = 2 }
 
 const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 
+const MAPSHOTS_DIRECTORY: String = "user://mapshots"
+
 @onready var mouse_timer: Timer = get_node("MouseTimer")
 
 @onready var music_player: AudioStreamPlayer = get_node("MusicPlayer")
@@ -63,9 +65,7 @@ func _input(event: InputEvent) -> void:
 			if not DirAccess.dir_exists_absolute(SCREENSHOTS_DIRECTORY):
 				DirAccess.make_dir_absolute(SCREENSHOTS_DIRECTORY)
 
-			var date: Dictionary = Time.get_datetime_dict_from_system()
-			var process_frames: int = Engine.get_process_frames()
-			screenshot.save_png(SCREENSHOTS_DIRECTORY.path_join(str("%d%02d%02d_%02d%02d%02d_%d.png" % [date.year, date.month, date.day, date.hour, date.minute, date.second, process_frames])))
+			screenshot.save_png(SCREENSHOTS_DIRECTORY.path_join(get_timestamp() + ".png"))
 
 func _on_scene_changed() -> void:
 	var current_scene: Node = get_tree().current_scene
@@ -212,6 +212,52 @@ func take_screenshot() -> Image:
 
 	return null
 
+func take_mapshot(map: YumeWorld) -> Image:
+	if not map.bounds.has_area():
+		return null
+
+	var viewport: Viewport = get_viewport()
+
+	if not viewport:
+		return null
+
+	var camera := Camera2D.new()
+	var scene_tree: SceneTree = get_tree()
+	var scene_tree_paused: bool = scene_tree.paused
+	camera.anchor_mode = Camera2D.ANCHOR_MODE_FIXED_TOP_LEFT
+	camera.position = map.bounds.position
+	map.add_child(camera)
+	camera.make_current()
+
+	if not scene_tree_paused:
+		scene_tree.paused = true
+
+	hide()
+	await RenderingServer.frame_post_draw
+	var image := Image.create_empty(int(map.bounds.size.x), int(map.bounds.size.y), false, Image.FORMAT_RGBA8)
+	var segment_size := Vector2i(ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height"))
+
+	while camera.position.y < map.bounds.size.y:
+		while camera.position.x < map.bounds.size.x:
+			await RenderingServer.frame_post_draw
+			var segment: Image = viewport.get_texture().get_image()
+
+			if segment:
+				image.blit_rect(segment, Rect2(Vector2.ZERO, segment_size), camera.position - map.bounds.position)
+
+			camera.position.x += segment_size.x
+
+		camera.position.x = map.bounds.position.x
+		camera.position.y += segment_size.y
+
+	show()
+	camera.free()
+
+	if not scene_tree_paused:
+		scene_tree.paused = false
+
+	return image
+
 func open_menu(menu_path: String, menu_property_list: Dictionary = {}) -> void:
 	var menu: YumeMenu = load(menu_path).instantiate()
 	var scene_tree: SceneTree = get_tree()
@@ -256,6 +302,11 @@ func wake_up() -> void:
 		if tween.is_running():
 			await tween.finished
 			music_player.stop()
+
+func get_timestamp() -> String:
+	var date: Dictionary = Time.get_datetime_dict_from_system()
+
+	return str("%d%02d%02d_%02d%02d%02d_%d" % [date.year, date.month, date.day, date.hour, date.minute, date.second, Engine.get_frames_drawn()])
 
 func _on_mouse_timer_timeout() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
