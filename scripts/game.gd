@@ -237,13 +237,13 @@ func take_mapshot(map: YumeWorld) -> Image:
 	var image := Image.create_empty(int(map.bounds.size.x), int(map.bounds.size.y), false, Image.FORMAT_RGBA8)
 	var segment_size := Vector2i(ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height"))
 
-	while camera.position.y < map.bounds.size.y:
-		while camera.position.x < map.bounds.size.x:
+	while (camera.position.y - map.bounds.position.y) < map.bounds.size.y:
+		while (camera.position.x - map.bounds.position.x) < map.bounds.size.x:
 			await RenderingServer.frame_post_draw
 			var segment: Image = viewport.get_texture().get_image()
 
 			if segment:
-				image.blit_rect(segment, Rect2(Vector2.ZERO, segment_size), camera.position - map.bounds.position)
+				image.blit_rect(segment, Rect2i(Vector2.ZERO, segment_size), camera.position - map.bounds.position)
 
 			camera.position.x += segment_size.x
 
