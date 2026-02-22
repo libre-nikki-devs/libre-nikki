@@ -51,7 +51,6 @@ func _ready() -> void:
 	_on_scene_changed()
 	get_tree().connect("scene_changed", _on_scene_changed)
 	get_window().min_size = Vector2i(640, 480)
-	_count_playtime()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
@@ -96,15 +95,6 @@ func _on_scene_changed() -> void:
 
 	persistent_data["scene_visits"][scene_path] = persistent_data["scene_visits"].get(scene_path, 0) + 1
 	emit_scene_changed.call()
-
-func _count_playtime() -> void:
-	while true:
-		await get_tree().create_timer(1.0, false, true).timeout
-
-		if persistent_data.has("playtime"):
-			persistent_data["playtime"] += 1
-		else:
-			persistent_data["playtime"] = 0
 
 func change_scene(path: String) -> void:
 	if not is_current_scene_loaded_from_file:
@@ -312,3 +302,6 @@ func _on_mouse_timer_timeout() -> void:
 
 func _on_menu_tree_exited() -> void:
 	get_tree().paused = false
+
+func _on_playtime_timer_timeout() -> void:
+	persistent_data["playtime"] = persistent_data.get("playtime", 0) + 1

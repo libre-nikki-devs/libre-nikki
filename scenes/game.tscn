@@ -257,6 +257,11 @@ volume_db = -40.0
 max_polyphony = 2
 bus = &"Music"
 
+[node name="PlaytimeTimer" type="Timer" parent="."]
+process_mode = 1
+process_callback = 0
+autostart = true
+
 [node name="TransitionHandler" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_yqjtg")
@@ -273,3 +278,4 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [connection signal="timeout" from="MouseTimer" to="." method="_on_mouse_timer_timeout"]
+[connection signal="timeout" from="PlaytimeTimer" to="." method="_on_playtime_timer_timeout"]
