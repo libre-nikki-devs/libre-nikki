@@ -180,7 +180,7 @@ func move(direction: DIRECTION) -> void:
 
 	if ground:
 		if ground is YumeInteractable:
-			ground.emit_signal("body_stepped_on", self)
+			ground.emit_signal.call_deferred("body_stepped_on", self)
 
 	elif not can_move_in_vacuum:
 		return
