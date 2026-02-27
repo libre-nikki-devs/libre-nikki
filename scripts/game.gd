@@ -213,14 +213,14 @@ func take_mapshot(map: YumeWorld) -> Image:
 
 	var camera := Camera2D.new()
 	var scene_tree: SceneTree = get_tree()
-	var scene_tree_paused: bool = scene_tree.paused
 	camera.anchor_mode = Camera2D.ANCHOR_MODE_FIXED_TOP_LEFT
 	camera.position = map.bounds.position
 	map.add_child(camera)
 	camera.make_current()
 
-	if not scene_tree_paused:
+	if not scene_tree.paused:
 		scene_tree.paused = true
+		camera.connect("tree_exited", _unpause_tree)
 
 	hide()
 	await RenderingServer.frame_post_draw
@@ -242,10 +242,6 @@ func take_mapshot(map: YumeWorld) -> Image:
 
 	show()
 	camera.free()
-
-	if not scene_tree_paused:
-		scene_tree.paused = false
-
 	return image
 
 func open_menu(menu_path: String, menu_property_list: Dictionary = {}) -> void:
@@ -254,7 +250,7 @@ func open_menu(menu_path: String, menu_property_list: Dictionary = {}) -> void:
 
 	if not scene_tree.paused:
 		scene_tree.paused = true
-		menu.connect("tree_exited", _on_menu_tree_exited)
+		menu.connect("tree_exited", _unpause_tree)
 
 	await menu._pre_open()
 
@@ -300,8 +296,8 @@ func get_timestamp() -> String:
 func _on_mouse_timer_timeout() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
-func _on_menu_tree_exited() -> void:
-	get_tree().paused = false
-
 func _on_playtime_timer_timeout() -> void:
 	persistent_data["playtime"] = persistent_data.get("playtime", 0) + 1
+
+func _unpause_tree() -> void:
+	get_tree().paused = false
