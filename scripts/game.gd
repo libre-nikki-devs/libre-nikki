@@ -220,7 +220,7 @@ func take_mapshot(map: YumeWorld) -> Image:
 
 	if not scene_tree.paused:
 		scene_tree.paused = true
-		camera.connect("tree_exited", _unpause_tree)
+		camera.connect("tree_exited", scene_tree.set_pause.bind(false))
 
 	hide()
 	await RenderingServer.frame_post_draw
@@ -250,7 +250,7 @@ func open_menu(menu_path: String, menu_property_list: Dictionary = {}) -> void:
 
 	if not scene_tree.paused:
 		scene_tree.paused = true
-		menu.connect("tree_exited", _unpause_tree)
+		menu.connect("tree_exited", scene_tree.set_pause.bind(false))
 
 	await menu._pre_open()
 
@@ -298,6 +298,3 @@ func _on_mouse_timer_timeout() -> void:
 
 func _on_playtime_timer_timeout() -> void:
 	persistent_data["playtime"] = persistent_data.get("playtime", 0) + 1
-
-func _unpause_tree() -> void:
-	get_tree().paused = false
