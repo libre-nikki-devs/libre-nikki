@@ -176,15 +176,6 @@ func move(direction: DIRECTION) -> void:
 
 		return
 
-	var ground: Object = surface_detector.get_collider()
-
-	if ground:
-		if ground is YumeInteractable:
-			ground.emit_signal.call_deferred("body_stepped_on", self)
-
-	elif not can_move_in_vacuum:
-		return
-
 	var collision_shapes: Array[CollisionShape2D]
 
 	for shape_owner: int in get_shape_owners():
@@ -214,6 +205,15 @@ func move(direction: DIRECTION) -> void:
 	else:
 		current_collisions.clear()
 		collisions_last_checked = physics_frames
+
+	var ground: Object = surface_detector.get_collider()
+
+	if ground:
+		if ground is YumeInteractable:
+			ground.emit_signal.call_deferred("body_stepped_on", self)
+
+	elif not can_move_in_vacuum:
+		return
 
 	for collision_shape: CollisionShape2D in collision_shapes:
 		current_collisions.append(collision_shape)
