@@ -79,9 +79,8 @@ var parallaxes: Array[Parallax2D] = []
 
 func _recursive_call(node: Node, method: Callable):
 	for child: Node in node.get_children():
-		if child is not YumeWorld:
-			method.call(child)
-			_recursive_call(child, method)
+		method.call(child)
+		_recursive_call(child, method)
 
 func _update_duplicate_positions() -> void:
 	if bounds.has_area():
@@ -117,101 +116,99 @@ func _update_duplicate_positions() -> void:
 		camera_limits = []
 		duplicate_positions = []
 
-func _notification(what: int) -> void:
-	match what:
-		NOTIFICATION_READY:
-			connect("child_entered_tree", _on_child_entered_tree)
-			connect("child_exiting_tree", _on_child_exiting_tree)
-
-			if loop == "None":
-				loop = loop
-
-			_recursive_call(self, _on_child_entered_tree)
+func _init() -> void:
+	child_entered_tree.connect(_on_child_entered_tree)
+	child_exiting_tree.connect(_on_child_exiting_tree)
 
 func _on_child_entered_tree(node: Node):
-	if not node.is_connected("child_entered_tree", _on_child_entered_tree):
-		node.connect("child_entered_tree", _on_child_entered_tree)
+	if node is YumeWorld:
+		return
 
-	if not node.is_connected("child_exiting_tree", _on_child_exiting_tree):
-		node.connect("child_exiting_tree", _on_child_exiting_tree)
+	if not node.child_entered_tree.is_connected(_on_child_entered_tree):
+		node.child_entered_tree.connect(_on_child_entered_tree)
 
-	if not node.is_in_group("Duplicate"):
-		var node_class: String = node.get_class()
+	if not node.child_exiting_tree.is_connected(_on_child_exiting_tree):
+		node.child_exiting_tree.connect(_on_child_exiting_tree)
 
-		match node_class:
-			"Camera2D":
-				if camera_limits.is_empty():
-					node.limit_enabled = false
-				else:
-					node.limit_enabled = true
-					node.limit_left = floor(camera_limits[0] - node.offset.x)
-					node.limit_bottom = floor(camera_limits[1] - node.offset.y)
-					node.limit_top = floor(camera_limits[2] - node.offset.y)
-					node.limit_right = floor(camera_limits[3] - node.offset.x)
+	if node.is_in_group("Duplicate"):
+		return
 
-			"Parallax2D":
-				parallaxes.append(node)
+	var node_class: String = node.get_class()
 
-			"TileMapLayer":
-				var tile_set: TileSet = node.tile_set
+	match node_class:
+		"Camera2D":
+			if camera_limits.is_empty():
+				node.limit_enabled = false
+			else:
+				node.limit_enabled = true
+				node.limit_left = floor(camera_limits[0] - node.offset.x)
+				node.limit_bottom = floor(camera_limits[1] - node.offset.y)
+				node.limit_top = floor(camera_limits[2] - node.offset.y)
+				node.limit_right = floor(camera_limits[3] - node.offset.x)
 
-				if tile_set:
-					for index: int in tile_set.get_source_count():
-						var source_id: int = tile_set.get_source_id(index)
-						var source: TileSetSource = tile_set.get_source(source_id)
+		"Parallax2D":
+			parallaxes.append(node)
 
-						if source is TileSetScenesCollectionSource:
-							for cell: Vector2i in node.get_used_cells_by_id(source_id):
-								var alt_id: int = node.get_cell_alternative_tile(cell)
-								var instance: Node = source.get_scene_tile_scene(alt_id).instantiate()
-								instance.position = node.map_to_local(cell)
-								node.add_child.call_deferred(instance)
-								instance.set_owner.call_deferred(self)
+		"TileMapLayer":
+			var tile_set: TileSet = node.tile_set
 
-							tile_set.remove_source(source_id)
+			if tile_set:
+				for index: int in tile_set.get_source_count():
+					var source_id: int = tile_set.get_source_id(index)
+					var source: TileSetSource = tile_set.get_source(source_id)
 
-		if loop == "None":
-			return
+					if source is TileSetScenesCollectionSource:
+						for cell: Vector2i in node.get_used_cells_by_id(source_id):
+							var alt_id: int = node.get_cell_alternative_tile(cell)
+							var instance: Node = source.get_scene_tile_scene(alt_id).instantiate()
+							instance.position = node.map_to_local(cell)
+							node.add_child.call_deferred(instance)
+							instance.set_owner.call_deferred(self)
 
-		if not node.has_meta("mimic_properties") and not default_mimic_data.has(node_class):
-			return
+						tile_set.remove_source(source_id)
 
-		var mimic_properties: Variant = node.get_meta("mimic_properties", [])
+	if loop == "None":
+		return
 
-		if mimic_properties is not Array:
-			mimic_properties = []
+	if not node.has_meta("mimic_properties") and not default_mimic_data.has(node_class):
+		return
 
-		if mimic_properties.is_empty():
-			mimic_properties = default_mimic_data.get(node_class, [])
+	var mimic_properties: Variant = node.get_meta("mimic_properties", [])
 
-		for property: Variant in mimic_properties:
-			if property is not String:
-				mimic_properties.erase(property)
+	if mimic_properties is not Array:
+		mimic_properties = []
 
-		var template: Node = node.duplicate(0)
-		template.add_to_group("Duplicate")
+	if mimic_properties.is_empty():
+		mimic_properties = default_mimic_data.get(node_class, [])
 
-		for child: Node in template.get_children():
-			child.free()
+	for property: Variant in mimic_properties:
+		if property is not String:
+			mimic_properties.erase(property)
 
-		for duplicate_position: Vector2 in duplicate_positions:
-			var instance: Node = template.duplicate(2)
-			instance.global_position += duplicate_position
+	var template: Node = node.duplicate(0)
+	template.add_to_group("Duplicate")
 
-			if not mimic_properties.is_empty():
-				instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-				instance.mimic_properties.append_array(mimic_properties)
-				instance.mimic_position_offset += duplicate_position
-				instance.to_mimic = node
+	for child: Node in template.get_children():
+		child.free()
 
-			node.get_parent().add_child.call_deferred(instance)
+	for duplicate_position: Vector2 in duplicate_positions:
+		var instance: Node = template.duplicate(2)
+		instance.global_position += duplicate_position
+
+		if not mimic_properties.is_empty():
+			instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
+			instance.mimic_properties.append_array(mimic_properties)
+			instance.mimic_position_offset += duplicate_position
+			instance.to_mimic = node
+
+		node.get_parent().add_child.call_deferred(instance)
 
 func _on_child_exiting_tree(node: Node):
-	if node.is_connected("child_entered_tree", _on_child_entered_tree):
-		node.disconnect("child_entered_tree", _on_child_entered_tree)
+	if node.child_entered_tree.is_connected(_on_child_entered_tree):
+		node.child_entered_tree.disconnect(_on_child_entered_tree)
 
-	if node.is_connected("child_exiting_tree", _on_child_exiting_tree):
-		node.disconnect("child_exiting_tree", _on_child_exiting_tree)
+	if node.child_exiting_tree.is_connected(_on_child_exiting_tree):
+		node.child_exiting_tree.disconnect(_on_child_exiting_tree)
 
 	if node.is_in_group("Duplicate"):
 		node.queue_free()

@@ -1,6 +1,7 @@
 extends YumeWorld
 
 func _init() -> void:
+	super()
 	process_mode = Node.PROCESS_MODE_DISABLED
 
 func _ready() -> void:

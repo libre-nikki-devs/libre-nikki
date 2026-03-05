@@ -3,6 +3,7 @@ extends YumeWorld
 @onready var player: YumePlayer = get_node("Sakutsuki")
 
 func _init() -> void:
+	super()
 	process_mode = Node.PROCESS_MODE_DISABLED
 
 func _ready() -> void:
