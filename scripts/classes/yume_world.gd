@@ -84,22 +84,38 @@ func _recursive_call(node: Node, method: Callable):
 			_recursive_call(child, method)
 
 func _update_duplicate_positions() -> void:
-	match loop:
-		"All Sides":
-			camera_limits = []
-			duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y), Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0), Vector2(bounds.size.x, bounds.size.y), Vector2(bounds.size.x, -bounds.size.y), Vector2(-bounds.size.x, bounds.size.y), Vector2(-bounds.size.x, -bounds.size.y)]
+	if bounds.has_area():
+		match loop:
+			"All Sides":
+				camera_limits = []
+				duplicate_positions = [Vector2(0.0, bounds.size.y),
+						Vector2(0.0, -bounds.size.y),
+						Vector2(bounds.size.x, 0.0),
+						Vector2(-bounds.size.x, 0.0),
+						Vector2(bounds.size.x, bounds.size.y),
+						Vector2(bounds.size.x, -bounds.size.y),
+						Vector2(-bounds.size.x, bounds.size.y),
+						Vector2(-bounds.size.x, -bounds.size.y)]
 
-		"Horizontally":
-			camera_limits = [-10000000, bounds.end.y, bounds.position.y, 10000000]
-			duplicate_positions = [Vector2(bounds.size.x, 0), Vector2(-bounds.size.x, 0)]
+			"Horizontally":
+				camera_limits = [-10000000, bounds.end.y,
+						bounds.position.y, 10000000]
+				duplicate_positions = [Vector2(bounds.size.x, 0.0),
+						Vector2(-bounds.size.x, 0.0)]
 
-		"Vertically":
-			camera_limits = [bounds.position.x, 10000000, -10000000, bounds.end.x]
-			duplicate_positions = [Vector2(0, bounds.size.y), Vector2(0, -bounds.size.y)]
+			"Vertically":
+				camera_limits = [bounds.position.x, 10000000,
+						-10000000, bounds.end.x]
+				duplicate_positions = [Vector2(0.0, bounds.size.y),
+						Vector2(0.0, -bounds.size.y)]
 
-		"None":
-			camera_limits = [bounds.position.x, bounds.end.y, bounds.position.y, bounds.end.x]
-			duplicate_positions = []
+			"None":
+				camera_limits = [bounds.position.x, bounds.end.y,
+						bounds.position.y, bounds.end.x]
+				duplicate_positions = []
+	else:
+		camera_limits = []
+		duplicate_positions = []
 
 func _notification(what: int) -> void:
 	match what:
