@@ -202,7 +202,7 @@ func _on_child_entered_tree(node: Node):
 			instance.mimic_position_offset += duplicate_position
 			instance.to_mimic = node
 
-		node.get_parent().add_child.call_deferred(instance)
+		node.add_sibling.call_deferred(instance)
 
 func _on_child_exiting_tree(node: Node):
 	if node.child_entered_tree.is_connected(_on_child_entered_tree):
