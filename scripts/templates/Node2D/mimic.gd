@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -22,8 +22,6 @@ var mimic_properties: Array[String] = []
 
 var mimic_position_offset: Vector2 = Vector2.ZERO
 
-var mimic_collision_mask_bit_offset: int = 0
-
 var to_mimic: Node2D
 
 func _ready() -> void:
@@ -37,9 +35,6 @@ func mimic() -> void:
 		for property: String in mimic_properties:
 			if property in self:
 				match property:
-					"collision_mask":
-						set(property, to_mimic.get(property) >> mimic_collision_mask_bit_offset)
-
 					"global_position", "position":
 						set(property, to_mimic.get(property) + mimic_position_offset)
 

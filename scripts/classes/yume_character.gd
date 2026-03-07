@@ -74,17 +74,10 @@ func _init() -> void:
 	collision_detector.enabled = false
 	collision_detector.light_mask = 0
 	collision_detector.visibility_layer = 0
-	collision_detector.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-	collision_detector.mimic_properties.append("collision_mask")
-	collision_detector.to_mimic = self
 	surface_detector.name = "SurfaceDetector"
 	surface_detector.enabled = false
 	surface_detector.light_mask = 0
 	surface_detector.visibility_layer = 0
-	surface_detector.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-	surface_detector.mimic_properties.append("collision_mask")
-	surface_detector.mimic_collision_mask_bit_offset = 1
-	surface_detector.to_mimic = self
 	add_child(collision_detector)
 	add_child(surface_detector)
 
@@ -109,6 +102,9 @@ func _move() -> void:
 	pass
 
 func _update_detectors(direction: DIRECTION) -> void:
+	collision_detector.collision_mask = collision_mask
+	surface_detector.collision_mask = collision_mask >> 1
+
 	if current_world:
 		target_position = DIRECTIONS[direction] * current_world.tile_size
 		collision_detector.global_position = current_world.wrap_around_world(global_position + target_position) - target_position
