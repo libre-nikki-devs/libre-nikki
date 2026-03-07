@@ -79,8 +79,9 @@ var parallaxes: Array[Parallax2D] = []
 
 func _recursive_call(node: Node, method: Callable):
 	for child: Node in node.get_children():
-		method.call(child)
-		_recursive_call(child, method)
+		if child is not YumeWorld:
+			method.call(child)
+			_recursive_call(child, method)
 
 func _update_duplicate_positions() -> void:
 	if bounds.has_area():
