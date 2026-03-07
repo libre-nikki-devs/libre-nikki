@@ -159,10 +159,9 @@ func interact() -> void:
 			_update_detectors.call_deferred(facing)
 			var collider: Object = collision_detector.get_collider()
 
-			if collider:
-				if collider is YumeInteractable:
-					collider.emit_signal("body_interacted", self)
-					collider.emit_signal("body_touched", self)
+			if collider is YumeInteractable:
+				collider.body_interacted.emit(self)
+				collider.body_touched.emit(self)
 	else:
 		if accept_events.front().get_argument_count() > 0:
 			accept_events.front().call(self)

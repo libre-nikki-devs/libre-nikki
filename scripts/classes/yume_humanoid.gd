@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -56,18 +56,17 @@ func _move() -> void:
 	else:
 		footstep_sound = load("res://sounds/あるく1.wav") # placeholder
 
-	if ground:
-		if ground is TileMapLayer:
-			var current_tile = ground.local_to_map(surface_detector.global_position + surface_detector.target_position)
+	if ground is TileMapLayer:
+		var current_tile = ground.local_to_map(surface_detector.global_position + surface_detector.target_position)
 
-			if current_world:
-				current_tile = ground.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
+		if current_world:
+			current_tile = ground.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
 
-			var tile_data = ground.get_cell_tile_data(current_tile)
-			footstep_sound = get_tile_footstep_sound(tile_data)
+		var tile_data = ground.get_cell_tile_data(current_tile)
+		footstep_sound = get_tile_footstep_sound(tile_data)
 
-		elif ground is YumeInteractable:
-			footstep_sound = get_footstep_sound(ground.surface)
+	elif ground is YumeInteractable:
+		footstep_sound = get_footstep_sound(ground.surface)
 
 	if last_step:
 		set_animation(str(DIRECTION.find_key(facing)).to_lower() + action, speed, 0.125)

@@ -119,40 +119,39 @@ func _update_detectors(direction: DIRECTION) -> void:
 	surface_detector.force_raycast_update()
 	var ground: Object = surface_detector.get_collider()
 
-	if ground and can_use_stairs:
-		if ground is TileMapLayer:
-			var current_tile: Vector2i = ground.local_to_map(global_position + target_position)
+	if ground is TileMapLayer and can_use_stairs:
+		var current_tile: Vector2i = ground.local_to_map(global_position + target_position)
 
-			if current_world:
-				current_tile = ground.local_to_map(current_world.wrap_around_world(global_position + target_position))
+		if current_world:
+			current_tile = ground.local_to_map(current_world.wrap_around_world(global_position + target_position))
 
-			var tile_data: TileData = ground.get_cell_tile_data(current_tile)
+		var tile_data: TileData = ground.get_cell_tile_data(current_tile)
 
-			if tile_data:
-				if tile_data.has_custom_data("stair"):
-					match tile_data.get_custom_data("stair"):
-						# \-shaped stairs; horizontal movement.
-						1, 5 when direction & HORIZONTAL:
-							target_position += Vector2(0.0, target_position.x)
-							_update_detector_positions(Vector2(0.0, target_position.x))
+		if tile_data:
+			if tile_data.has_custom_data("stair"):
+				match tile_data.get_custom_data("stair"):
+					# \-shaped stairs; horizontal movement.
+					1, 5 when direction & HORIZONTAL:
+						target_position += Vector2(0.0, target_position.x)
+						_update_detector_positions(Vector2(0.0, target_position.x))
 
-						# /-shaped stairs; horizontal movement.
-						2, 6 when direction & HORIZONTAL:
-							target_position -= Vector2(0.0, target_position.x)
-							_update_detector_positions(-Vector2(0.0, target_position.x))
+					# /-shaped stairs; horizontal movement.
+					2, 6 when direction & HORIZONTAL:
+						target_position -= Vector2(0.0, target_position.x)
+						_update_detector_positions(-Vector2(0.0, target_position.x))
 
-						# \-shaped stairs; vertical movement.
-						3, 5 when direction & VERTICAL:
-							target_position += Vector2(target_position.y, 0.0)
-							_update_detector_positions(Vector2(target_position.y, 0.0))
+					# \-shaped stairs; vertical movement.
+					3, 5 when direction & VERTICAL:
+						target_position += Vector2(target_position.y, 0.0)
+						_update_detector_positions(Vector2(target_position.y, 0.0))
 
-						# /-shaped stairs; vertical movement.
-						4, 6 when direction & VERTICAL:
-							target_position -= Vector2(target_position.y, 0.0)
-							_update_detector_positions(-Vector2(target_position.y, 0.0))
+					# /-shaped stairs; vertical movement.
+					4, 6 when direction & VERTICAL:
+						target_position -= Vector2(target_position.y, 0.0)
+						_update_detector_positions(-Vector2(target_position.y, 0.0))
 
-			collision_detector.force_raycast_update()
-			surface_detector.force_raycast_update()
+		collision_detector.force_raycast_update()
+		surface_detector.force_raycast_update()
 
 func _update_detector_positions(target_vector: Vector2) -> void:
 	if current_world:
