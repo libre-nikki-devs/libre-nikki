@@ -113,7 +113,7 @@ func _input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("ui_go_back"):
 		if is_busy:
-			if is_moving:
+			if moving:
 				if not menu_queued:
 					menu_queued = true
 					await moved

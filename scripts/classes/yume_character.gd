@@ -21,9 +21,10 @@ extends YumeInteractable
 
 enum { ALL = 15, HORIZONTAL = 9, VERTICAL = 6 }
 
-enum DIRECTION { LEFT = 1, DOWN = 2, UP = 4, RIGHT = 8 }
+enum DIRECTION { NULL = 0, LEFT = 1, DOWN = 2, UP = 4, RIGHT = 8 }
 
 const DIRECTIONS: Dictionary[DIRECTION, Vector2] = {
+	DIRECTION.NULL: Vector2.ZERO,
 	DIRECTION.LEFT: Vector2.LEFT,
 	DIRECTION.DOWN: Vector2.DOWN,
 	DIRECTION.UP: Vector2.UP,
@@ -49,8 +50,8 @@ const DIRECTIONS: Dictionary[DIRECTION, Vector2] = {
 
 var current_world: YumeWorld = null
 
-## True, if the character is moving.
-var is_moving: bool = false
+## Direction the character is moving.
+var moving := DIRECTION.NULL
 
 ## Target movement point.
 var target_position: Vector2
@@ -222,7 +223,7 @@ func move(direction: DIRECTION) -> void:
 			wrapped.emit(previous_position)
 
 	is_busy = true
-	is_moving = true
+	moving = direction
 	_move()
 	var tween: Tween = create_tween()
 	tween.tween_property(self, "pixel_position", Vector2i(target_position), 0.25 / speed).as_relative()
@@ -234,7 +235,7 @@ func move(direction: DIRECTION) -> void:
 
 	await tween.finished
 	is_busy = false
-	is_moving = false
+	moving = DIRECTION.NULL
 	moved.emit()
 
 func is_colliding(direction: DIRECTION) -> bool:
@@ -278,7 +279,9 @@ func is_colliding(direction: DIRECTION) -> bool:
 	return false
 
 func get_opposite_direction(direction: DIRECTION) -> DIRECTION:
-	if direction & HORIZONTAL:
+	if direction == DIRECTION.NULL:
+		return direction
+	elif direction & HORIZONTAL:
 		return (~direction & ALL) ^ VERTICAL as DIRECTION
 	else:
 		return (~direction & ALL) ^ HORIZONTAL as DIRECTION
