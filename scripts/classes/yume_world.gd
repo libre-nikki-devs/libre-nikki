@@ -65,9 +65,6 @@ extends Node2D
 ## True, if this is a dream world.
 @export var dreaming: bool = true
 
-## Size of a single tile (in pixels). Used for character movement.
-@export var tile_size: int = 16
-
 ## Positions for node duplicates. Used only for looping worlds.
 var duplicate_positions: Array[Vector2] = []
 

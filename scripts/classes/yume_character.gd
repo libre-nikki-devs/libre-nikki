@@ -48,6 +48,9 @@ const DIRECTIONS: Dictionary[DIRECTION, Vector2] = {
 ## If true, the character will move diagonally on stairs.
 @export var can_use_stairs: bool = true
 
+## Size of a single tile (in pixels).
+@export var tile_size: int = 16
+
 var current_world: YumeWorld = null
 
 ## Direction the character is moving.
@@ -105,12 +108,12 @@ func _move() -> void:
 func _update_detectors(direction: DIRECTION) -> void:
 	collision_detector.collision_mask = collision_mask
 	surface_detector.collision_mask = collision_mask >> 1
+	target_position = DIRECTIONS[direction] * tile_size
 
 	if current_world:
-		target_position = DIRECTIONS[direction] * current_world.tile_size
-		collision_detector.global_position = current_world.wrap_around_world(global_position + target_position) - target_position
+		collision_detector.global_position = current_world.wrap_around_world(
+			global_position + target_position) - target_position
 	else:
-		target_position = DIRECTIONS[direction] * 16.0
 		collision_detector.global_position = global_position
 
 	collision_detector.target_position = target_position
