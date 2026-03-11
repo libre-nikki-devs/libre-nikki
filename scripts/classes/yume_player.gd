@@ -155,8 +155,9 @@ func equip(effect: EFFECT = EFFECT.DEFAULT, silently: bool = false) -> void:
 
 func interact() -> void:
 	if accept_events.is_empty():
-		if not is_sitting:
-			_update_detectors.call_deferred(facing)
+		if not is_sitting and is_inside_tree():
+			await get_tree().physics_frame
+			_update_detectors(facing)
 			var collider: Object = collision_detector.get_collider()
 
 			if collider is YumeInteractable:
