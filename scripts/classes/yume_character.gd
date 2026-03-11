@@ -214,14 +214,7 @@ func move(direction: DIRECTION) -> void:
 	for collision_shape: CollisionShape2D in collision_shapes:
 		current_collisions.append(collision_shape)
 
-	if current_world:
-		var wrapped_position: Vector2 = current_world.wrap_around_world(global_position + target_position) - target_position
-
-		if global_position != wrapped_position:
-			var previous_position: Vector2 = global_position
-			global_position = wrapped_position
-			wrapped.emit(previous_position)
-
+	wrap_around_world()
 	is_busy = true
 	moving = direction
 	_move()
@@ -277,6 +270,16 @@ func is_colliding(direction: DIRECTION) -> bool:
 		collisions_last_checked = physics_frames
 
 	return false
+
+func wrap_around_world() -> void:
+	if current_world:
+		var wrapped_position: Vector2 = current_world.wrap_around_world(
+				global_position + target_position) - target_position
+
+		if global_position != wrapped_position:
+			var previous_position: Vector2 = global_position
+			global_position = wrapped_position
+			wrapped.emit(previous_position)
 
 func get_opposite_direction(direction: DIRECTION) -> DIRECTION:
 	if direction == DIRECTION.NULL:
