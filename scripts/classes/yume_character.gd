@@ -165,6 +165,29 @@ func _update_detector_positions(target_vector: Vector2) -> void:
 
 	surface_detector.global_position = collision_detector.global_position
 
+func face(what: Vector2) -> DIRECTION:
+	var closest: Vector2 = global_position
+	var distance: float = global_position.distance_to(what)
+
+	if current_world:
+		for duplicate_position: Vector2 in current_world.duplicate_positions:
+			var duplicate_distance: float = (global_position + duplicate_position).distance_to(what)
+
+			if duplicate_distance < distance:
+				distance = duplicate_distance
+				closest = global_position + duplicate_position
+
+	var closest_angle: float = closest.angle_to_point(what)
+
+	if closest_angle >= -0.25 * PI and closest_angle <= 0.25 * PI:
+		return DIRECTION.RIGHT
+	elif closest_angle > 0.25 * PI and closest_angle < 0.75 * PI:
+		return DIRECTION.DOWN
+	elif closest_angle > -0.75 * PI and closest_angle < -0.25 * PI:
+		return DIRECTION.UP
+	else:
+		return DIRECTION.LEFT
+
 func move(direction: DIRECTION) -> void:
 	_update_detectors(direction)
 	var collider: Object = collision_detector.get_collider()

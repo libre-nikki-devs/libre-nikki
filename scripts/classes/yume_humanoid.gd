@@ -118,26 +118,3 @@ func set_animation(animation: String = str(DIRECTION.find_key(facing)).to_lower(
 	if animation_player.get_animation_library("").has_animation(animation):
 		animation_player.play(animation, -1, animation_speed, from_end)
 		animation_player.seek(animation_position, true)
-
-func face(what: Vector2) -> DIRECTION:
-	var closest: Vector2 = global_position
-	var distance: float = global_position.distance_to(what)
-
-	if current_world:
-		for duplicate_position: Vector2 in current_world.duplicate_positions:
-			var duplicate_distance: float = (global_position + duplicate_position).distance_to(what)
-
-			if duplicate_distance < distance:
-				distance = duplicate_distance
-				closest = global_position + duplicate_position
-
-	var closest_angle: float = closest.angle_to_point(what)
-
-	if closest_angle >= -0.25 * PI and closest_angle <= 0.25 * PI:
-		return DIRECTION.RIGHT
-	elif closest_angle > 0.25 * PI and closest_angle < 0.75 * PI:
-		return DIRECTION.DOWN
-	elif closest_angle > -0.75 * PI and closest_angle < -0.25 * PI:
-		return DIRECTION.UP
-	else:
-		return DIRECTION.LEFT
