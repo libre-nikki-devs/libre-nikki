@@ -36,26 +36,20 @@ offset_left = -232.0
 offset_bottom = 240.0
 grow_horizontal = 0
 
-[node name="AboutVBoxContainer" type="VBoxContainer" parent="MainPanelContainer"]
+[node name="LicensesVBoxContainer" type="VBoxContainer" parent="MainPanelContainer"]
 layout_mode = 2
 
-[node name="LicensesLabel" type="Label" parent="MainPanelContainer/AboutVBoxContainer"]
-modulate = Color(1, 1, 1, 0.5)
-layout_mode = 2
-text = "Licenses"
-horizontal_alignment = 1
-
-[node name="CCButton" type="Button" parent="MainPanelContainer/AboutVBoxContainer"]
+[node name="CCButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
-focus_neighbor_top = NodePath("../UpdateButton")
+focus_neighbor_top = NodePath("../GPLButton")
 focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../GPLButton")
 focus_next = NodePath("../GPLButton")
-focus_previous = NodePath("../UpdateButton")
+focus_previous = NodePath("../GPLButton")
 text = " "
 
-[node name="Label" type="Label" parent="MainPanelContainer/AboutVBoxContainer/CCButton"]
+[node name="Label" type="Label" parent="MainPanelContainer/LicensesVBoxContainer/CCButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -66,17 +60,17 @@ text = "CC-BY-4.0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="GPLButton" type="Button" parent="MainPanelContainer/AboutVBoxContainer"]
+[node name="GPLButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../CCButton")
 focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath("../UpdateButton")
-focus_next = NodePath("../UpdateButton")
+focus_neighbor_bottom = NodePath("../CCButton")
+focus_next = NodePath("../CCButton")
 focus_previous = NodePath("../CCButton")
 text = " "
 
-[node name="Label" type="Label" parent="MainPanelContainer/AboutVBoxContainer/GPLButton"]
+[node name="Label" type="Label" parent="MainPanelContainer/LicensesVBoxContainer/GPLButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -84,33 +78,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "GPL-3"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="OtherLabel" type="Label" parent="MainPanelContainer/AboutVBoxContainer"]
-modulate = Color(1, 1, 1, 0.5)
-layout_mode = 2
-text = "Other"
-horizontal_alignment = 1
-
-[node name="UpdateButton" type="Button" parent="MainPanelContainer/AboutVBoxContainer"]
-layout_mode = 2
-focus_neighbor_left = NodePath(".")
-focus_neighbor_top = NodePath("../GPLButton")
-focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath("../CCButton")
-focus_next = NodePath("../CCButton")
-focus_previous = NodePath("../GPLButton")
-text = " "
-
-[node name="Label" type="Label" parent="MainPanelContainer/AboutVBoxContainer/UpdateButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Check for updates"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -123,28 +90,49 @@ offset_bottom = 24.0
 layout_mode = 2
 alignment = 1
 
-[node name="AboutButton" type="Button" parent="SidePanelContainer/SideVBoxContainer"]
+[node name="LicensesButton" type="Button" parent="SidePanelContainer/SideVBoxContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
-focus_neighbor_top = NodePath(".")
+focus_neighbor_top = NodePath("../UpdatesButton")
 focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath(".")
-focus_next = NodePath(".")
-focus_previous = NodePath(".")
+focus_neighbor_bottom = NodePath("../UpdatesButton")
+focus_next = NodePath("../UpdatesButton")
+focus_previous = NodePath("../UpdatesButton")
 text = " "
 
-[node name="AboutLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/AboutButton"]
+[node name="LicensesLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/LicensesButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "About"
+text = "Licenses"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="MainPanelContainer/AboutVBoxContainer/CCButton" to="." method="_on_cc_button_pressed"]
-[connection signal="pressed" from="MainPanelContainer/AboutVBoxContainer/GPLButton" to="." method="_on_gpl_button_pressed"]
-[connection signal="pressed" from="MainPanelContainer/AboutVBoxContainer/UpdateButton" to="." method="_on_update_button_pressed"]
-[connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/AboutButton" to="." method="_on_about_button_pressed"]
+[node name="UpdatesButton" type="Button" parent="SidePanelContainer/SideVBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../LicensesButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../LicensesButton")
+focus_next = NodePath("../LicensesButton")
+focus_previous = NodePath("../LicensesButton")
+text = " "
+
+[node name="UpdatesLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/UpdatesButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Updates"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/CCButton" to="." method="_on_cc_button_pressed"]
+[connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/GPLButton" to="." method="_on_gpl_button_pressed"]
+[connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/LicensesButton" to="." method="_on_licenses_button_pressed"]
+[connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/UpdatesButton" to="." method="_on_updates_button_pressed"]
