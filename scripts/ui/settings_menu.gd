@@ -19,9 +19,7 @@ extends YumeMenu
 @onready var licenses_button := $SidePanelContainer/SideVBoxContainer/LicensesButton
 @onready var licenses_menu := $MainPanelContainer/LicensesVBoxContainer
 @onready var side_menu := $SidePanelContainer/SideVBoxContainer
-
-func _ready() -> void:
-	licenses_menu.show()
+@onready var main_label := $MainPanelContainer/MainLabel
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_go_back"):
@@ -35,6 +33,8 @@ func _input(event: InputEvent) -> void:
 		if focus_owner:
 			match focus_owner.get_parent():
 				licenses_menu:
+					main_label.show()
+					licenses_menu.hide()
 					licenses_button.grab_focus()
 
 				side_menu:
@@ -43,7 +43,11 @@ func _input(event: InputEvent) -> void:
 func _get_focus_grabber() -> Control:
 	return licenses_button
 
+func _on_main_label_meta_clicked(meta: Variant) -> void:
+	OS.shell_open(meta)
+
 func _on_licenses_button_pressed() -> void:
+	main_label.hide()
 	licenses_menu.show()
 
 	for child: Node in licenses_menu.get_children():

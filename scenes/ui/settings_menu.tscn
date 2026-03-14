@@ -36,7 +36,21 @@ offset_left = -232.0
 offset_bottom = 240.0
 grow_horizontal = 0
 
+[node name="MainLabel" type="RichTextLabel" parent="MainPanelContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "Copyright (C) 2024-2026 Libre Nikki Developers. All rights reserved.
+
+Libre Nikki's source code is licensed under the terms of the GNU General Public License Version 3.
+
+Libre Nikki features assets that use licenses compatible with the GPL-3.
+
+
+Github: [url]https://github.com/libre-nikki-devs/libre-nikki[/url]"
+meta_underlined = false
+
 [node name="LicensesVBoxContainer" type="VBoxContainer" parent="MainPanelContainer"]
+visible = false
 layout_mode = 2
 
 [node name="CCButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer"]
@@ -132,6 +146,7 @@ text = "Updates"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[connection signal="meta_clicked" from="MainPanelContainer/MainLabel" to="." method="_on_main_label_meta_clicked"]
 [connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/CCButton" to="." method="_on_cc_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/GPLButton" to="." method="_on_gpl_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/LicensesButton" to="." method="_on_licenses_button_pressed"]
