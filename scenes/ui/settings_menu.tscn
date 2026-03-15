@@ -49,6 +49,103 @@ Libre Nikki features assets that use licenses compatible with the GPL-3.
 Github: [url]https://github.com/libre-nikki-devs/libre-nikki[/url]"
 meta_underlined = false
 
+[node name="DisplayVBoxContainer" type="VBoxContainer" parent="MainPanelContainer"]
+visible = false
+layout_mode = 2
+
+[node name="FPSCounterButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../MaxFPSButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../VSyncButton")
+focus_next = NodePath("../VSyncButton")
+focus_previous = NodePath("../MaxFPSButton")
+text = " "
+
+[node name="FPSCounterLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/FPSCounterButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = " FPS Counter"
+vertical_alignment = 1
+
+[node name="ValueLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/FPSCounterButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "[OFF] "
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="VSyncButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../FPSCounterButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../MaxFPSButton")
+focus_next = NodePath("../MaxFPSButton")
+focus_previous = NodePath("../FPSCounterButton")
+text = " "
+
+[node name="VSyncLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/VSyncButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = " V-Sync"
+vertical_alignment = 1
+
+[node name="ValueLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/VSyncButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "[ON] "
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MaxFPSButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../VSyncButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../FPSCounterButton")
+focus_next = NodePath("../FPSCounterButton")
+focus_previous = NodePath("../VSyncButton")
+text = " "
+
+[node name="MaxFPSLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/MaxFPSButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = " Max FPS"
+vertical_alignment = 1
+
+[node name="ValueLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/MaxFPSButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "INF "
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [node name="LicensesVBoxContainer" type="VBoxContainer" parent="MainPanelContainer"]
 visible = false
 layout_mode = 2
@@ -104,14 +201,35 @@ offset_bottom = 24.0
 layout_mode = 2
 alignment = 1
 
-[node name="LicensesButton" type="Button" parent="SidePanelContainer/SideVBoxContainer"]
+[node name="DisplayButton" type="Button" parent="SidePanelContainer/SideVBoxContainer"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../UpdatesButton")
 focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../LicensesButton")
+focus_next = NodePath("../LicensesButton")
+focus_previous = NodePath("../UpdatesButton")
+text = " "
+
+[node name="DisplayLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/DisplayButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Display"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LicensesButton" type="Button" parent="SidePanelContainer/SideVBoxContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../DisplayButton")
+focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../UpdatesButton")
 focus_next = NodePath("../UpdatesButton")
-focus_previous = NodePath("../UpdatesButton")
+focus_previous = NodePath("../DisplayButton")
 text = " "
 
 [node name="LicensesLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/LicensesButton"]
@@ -130,8 +248,8 @@ layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../LicensesButton")
 focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath("../LicensesButton")
-focus_next = NodePath("../LicensesButton")
+focus_neighbor_bottom = NodePath("../DisplayButton")
+focus_next = NodePath("../DisplayButton")
 focus_previous = NodePath("../LicensesButton")
 text = " "
 
@@ -147,7 +265,11 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="meta_clicked" from="MainPanelContainer/MainLabel" to="." method="_on_main_label_meta_clicked"]
+[connection signal="pressed" from="MainPanelContainer/DisplayVBoxContainer/FPSCounterButton" to="." method="_on_fps_counter_button_pressed"]
+[connection signal="pressed" from="MainPanelContainer/DisplayVBoxContainer/VSyncButton" to="." method="_on_v_sync_button_pressed"]
+[connection signal="pressed" from="MainPanelContainer/DisplayVBoxContainer/MaxFPSButton" to="." method="_on_max_fps_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/CCButton" to="." method="_on_cc_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/GPLButton" to="." method="_on_gpl_button_pressed"]
+[connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/DisplayButton" to="." method="_on_display_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/LicensesButton" to="." method="_on_licenses_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/UpdatesButton" to="." method="_on_updates_button_pressed"]

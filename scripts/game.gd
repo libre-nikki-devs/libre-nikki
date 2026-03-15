@@ -35,17 +35,47 @@ var current_scene_state: SCENE_STATES = SCENE_STATES.DEFAULT
 
 var is_current_scene_loaded_from_file: bool = false
 
+var key_hold_time: float = 0.5
+
 ## Contains data that are preserved in a save file.
 var persistent_data: Dictionary = {}
 
 var scene_data: Dictionary[String, PackedScene] = {}
 
 ## Contains settings data.
-var settings: Dictionary = {
-	"key_hold_time" = 0.5
-}
+var settings := ConfigFile.new()
 
 signal scene_changed
+
+func _init() -> void:
+	if settings.load("user://settings.ini") != OK:
+		return
+
+	if settings.has_section_key("display", "fps_counter"):
+		var fps_counter: Variant = settings.get_value(
+			"display", "fps_counter", false)
+
+		if fps_counter is bool:
+			if fps_counter:
+				fps_counter = preload(
+					"res://scenes/ui/fps_counter.tscn").instantiate()
+
+				fps_counter.position = Vector2(4.0, 4.0)
+				fps_counter.z_index = 2
+				add_child(fps_counter)
+
+	if settings.has_section_key("display", "max_fps"):
+		var max_fps: Variant = settings.get_value("display", "max_fps", 0)
+
+		if max_fps is int:
+			Engine.max_fps = max_fps
+
+	if settings.has_section_key("display", "vsync"):
+		var vsync: Variant = settings.get_value("display", "vsync", 1)
+
+		if vsync is int:
+			DisplayServer.window_set_vsync_mode(
+				vsync as DisplayServer.VSyncMode)
 
 func _ready() -> void:
 	_on_scene_changed()

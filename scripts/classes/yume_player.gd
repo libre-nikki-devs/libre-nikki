@@ -89,8 +89,8 @@ func _notification(what: int) -> void:
 			if Input.is_action_pressed("ui_accept"):
 				accept_key_hold_time += get_process_delta_time()
 
-				if accept_key_hold_time > Game.settings["key_hold_time"]:
-					emit_signal("accept_key_held")
+				if accept_key_hold_time > Game.key_hold_time:
+					accept_key_held.emit()
 
 			else:
 				accept_key_hold_time = 0.0
@@ -98,8 +98,8 @@ func _notification(what: int) -> void:
 			if Input.is_action_pressed("ui_go_back"):
 				cancel_key_hold_time += get_process_delta_time()
 
-				if cancel_key_hold_time > Game.settings["key_hold_time"]:
-					emit_signal("cancel_key_held")
+				if cancel_key_hold_time > Game.key_hold_time:
+					cancel_key_held.emit()
 
 			else:
 				cancel_key_hold_time = 0.0
