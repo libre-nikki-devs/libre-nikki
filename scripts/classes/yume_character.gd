@@ -63,6 +63,8 @@ var surface_detector: RayCast2D = RayCast2D.new()
 
 var collision_detector: RayCast2D = RayCast2D.new()
 
+var collision_shapes: Array[CollisionShape2D] = []
+
 static var current_collisions: Array[CollisionShape2D] = []
 
 static var collisions_last_checked: int = 0
@@ -74,14 +76,27 @@ signal moved
 signal wrapped(previous_position: Vector2)
 
 func _init() -> void:
+	var on_child_entered_tree: Callable = func (node: Node):
+		if node is CollisionShape2D:
+			collision_shapes.append(node)
+
+	var on_child_exiting_tree: Callable = func (node: Node):
+		if node is CollisionShape2D:
+			collision_shapes.erase(node)
+
+	child_entered_tree.connect(on_child_entered_tree)
+	child_exiting_tree.connect(on_child_exiting_tree)
+
 	collision_detector.name = "CollisionDetector"
 	collision_detector.enabled = false
 	collision_detector.light_mask = 0
 	collision_detector.visibility_layer = 0
+
 	surface_detector.name = "SurfaceDetector"
 	surface_detector.enabled = false
 	surface_detector.light_mask = 0
 	surface_detector.visibility_layer = 0
+
 	add_child(collision_detector)
 	add_child(surface_detector)
 
@@ -101,6 +116,45 @@ func _notification(what: int) -> void:
 				if parent is YumeWorld:
 					current_world = parent
 					return
+
+func _get_current_collider() -> YumeCharacter:
+	var physics_frames: int = Engine.get_physics_frames()
+
+	if collisions_last_checked == physics_frames:
+		for current_collision_shape: CollisionShape2D in current_collisions:
+			var current_collision_shape_parent: YumeCharacter = \
+					current_collision_shape.get_parent()
+
+			if collision_mask & current_collision_shape_parent.collision_layer \
+					and not current_collision_shape.disabled:
+
+				for collision_shape: CollisionShape2D in collision_shapes:
+					var target_origin: Vector2 = (
+							current_world.wrap_around_world(
+							collision_shape.global_transform.origin + \
+							target_position) - \
+							collision_shape.global_transform.origin \
+							if current_world else target_position
+					)
+
+					var shape: Shape2D = collision_shape.shape
+					var current_shape: Shape2D = current_collision_shape.shape
+					var target_transform := \
+							Transform2D(collision_shape.global_transform)
+
+					target_transform.origin += target_origin
+
+					if not shape.collide_and_get_contacts(target_transform,
+							current_shape,
+							current_collision_shape.global_transform) \
+							.is_empty():
+
+						return current_collision_shape_parent
+	else:
+		current_collisions.clear()
+		collisions_last_checked = physics_frames
+
+	return null
 
 func _move() -> void:
 	pass
@@ -198,36 +252,6 @@ func move(direction: DIRECTION) -> void:
 
 		return
 
-	var collision_shapes: Array[CollisionShape2D]
-
-	for shape_owner: int in get_shape_owners():
-		collision_shapes.append(shape_owner_get_owner(shape_owner))
-
-	var physics_frames: int = Engine.get_physics_frames()
-
-	if collisions_last_checked == physics_frames:
-		for current_collision_shape: CollisionShape2D in current_collisions:
-			var current_collision_shape_parent: YumeCharacter = current_collision_shape.get_parent()
-
-			if collision_mask & current_collision_shape_parent.collision_layer and not current_collision_shape.disabled:
-				for collision_shape: CollisionShape2D in collision_shapes:
-					var target_origin: Vector2 = target_position
-
-					if current_world:
-						target_origin = current_world.wrap_around_world(collision_shape.global_transform.origin + target_origin) - collision_shape.global_transform.origin
-
-					var shape: Shape2D = collision_shape.shape
-					var current_shape: Shape2D = current_collision_shape.shape
-					var target_transform := Transform2D(collision_shape.global_transform)
-					target_transform.origin += target_origin
-
-					if not shape.collide_and_get_contacts(target_transform, current_shape, current_collision_shape.global_transform).is_empty():
-						current_collision_shape_parent.emit_signal("body_touched", self)
-						return
-	else:
-		current_collisions.clear()
-		collisions_last_checked = physics_frames
-
 	var ground: Object = surface_detector.get_collider()
 
 	if ground:
@@ -235,6 +259,12 @@ func move(direction: DIRECTION) -> void:
 			ground.emit_signal.call_deferred("body_stepped_on", self)
 
 	elif not can_move_in_vacuum:
+		return
+
+	var current_collider: YumeCharacter = _get_current_collider()
+
+	if current_collider:
+		current_collider.body_touched.emit(self)
 		return
 
 	for collision_shape: CollisionShape2D in collision_shapes:
@@ -266,34 +296,8 @@ func is_colliding(direction: DIRECTION) -> bool:
 	if not (surface_detector.is_colliding() or can_move_in_vacuum):
 		return true
 
-	var collision_shapes: Array[CollisionShape2D]
-
-	for shape_owner: int in get_shape_owners():
-		collision_shapes.append(shape_owner_get_owner(shape_owner))
-
-	var physics_frames: int = Engine.get_physics_frames()
-
-	if collisions_last_checked == physics_frames:
-		for current_collision_shape: CollisionShape2D in current_collisions:
-			var current_collision_shape_parent: YumeCharacter = current_collision_shape.get_parent()
-
-			if collision_mask & current_collision_shape_parent.collision_layer and not current_collision_shape.disabled:
-				for collision_shape: CollisionShape2D in collision_shapes:
-					var target_origin: Vector2 = target_position
-
-					if current_world:
-						target_origin = current_world.wrap_around_world(collision_shape.global_transform.origin + target_origin) - collision_shape.global_transform.origin
-
-					var shape: Shape2D = collision_shape.shape
-					var current_shape: Shape2D = current_collision_shape.shape
-					var target_transform := Transform2D(collision_shape.global_transform)
-					target_transform.origin += target_origin
-
-					if not shape.collide_and_get_contacts(target_transform, current_shape, current_collision_shape.global_transform).is_empty():
-						return true
-	else:
-		current_collisions.clear()
-		collisions_last_checked = physics_frames
+	if _get_current_collider():
+		return true
 
 	return false
 
