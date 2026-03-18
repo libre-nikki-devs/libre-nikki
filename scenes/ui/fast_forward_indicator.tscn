@@ -12,10 +12,13 @@ border_width_bottom = 1
 border_color = Color(0, 0, 0, 0.5)
 
 [node name="FastForwardIndicator" type="PanelContainer"]
-offset_right = 20.0
+offset_left = -40.0
+offset_right = -20.0
 offset_bottom = 14.0
+scale = Vector2(2, 2)
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_h1dj2")
 script = ExtResource("1_0qwkn")
 

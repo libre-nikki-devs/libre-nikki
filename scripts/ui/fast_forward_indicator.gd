@@ -17,10 +17,7 @@
 extends PanelContainer
 
 func _init() -> void:
-	if OS.is_debug_build():
-		hide()
-	else:
-		queue_free()
+	hide()
 
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("fast_forward"):

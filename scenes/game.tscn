@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://dhnn80wdox05k"]
+[gd_scene load_steps=10 format=3 uid="uid://dhnn80wdox05k"]
 
 [ext_resource type="Script" uid="uid://c305spui1e7hh" path="res://scripts/game.gd" id="1_w2k2j"]
 [ext_resource type="Shader" uid="uid://clrvlroex8lf6" path="res://shaders/pixelate.gdshader" id="2_yqjtg"]
-[ext_resource type="PackedScene" uid="uid://s5isouysugs2" path="res://scenes/ui/fast_forward_indicator.tscn" id="3_lnu2h"]
 
 [sub_resource type="Animation" id="Animation_yqjtg"]
 length = 0.001
@@ -233,19 +232,6 @@ _data = {
 process_mode = 3
 layer = 100
 script = ExtResource("1_w2k2j")
-
-[node name="FastForwardIndicator" parent="." instance=ExtResource("3_lnu2h")]
-visible = false
-z_index = 2
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -44.0
-offset_top = 8.0
-offset_right = -24.0
-offset_bottom = 22.0
-grow_horizontal = 0
-scale = Vector2(2, 2)
 
 [node name="MouseTimer" type="Timer" parent="."]
 wait_time = 5.0

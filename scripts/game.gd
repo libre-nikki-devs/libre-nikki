@@ -77,6 +77,15 @@ func _init() -> void:
 			DisplayServer.window_set_vsync_mode(
 				vsync as DisplayServer.VSyncMode)
 
+	if OS.is_debug_build():
+		var fast_forward_indicator: Control = preload(
+				"res://scenes/ui/fast_forward_indicator.tscn").instantiate()
+
+		fast_forward_indicator.position += Vector2(-4.0, 4.0)
+		fast_forward_indicator.z_index = 2
+		fast_forward_indicator.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+		add_child(fast_forward_indicator)
+
 func _ready() -> void:
 	_on_scene_changed()
 	get_tree().connect("scene_changed", _on_scene_changed)
