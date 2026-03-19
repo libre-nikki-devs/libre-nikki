@@ -134,12 +134,10 @@ func _input(event: InputEvent) -> void:
 		mapshot.save_png(Game.MAPSHOTS_DIRECTORY.path_join(Game.get_timestamp() + ".png"))
 
 func _move() -> void:
-	super()
+	await super()
 
-	if not Game.persistent_data.has("steps_taken"):
-		Game.persistent_data["steps_taken"] = 0
-
-	Game.persistent_data["steps_taken"] += 1
+	Game.persistent_data["steps_taken"] = (
+			Game.persistent_data.get("steps_taken", 0) + 1)
 
 ## Equip this [param effect].
 func equip(effect: EFFECT = EFFECT.DEFAULT, silently: bool = false) -> void:

@@ -49,20 +49,19 @@ var footstep_sound: AudioStream
 var last_step: int = STEP_LEFT
 
 func _move() -> void:
+	footstep_sound = (current_world.default_footstep_sound if current_world
+			else load("res://sounds/あるく1.wav")) # placeholder
+
 	var ground: Object = surface_detector.get_collider()
 
-	if current_world:
-		footstep_sound = current_world.default_footstep_sound
-	else:
-		footstep_sound = load("res://sounds/あるく1.wav") # placeholder
-
 	if ground is TileMapLayer:
-		var current_tile = ground.local_to_map(surface_detector.global_position + surface_detector.target_position)
+		var current_tile: Vector2i = (ground.local_to_map(
+			current_world.wrap_around_world(surface_detector.global_position +
+			surface_detector.target_position)) if current_world else
+			ground.local_to_map(surface_detector.global_position +
+			surface_detector.target_position))
 
-		if current_world:
-			current_tile = ground.local_to_map(current_world.wrap_around_world(surface_detector.global_position + surface_detector.target_position))
-
-		var tile_data = ground.get_cell_tile_data(current_tile)
+		var tile_data: TileData = ground.get_cell_tile_data(current_tile)
 		footstep_sound = get_tile_footstep_sound(tile_data)
 
 	elif ground is YumeInteractable:
@@ -74,6 +73,8 @@ func _move() -> void:
 		set_animation(str(DIRECTION.find_key(facing)).to_lower() + action + "2", speed, 0.125)
 
 	last_step = !last_step
+
+	await super()
 
 ## Look this 'direction'.
 func look(direction: DIRECTION) -> void:

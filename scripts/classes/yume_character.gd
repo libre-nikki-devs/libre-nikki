@@ -157,7 +157,20 @@ func _get_current_collider() -> YumeCharacter:
 	return null
 
 func _move() -> void:
-	pass
+	var tween: Tween = create_tween()
+
+	tween.tween_property(self, "pixel_position",
+			Vector2i(target_position), 0.25 / speed).as_relative()
+
+	for collision_shape: CollisionShape2D in collision_shapes:
+		collision_shape.position += target_position
+
+		tween.parallel()
+
+		tween.tween_property(collision_shape, "position",
+				-target_position, 0.25 / speed).as_relative()
+
+	await tween.finished
 
 func _update_detectors(direction: DIRECTION) -> void:
 	collision_detector.collision_mask = collision_mask
@@ -273,16 +286,7 @@ func move(direction: DIRECTION) -> void:
 	wrap_around_world()
 	is_busy = true
 	moving = direction
-	_move()
-	var tween: Tween = create_tween()
-	tween.tween_property(self, "pixel_position", Vector2i(target_position), 0.25 / speed).as_relative()
-
-	for collision_shape: CollisionShape2D in collision_shapes:
-		collision_shape.position += target_position
-		tween.parallel()
-		tween.tween_property(collision_shape, "position", -target_position, 0.25 / speed).as_relative()
-
-	await tween.finished
+	await _move()
 	is_busy = false
 	moving = DIRECTION.NULL
 	moved.emit()
