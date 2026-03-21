@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://c7ow23cauvtl8"]
+[gd_scene format=3 uid="uid://c7ow23cauvtl8"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_7i3iu"]
 [ext_resource type="Script" uid="uid://dj2ddgsj5qt4e" path="res://scripts/ui/settings_menu.gd" id="2_s2d1y"]
 
-[node name="SettingsMenu" type="Control"]
+[node name="SettingsMenu" type="Control" unique_id=2108724142]
 top_level = true
 layout_mode = 3
 anchors_preset = 15
@@ -18,7 +18,7 @@ theme = ExtResource("1_7i3iu")
 script = ExtResource("2_s2d1y")
 metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=569278999]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,7 +27,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="MainPanelContainer" type="PanelContainer" parent="."]
+[node name="MainPanelContainer" type="PanelContainer" parent="." unique_id=2107141221]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -36,7 +36,7 @@ offset_left = -232.0
 offset_bottom = 240.0
 grow_horizontal = 0
 
-[node name="MainLabel" type="RichTextLabel" parent="MainPanelContainer"]
+[node name="MainLabel" type="RichTextLabel" parent="MainPanelContainer" unique_id=785819581]
 layout_mode = 2
 bbcode_enabled = true
 text = "Copyright (C) 2024-2026 Libre Nikki Developers. All rights reserved.
@@ -49,11 +49,11 @@ Libre Nikki features assets that use licenses compatible with the GPL-3.
 Github: [url]https://github.com/libre-nikki-devs/libre-nikki[/url]"
 meta_underlined = false
 
-[node name="DisplayVBoxContainer" type="VBoxContainer" parent="MainPanelContainer"]
+[node name="DisplayVBoxContainer" type="VBoxContainer" parent="MainPanelContainer" unique_id=376316123]
 visible = false
 layout_mode = 2
 
-[node name="FPSCounterButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer"]
+[node name="FPSCounterButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer" unique_id=1809326005]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../MaxFPSButton")
@@ -63,7 +63,7 @@ focus_next = NodePath("../VSyncButton")
 focus_previous = NodePath("../MaxFPSButton")
 text = " "
 
-[node name="FPSCounterLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/FPSCounterButton"]
+[node name="FPSCounterLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/FPSCounterButton" unique_id=2070546900]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -73,7 +73,7 @@ grow_vertical = 2
 text = " FPS Counter"
 vertical_alignment = 1
 
-[node name="ValueLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/FPSCounterButton"]
+[node name="ValueLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/FPSCounterButton" unique_id=1287555848]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -84,7 +84,7 @@ text = "[OFF] "
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="VSyncButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer"]
+[node name="VSyncButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer" unique_id=881769984]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../FPSCounterButton")
@@ -94,7 +94,7 @@ focus_next = NodePath("../MaxFPSButton")
 focus_previous = NodePath("../FPSCounterButton")
 text = " "
 
-[node name="VSyncLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/VSyncButton"]
+[node name="VSyncLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/VSyncButton" unique_id=1462605906]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -104,7 +104,7 @@ grow_vertical = 2
 text = " V-Sync"
 vertical_alignment = 1
 
-[node name="ValueLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/VSyncButton"]
+[node name="ValueLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/VSyncButton" unique_id=95101415]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -115,7 +115,7 @@ text = "[ON] "
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="MaxFPSButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer"]
+[node name="MaxFPSButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer" unique_id=2052115852]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../VSyncButton")
@@ -125,7 +125,7 @@ focus_next = NodePath("../FPSCounterButton")
 focus_previous = NodePath("../VSyncButton")
 text = " "
 
-[node name="MaxFPSLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/MaxFPSButton"]
+[node name="MaxFPSLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/MaxFPSButton" unique_id=2085315424]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -135,7 +135,7 @@ grow_vertical = 2
 text = " Max FPS"
 vertical_alignment = 1
 
-[node name="ValueLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/MaxFPSButton"]
+[node name="ValueLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/MaxFPSButton" unique_id=963864332]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -146,11 +146,11 @@ text = "INF "
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="LicensesVBoxContainer" type="VBoxContainer" parent="MainPanelContainer"]
+[node name="LicensesVBoxContainer" type="VBoxContainer" parent="MainPanelContainer" unique_id=1280798918]
 visible = false
 layout_mode = 2
 
-[node name="CCButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer"]
+[node name="CCButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer" unique_id=494383399]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../GPLButton")
@@ -160,7 +160,7 @@ focus_next = NodePath("../GPLButton")
 focus_previous = NodePath("../GPLButton")
 text = " "
 
-[node name="Label" type="Label" parent="MainPanelContainer/LicensesVBoxContainer/CCButton"]
+[node name="Label" type="Label" parent="MainPanelContainer/LicensesVBoxContainer/CCButton" unique_id=786923517]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -171,7 +171,7 @@ text = "CC-BY-4.0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="GPLButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer"]
+[node name="GPLButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer" unique_id=1566512541]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../CCButton")
@@ -181,7 +181,7 @@ focus_next = NodePath("../CCButton")
 focus_previous = NodePath("../CCButton")
 text = " "
 
-[node name="Label" type="Label" parent="MainPanelContainer/LicensesVBoxContainer/GPLButton"]
+[node name="Label" type="Label" parent="MainPanelContainer/LicensesVBoxContainer/GPLButton" unique_id=1533400527]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -192,16 +192,16 @@ text = "GPL-3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SidePanelContainer" type="PanelContainer" parent="."]
+[node name="SidePanelContainer" type="PanelContainer" parent="." unique_id=1160137277]
 layout_mode = 0
 offset_right = 88.0
 offset_bottom = 24.0
 
-[node name="SideVBoxContainer" type="VBoxContainer" parent="SidePanelContainer"]
+[node name="SideVBoxContainer" type="VBoxContainer" parent="SidePanelContainer" unique_id=1391207421]
 layout_mode = 2
 alignment = 1
 
-[node name="DisplayButton" type="Button" parent="SidePanelContainer/SideVBoxContainer"]
+[node name="DisplayButton" type="Button" parent="SidePanelContainer/SideVBoxContainer" unique_id=1422774310]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../UpdatesButton")
@@ -211,7 +211,7 @@ focus_next = NodePath("../LicensesButton")
 focus_previous = NodePath("../UpdatesButton")
 text = " "
 
-[node name="DisplayLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/DisplayButton"]
+[node name="DisplayLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/DisplayButton" unique_id=2143377853]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -222,7 +222,7 @@ text = "Display"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LicensesButton" type="Button" parent="SidePanelContainer/SideVBoxContainer"]
+[node name="LicensesButton" type="Button" parent="SidePanelContainer/SideVBoxContainer" unique_id=997147852]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../DisplayButton")
@@ -232,7 +232,7 @@ focus_next = NodePath("../UpdatesButton")
 focus_previous = NodePath("../DisplayButton")
 text = " "
 
-[node name="LicensesLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/LicensesButton"]
+[node name="LicensesLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/LicensesButton" unique_id=2094499920]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -243,7 +243,7 @@ text = "Licenses"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="UpdatesButton" type="Button" parent="SidePanelContainer/SideVBoxContainer"]
+[node name="UpdatesButton" type="Button" parent="SidePanelContainer/SideVBoxContainer" unique_id=564108661]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../LicensesButton")
@@ -253,7 +253,7 @@ focus_next = NodePath("../DisplayButton")
 focus_previous = NodePath("../LicensesButton")
 text = " "
 
-[node name="UpdatesLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/UpdatesButton"]
+[node name="UpdatesLabel" type="Label" parent="SidePanelContainer/SideVBoxContainer/UpdatesButton" unique_id=1247428184]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

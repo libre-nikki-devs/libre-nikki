@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://davlmpwfjrkvd"]
+[gd_scene format=3 uid="uid://davlmpwfjrkvd"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_4anwf"]
 [ext_resource type="Script" uid="uid://cjfep8ns55ob5" path="res://scripts/ui/update_checker.gd" id="2_qyxqr"]
 
-[node name="UpdateChecker" type="Control"]
+[node name="UpdateChecker" type="Control" unique_id=974084570]
 top_level = true
 layout_mode = 3
 anchors_preset = 15
@@ -18,9 +18,9 @@ theme = ExtResource("1_4anwf")
 script = ExtResource("2_qyxqr")
 metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=1267105683]
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1625020431]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,7 +29,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1670016603]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -43,10 +43,10 @@ offset_bottom = 18.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1086486558]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/VBoxContainer" unique_id=900319236]
 layout_mode = 2
 bbcode_enabled = true
 text = "Checking for updates..."
@@ -57,10 +57,10 @@ horizontal_alignment = 1
 vertical_alignment = 1
 meta_underlined = false
 
-[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer" unique_id=423819836]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="PanelContainer/VBoxContainer/CenterContainer"]
+[node name="Button" type="Button" parent="PanelContainer/VBoxContainer/CenterContainer" unique_id=770965034]
 layout_mode = 2
 text = " Interrupt "
 

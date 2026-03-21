@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bojy2o2nyo8y2"]
+[gd_scene format=3 uid="uid://bojy2o2nyo8y2"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_kk08f"]
 [ext_resource type="Script" uid="uid://d1ofgp8iifwmr" path="res://scripts/ui/travel_menu.gd" id="2_ii56h"]
 
-[node name="TravelMenu" type="Control"]
+[node name="TravelMenu" type="Control" unique_id=626076588]
 top_level = true
 layout_mode = 3
 anchors_preset = 15
@@ -18,7 +18,7 @@ theme = ExtResource("1_kk08f")
 script = ExtResource("2_ii56h")
 metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=544093107]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,7 +27,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1408549793]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,7 +36,7 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MapContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="MapContainer" type="VBoxContainer" parent="PanelContainer" unique_id=264163242]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath(".")
@@ -47,7 +47,7 @@ focus_previous = NodePath(".")
 focus_mode = 2
 mouse_filter = 2
 
-[node name="FilterBar" type="LineEdit" parent="."]
+[node name="FilterBar" type="LineEdit" parent="." unique_id=872484640]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0

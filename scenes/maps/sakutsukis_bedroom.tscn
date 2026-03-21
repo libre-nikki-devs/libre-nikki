@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://bra2nosjgdw7m"]
+[gd_scene format=4 uid="uid://bra2nosjgdw7m"]
 
 [ext_resource type="Script" uid="uid://dekpdnansexi6" path="res://scripts/maps/sakutsukis_bedroom.gd" id="1_bvmiv"]
 [ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="2_0kkjn"]
@@ -92,7 +92,7 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rdjp8"]
 size = Vector2(16, 16)
 
-[node name="SakutsukisBedroom" type="Node2D"]
+[node name="SakutsukisBedroom" type="Node2D" unique_id=1504023297]
 y_sort_enabled = true
 script = ExtResource("1_bvmiv")
 pretty_name = "Sakutsuki's Bedroom"
@@ -100,16 +100,16 @@ depth = "?"
 dreaming = false
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=729497553]
 position = Vector2(0, 8)
 zoom = Vector2(2, 2)
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=111272017]
 tile_map_data = PackedByteArray("AAD7/wAAAAAAAAAAAAD7/wEAAAAAAAAAAAD7/wIAAAAAAAAAAAD8//3/AAAAAAAAAAD8//7/AAAAAAAAAAD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAAAAAD9//3/AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD+//3/AAAAAAAAAAD+//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD+/wIAAAAAAAAAAAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAACAP3/AAAAAAAAAAACAP7/AAAAAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAADAP3/AAAAAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/AAAAAAAAAAD7////AAAAAAAAAAD8//z/AAAAAAAAAAD9//z/AAAAAAAAAAD+//z/AAAAAAAAAAD///z/AAAAAAAAAAAAAP7/AAAAAAAAAAABAP7/AAAAAAAAAAACAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAA=")
 tile_set = SubResource("TileSet_74b13")
 physics_quadrant_size = 1
 
-[node name="Sakutsuki" parent="." instance=ExtResource("3_wt7fi")]
+[node name="Sakutsuki" parent="." unique_id=2075704312 instance=ExtResource("3_wt7fi")]
 z_index = 1
 position = Vector2(-8, 8)
 collision_layer = 2
@@ -117,7 +117,7 @@ collision_mask = 2
 shared_properties = Array[String]([])
 can_move_in_vacuum = false
 
-[node name="Desk" type="CharacterBody2D" parent="."]
+[node name="Desk" type="CharacterBody2D" parent="." unique_id=272638602]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-72, 8)
@@ -125,13 +125,13 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource("4_gh7np")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Desk"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Desk" unique_id=2031360638]
 sprite_frames = SubResource("SpriteFrames_5i2lv")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Desk"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Desk" unique_id=1462678146]
 shape = SubResource("RectangleShape2D_86v08")
 
-[node name="Bed" type="CharacterBody2D" parent="."]
+[node name="Bed" type="CharacterBody2D" parent="." unique_id=1026668183]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-40, -40)
@@ -139,25 +139,25 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource("4_gh7np")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Bed"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Bed" unique_id=747175975]
 sprite_frames = SubResource("SpriteFrames_w0bp4")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bed"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bed" unique_id=992467113]
 shape = SubResource("RectangleShape2D_86v08")
 
-[node name="Door" type="CharacterBody2D" parent="."]
+[node name="Door" type="CharacterBody2D" parent="." unique_id=1424751528]
 z_index = 1
 position = Vector2(56, -72)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("4_gh7np")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Door"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Door" unique_id=1328561791]
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_wxba3")
 animation = &"open"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=267211541]
 shape = SubResource("RectangleShape2D_rdjp8")
 
 [connection signal="body_interacted" from="Desk" to="." method="_on_desk_body_interacted"]

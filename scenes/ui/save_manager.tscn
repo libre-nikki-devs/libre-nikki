@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dv4h2nse5v7yy"]
+[gd_scene format=3 uid="uid://dv4h2nse5v7yy"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_n22gi"]
 [ext_resource type="Script" uid="uid://bj2k5qk14fgl5" path="res://scripts/ui/save_manager.gd" id="2_qabvu"]
 
-[node name="SaveManager" type="Control"]
+[node name="SaveManager" type="Control" unique_id=2046250507]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_vertical = 2
 script = ExtResource("2_qabvu")
 metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=156654990]
 top_level = true
 layout_mode = 1
 anchors_preset = -1
@@ -27,23 +27,23 @@ scale = Vector2(2, 2)
 theme = ExtResource("1_n22gi")
 theme_override_constants/separation = 0
 
-[node name="LabelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="LabelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1695722306]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/LabelContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/LabelContainer" unique_id=326423006]
 layout_mode = 2
 text = "Save to which slot?"
 
-[node name="SaveContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="SaveContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1335829693]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/SaveContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/SaveContainer" unique_id=694930587]
 layout_mode = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SaveContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SaveContainer/ScrollContainer" unique_id=957035993]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bghxnpywucjso"]
+[gd_scene format=3 uid="uid://bghxnpywucjso"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_fe2o3"]
 [ext_resource type="Script" uid="uid://bwuyc2n84asut" path="res://scripts/ui/main_menu.gd" id="2_1g8jr"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=744361102]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,7 +19,7 @@ theme = ExtResource("1_fe2o3")
 script = ExtResource("2_1g8jr")
 metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
-[node name="MenuContainer" type="PanelContainer" parent="."]
+[node name="MenuContainer" type="PanelContainer" parent="." unique_id=2048237635]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -33,11 +33,11 @@ offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ButtonContainer" type="VBoxContainer" parent="MenuContainer"]
+[node name="ButtonContainer" type="VBoxContainer" parent="MenuContainer" unique_id=1024997811]
 layout_mode = 2
 alignment = 1
 
-[node name="PlayButton" type="Button" parent="MenuContainer/ButtonContainer"]
+[node name="PlayButton" type="Button" parent="MenuContainer/ButtonContainer" unique_id=2016687599]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../QuitButton")
@@ -47,7 +47,7 @@ focus_next = NodePath("../ContinueButton")
 focus_previous = NodePath("../QuitButton")
 text = " "
 
-[node name="PlayLabel" type="Label" parent="MenuContainer/ButtonContainer/PlayButton"]
+[node name="PlayLabel" type="Label" parent="MenuContainer/ButtonContainer/PlayButton" unique_id=1069735330]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -58,7 +58,7 @@ text = "Play"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ContinueButton" type="Button" parent="MenuContainer/ButtonContainer"]
+[node name="ContinueButton" type="Button" parent="MenuContainer/ButtonContainer" unique_id=1913242441]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../PlayButton")
@@ -69,7 +69,7 @@ focus_previous = NodePath("../PlayButton")
 disabled = true
 text = " "
 
-[node name="ContinueLabel" type="Label" parent="MenuContainer/ButtonContainer/ContinueButton"]
+[node name="ContinueLabel" type="Label" parent="MenuContainer/ButtonContainer/ContinueButton" unique_id=790381217]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -80,7 +80,7 @@ text = "Continue"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SettingsButton" type="Button" parent="MenuContainer/ButtonContainer"]
+[node name="SettingsButton" type="Button" parent="MenuContainer/ButtonContainer" unique_id=429460289]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../ContinueButton")
@@ -90,7 +90,7 @@ focus_next = NodePath("../QuitButton")
 focus_previous = NodePath("../ContinueButton")
 text = " "
 
-[node name="SettingsLabel" type="Label" parent="MenuContainer/ButtonContainer/SettingsButton"]
+[node name="SettingsLabel" type="Label" parent="MenuContainer/ButtonContainer/SettingsButton" unique_id=455397286]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -101,7 +101,7 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="QuitButton" type="Button" parent="MenuContainer/ButtonContainer"]
+[node name="QuitButton" type="Button" parent="MenuContainer/ButtonContainer" unique_id=1265555644]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../SettingsButton")
@@ -111,7 +111,7 @@ focus_next = NodePath("../PlayButton")
 focus_previous = NodePath("../SettingsButton")
 text = " "
 
-[node name="QuitLabel" type="Label" parent="MenuContainer/ButtonContainer/QuitButton"]
+[node name="QuitLabel" type="Label" parent="MenuContainer/ButtonContainer/QuitButton" unique_id=410307624]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -122,7 +122,7 @@ text = "Quit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="GameLabel" type="Label" parent="."]
+[node name="GameLabel" type="Label" parent="." unique_id=93501533]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -139,7 +139,7 @@ text = "Libre Nikki"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VersionLabel" type="Label" parent="."]
+[node name="VersionLabel" type="Label" parent="." unique_id=874308501]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -150,7 +150,7 @@ grow_vertical = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Greeting" type="Control" parent="."]
+[node name="Greeting" type="Control" parent="." unique_id=1234548688]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -159,7 +159,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="Greeting"]
+[node name="ColorRect" type="ColorRect" parent="Greeting" unique_id=1187114337]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -168,7 +168,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="GreetingLabel" type="RichTextLabel" parent="Greeting"]
+[node name="GreetingLabel" type="RichTextLabel" parent="Greeting" unique_id=1185643536]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

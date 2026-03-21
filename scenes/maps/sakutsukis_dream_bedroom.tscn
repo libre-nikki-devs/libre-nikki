@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://vn4fgou5kpqy"]
+[gd_scene format=4 uid="uid://vn4fgou5kpqy"]
 
 [ext_resource type="Script" uid="uid://bbk0ro0r6hpno" path="res://scripts/maps/sakutsukis_dream_bedroom.gd" id="1_54v4e"]
 [ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="2_8dtg0"]
@@ -93,30 +93,30 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6lxew"]
 size = Vector2(16, 16)
 
-[node name="SakutsukisDreamBedroom" type="Node2D"]
+[node name="SakutsukisDreamBedroom" type="Node2D" unique_id=1919317194]
 y_sort_enabled = true
 script = ExtResource("1_54v4e")
 pretty_name = "Sakutsuki's Dream Bedroom"
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1848118427]
 position = Vector2(-8, 16)
 zoom = Vector2(2, 2)
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=349404052]
 position = Vector2(-8, 8)
 tile_map_data = PackedByteArray("AAD7/wAAAAAAAAAAAAD7/wEAAAAAAAAAAAD7/wIAAAAAAAAAAAD8//3/AAAAAAAAAAD8//7/AAAAAAAAAAD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAAAAAD9//3/AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD+//3/AAAAAAAAAAD+//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD+/wIAAAAAAAAAAAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAACAP3/AAAAAAAAAAACAP7/AAAAAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAADAP3/AAAAAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/AAAAAAAAAAD7////AAAAAAAAAAD8//z/AAAAAAAAAAD9//z/AAAAAAAAAAD+//z/AAAAAAAAAAD///z/AAAAAAAAAAAAAP7/AAAAAAAAAAABAP7/AAAAAAAAAAACAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAA=")
 tile_set = SubResource("TileSet_e3vec")
 physics_quadrant_size = 1
 
-[node name="Sakutsuki" parent="." instance=ExtResource("3_w136h")]
+[node name="Sakutsuki" parent="." unique_id=866587971 instance=ExtResource("3_w136h")]
 z_index = 1
 position = Vector2(-48, -16)
 collision_layer = 2
 collision_mask = 2
 can_move_in_vacuum = false
 
-[node name="Desk" type="CharacterBody2D" parent="."]
+[node name="Desk" type="CharacterBody2D" parent="." unique_id=987837288]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-80, 16)
@@ -124,13 +124,13 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource("4_kow8v")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Desk"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Desk" unique_id=1480882002]
 sprite_frames = SubResource("SpriteFrames_f8au5")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Desk"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Desk" unique_id=274230167]
 shape = SubResource("RectangleShape2D_t21p4")
 
-[node name="Bed" type="CharacterBody2D" parent="."]
+[node name="Bed" type="CharacterBody2D" parent="." unique_id=1949213732]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(-48, -32)
@@ -138,13 +138,13 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource("4_kow8v")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Bed"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Bed" unique_id=275521127]
 sprite_frames = SubResource("SpriteFrames_ogmwe")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bed"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bed" unique_id=990265513]
 shape = SubResource("RectangleShape2D_t21p4")
 
-[node name="Door" type="CharacterBody2D" parent="." node_paths=PackedStringArray("animated_sprite")]
+[node name="Door" type="CharacterBody2D" parent="." unique_id=694211365 node_paths=PackedStringArray("animated_sprite")]
 z_index = 1
 position = Vector2(48, -64)
 collision_layer = 2
@@ -152,12 +152,12 @@ collision_mask = 2
 script = ExtResource("6_jlni6")
 animated_sprite = NodePath("AnimatedSprite2D")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Door"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Door" unique_id=1772799650]
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_w814h")
 animation = &"open"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=1710416192]
 shape = SubResource("RectangleShape2D_6lxew")
 
 [connection signal="opened" from="Door" to="." method="_on_door_opened"]
