@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b1skvxc5ssinq"]
+[gd_resource type="TileSet" format=3 uid="uid://b1skvxc5ssinq"]
 
 [ext_resource type="Texture2D" uid="uid://cfkvqlvubjxti" path="res://tilesets/images/boot_amber_corridors.png" id="1_p80o6"]
 

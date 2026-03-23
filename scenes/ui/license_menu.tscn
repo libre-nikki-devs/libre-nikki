@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://8aphpj5tpopl"]
+[gd_scene format=3 uid="uid://8aphpj5tpopl"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_1g757"]
 [ext_resource type="Script" uid="uid://bttu6pets30lg" path="res://scripts/ui/license_menu.gd" id="2_1g757"]
 
-[node name="LicenseMenu" type="Control"]
+[node name="LicenseMenu" type="Control" unique_id=295208931]
 top_level = true
 layout_mode = 3
 anchors_preset = 15
@@ -18,7 +18,7 @@ theme = ExtResource("1_1g757")
 script = ExtResource("2_1g757")
 metadata/_custom_type_script = "uid://8ximpr4sy7ta"
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=5214472]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,7 +26,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer" unique_id=128797824]
 custom_minimum_size = Vector2(312, 232)
 layout_mode = 2
 focus_mode = 2

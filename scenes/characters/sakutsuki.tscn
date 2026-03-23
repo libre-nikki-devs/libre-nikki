@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://8wulc2ysaubr"]
+[gd_scene format=3 uid="uid://8wulc2ysaubr"]
 
 [ext_resource type="Script" uid="uid://bwl57hfy2vtfs" path="res://scripts/characters/sakutsuki.gd" id="1_5uo7l"]
 [ext_resource type="Script" uid="uid://ca1j8ttrmv1bp" path="res://scripts/classes/yume_camera.gd" id="3_hvtgg"]
@@ -1659,7 +1659,7 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qhyl"]
 size = Vector2(16, 16)
 
-[node name="Sakutsuki" type="CharacterBody2D" node_paths=PackedStringArray("animation_player") groups=["Persist"]]
+[node name="Sakutsuki" type="CharacterBody2D" unique_id=827943735 node_paths=PackedStringArray("animation_player") groups=["Persist"]]
 y_sort_enabled = true
 script = ExtResource("1_5uo7l")
 shared_properties = Array[String](["equipped_effect", "last_step", "speed"])
@@ -1667,27 +1667,25 @@ animation_player = NodePath("AnimationPlayer")
 metadata/_custom_type_script = "uid://3tw0tkifql18"
 metadata/persistent_properties = ["accept_events", "cancel_events", "collision_layer", "collision_mask", "equipped_effect", "facing", "global_position", "last_step", "name", "speed", "z_index"]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=209230979]
 sprite_frames = ExtResource("3_l5dwh")
 animation = &"down"
 centered = false
 offset = Vector2(-12, -24)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1462859695]
 root_node = NodePath("../AnimatedSprite2D")
-libraries = {
-&"": SubResource("AnimationLibrary_7yjcr"),
-&"Bike": SubResource("AnimationLibrary_i4sdh"),
-&"Default": SubResource("AnimationLibrary_fjxp4")
-}
+libraries/ = SubResource("AnimationLibrary_7yjcr")
+libraries/Bike = SubResource("AnimationLibrary_i4sdh")
+libraries/Default = SubResource("AnimationLibrary_fjxp4")
 
-[node name="AudioListener2D" type="AudioListener2D" parent="."]
+[node name="AudioListener2D" type="AudioListener2D" parent="." unique_id=1166693637]
 current = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=215618112]
 shape = SubResource("RectangleShape2D_3qhyl")
 
-[node name="YumeCamera" type="Camera2D" parent="."]
+[node name="YumeCamera" type="Camera2D" parent="." unique_id=1524191713]
 offset = Vector2(8, 0)
 zoom = Vector2(2, 2)
 limit_enabled = false

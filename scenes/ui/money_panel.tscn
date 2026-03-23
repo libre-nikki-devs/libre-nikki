@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://o018hjpcyot8"]
+[gd_scene format=3 uid="uid://o018hjpcyot8"]
 
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_4bmpl"]
 [ext_resource type="Script" uid="uid://c0t24c04jxsie" path="res://scripts/ui/money_panel.gd" id="2_e61dm"]
 
-[node name="MoneyPanel" type="PanelContainer"]
+[node name="MoneyPanel" type="PanelContainer" unique_id=754265015]
 offset_right = 88.0
 offset_bottom = 24.0
 theme = ExtResource("1_4bmpl")
 script = ExtResource("2_e61dm")
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1135274584]
 layout_mode = 2
 text = "0♎"
 horizontal_alignment = 2
