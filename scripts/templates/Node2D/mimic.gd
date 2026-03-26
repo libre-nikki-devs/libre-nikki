@@ -24,6 +24,40 @@ var mimic_position_offset: Vector2 = Vector2.ZERO
 
 var to_mimic: Node2D
 
+func _init() -> void:
+	if to_mimic is AnimatedSprite2D:
+		if "animation" in mimic_properties:
+			mimic_properties.erase("animation")
+
+			var on_animation_changed: Callable = func () -> void:
+				self.animation = to_mimic.animation
+
+			to_mimic.animation_changed.connect(on_animation_changed)
+
+		if "frame" in mimic_properties:
+			mimic_properties.erase("frame")
+
+			var on_frame_changed: Callable = func () -> void:
+				self.frame = to_mimic.frame
+
+			to_mimic.frame_changed.connect(on_frame_changed)
+
+		if "sprite_frames" in mimic_properties:
+			mimic_properties.erase("sprite_frames")
+
+			var on_sprite_frames_changed: Callable = func () -> void:
+				self.sprite_frames = to_mimic.sprite_frames
+
+			to_mimic.sprite_frames_changed.connect(on_sprite_frames_changed)
+
+	if "visible" in mimic_properties:
+		mimic_properties.erase("visible")
+
+		var on_visibility_changed: Callable = func () -> void:
+			visible = to_mimic.visible
+
+		to_mimic.visibility_changed.connect(on_visibility_changed)
+
 func _ready() -> void:
 	mimic()
 
