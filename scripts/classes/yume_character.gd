@@ -315,6 +315,19 @@ func wrap_around_world() -> void:
 			global_position = wrapped_position
 			wrapped.emit(previous_position)
 
+func get_next_direction(direction: DIRECTION) -> DIRECTION:
+	match direction:
+		DIRECTION.LEFT:
+			return DIRECTION.UP
+		DIRECTION.DOWN:
+			return DIRECTION.LEFT
+		DIRECTION.UP:
+			return DIRECTION.RIGHT
+		DIRECTION.RIGHT:
+			return DIRECTION.DOWN
+
+	return direction
+
 func get_opposite_direction(direction: DIRECTION) -> DIRECTION:
 	if direction == DIRECTION.NULL:
 		return direction
