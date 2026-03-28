@@ -76,6 +76,8 @@ var camera_limits: Array[int] = []
 
 var parallaxes: Array[Parallax2D] = []
 
+var screen_notifiers: Array[VisibleOnScreenNotifier2D] = []
+
 func _recursive_call(node: Node, method: Callable):
 	for child: Node in node.get_children():
 		if child is not YumeWorld:
@@ -92,9 +94,9 @@ func _update_duplicate_positions() -> void:
 						Vector2(bounds.size.x, 0.0),
 						Vector2(-bounds.size.x, 0.0),
 						Vector2(bounds.size.x, bounds.size.y),
+						Vector2(-bounds.size.x, -bounds.size.y),
 						Vector2(bounds.size.x, -bounds.size.y),
-						Vector2(-bounds.size.x, bounds.size.y),
-						Vector2(-bounds.size.x, -bounds.size.y)]
+						Vector2(-bounds.size.x, bounds.size.y)]
 
 			"Horizontally":
 				camera_limits = [-10000000, bounds.end.y,
@@ -115,6 +117,18 @@ func _update_duplicate_positions() -> void:
 	else:
 		camera_limits = []
 		duplicate_positions = []
+
+	for screen_notifier: VisibleOnScreenNotifier2D in screen_notifiers:
+		remove_child(screen_notifier)
+
+	screen_notifiers.clear()
+
+	for duplicate_position in duplicate_positions:
+		var screen_notifier := VisibleOnScreenNotifier2D.new()
+		screen_notifier.global_position = duplicate_position
+		screen_notifier.rect = bounds
+		add_child(screen_notifier)
+		screen_notifiers.append(screen_notifier)
 
 func _init() -> void:
 	child_entered_tree.connect(_on_child_entered_tree)
@@ -191,15 +205,60 @@ func _on_child_entered_tree(node: Node):
 	for child: Node in template.get_children():
 		child.free()
 
-	for duplicate_position: Vector2 in duplicate_positions:
-		var instance: Node = template.duplicate(2)
-		instance.global_position += duplicate_position
+	var duplicate_positions_size: int = duplicate_positions.size()
+
+	for i: int in duplicate_positions_size:
+		var instance: Node = template.duplicate(DUPLICATE_GROUPS)
+		instance.global_position += duplicate_positions[i]
 
 		if not mimic_properties.is_empty():
 			instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
 			instance.mimic_properties.append_array(mimic_properties)
-			instance.mimic_position_offset += duplicate_position
+			instance.mimic_position_offset = duplicate_positions[i]
 			instance.to_mimic = node
+
+		if instance.process_mode == PROCESS_MODE_INHERIT:
+			instance.process_mode = PROCESS_MODE_DISABLED
+
+			var j: int = 1 if i % 2 == 0 else -1
+			j = (i + j) % duplicate_positions_size
+
+			var pause: Callable = func () -> void:
+				if not (screen_notifiers[i].is_on_screen() or
+						screen_notifiers[j].is_on_screen()):
+
+					instance.process_mode = PROCESS_MODE_DISABLED
+
+			var unpause: Callable = func () -> void:
+				if (screen_notifiers[i].is_on_screen() or
+						screen_notifiers[j].is_on_screen()):
+
+					instance.process_mode = PROCESS_MODE_INHERIT
+
+			screen_notifiers[i].screen_entered.connect(unpause)
+			screen_notifiers[j].screen_entered.connect(unpause)
+			screen_notifiers[i].screen_exited.connect(pause)
+			screen_notifiers[j].screen_exited.connect(pause)
+
+			instance.tree_exiting.connect(
+				func () -> void:
+					var screen_notifiers_size: int = screen_notifiers.size()
+
+					if screen_notifiers_size <= i or screen_notifiers_size <= j:
+						return
+
+					if screen_notifiers[i].screen_entered.is_connected(unpause):
+						screen_notifiers[i].screen_entered.disconnect(unpause)
+
+					if screen_notifiers[j].screen_entered.is_connected(unpause):
+						screen_notifiers[j].screen_entered.disconnect(unpause)
+
+					if screen_notifiers[i].screen_exited.is_connected(pause):
+						screen_notifiers[i].screen_exited.disconnect(pause)
+
+					if screen_notifiers[j].screen_exited.is_connected(pause):
+						screen_notifiers[j].screen_exited.disconnect(pause)
+			, CONNECT_ONE_SHOT)
 
 		node.add_sibling.call_deferred(instance)
 
