@@ -210,12 +210,10 @@ func _on_child_entered_tree(node: Node):
 	for i: int in duplicate_positions_size:
 		var instance: Node = template.duplicate(DUPLICATE_GROUPS)
 		instance.global_position += duplicate_positions[i]
-
-		if not mimic_properties.is_empty():
-			instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-			instance.mimic_properties.append_array(mimic_properties)
-			instance.mimic_position_offset = duplicate_positions[i]
-			instance.to_mimic = node
+		instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
+		instance.mimic_properties.append_array(mimic_properties)
+		instance.mimic_position_offset = duplicate_positions[i]
+		instance.to_mimic = node
 
 		if instance.process_mode == PROCESS_MODE_INHERIT:
 			instance.process_mode = PROCESS_MODE_DISABLED

@@ -25,6 +25,12 @@ var mimic_position_offset: Vector2 = Vector2.ZERO
 var to_mimic: Node2D
 
 func _ready() -> void:
+	if to_mimic:
+		to_mimic.tree_exiting.connect(queue_free, CONNECT_ONE_SHOT)
+	else:
+		queue_free()
+		return
+
 	if to_mimic is AnimatedSprite2D:
 		if "animation" in mimic_properties:
 			mimic_properties.erase("animation")
@@ -65,21 +71,18 @@ func _process(delta: float) -> void:
 	mimic()
 
 func mimic() -> void:
-	if to_mimic:
-		for property: String in mimic_properties:
-			if property in self:
-				match property:
-					"global_position", "position":
-						set(property, to_mimic.get(property) + mimic_position_offset)
+	for property: String in mimic_properties:
+		if property in self:
+			match property:
+				"global_position", "position":
+					set(property, to_mimic.get(property) + mimic_position_offset)
 
-					"z_index":
-						set(property, get_global_z_index(to_mimic))
-						z_as_relative = false
+				"z_index":
+					set(property, get_global_z_index(to_mimic))
+					z_as_relative = false
 
-					_:
-						set(property, to_mimic.get(property))
-	else:
-		queue_free()
+				_:
+					set(property, to_mimic.get(property))
 
 func get_global_z_index(canvas_item: CanvasItem) -> int:
 	var global_z_index: int = canvas_item.z_index
