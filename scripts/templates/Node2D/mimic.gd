@@ -24,7 +24,7 @@ var mimic_position_offset: Vector2 = Vector2.ZERO
 
 var to_mimic: Node2D
 
-func _init() -> void:
+func _ready() -> void:
 	if to_mimic is AnimatedSprite2D:
 		if "animation" in mimic_properties:
 			mimic_properties.erase("animation")
@@ -57,9 +57,6 @@ func _init() -> void:
 			visible = to_mimic.visible
 
 		to_mimic.visibility_changed.connect(on_visibility_changed)
-
-func _ready() -> void:
-	mimic()
 
 func _process(delta: float) -> void:
 	mimic()
