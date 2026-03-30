@@ -113,7 +113,7 @@ func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 	return load("res://sounds/あるく1.wav") # placeholder
 
 func play_footstep_sound() -> void:
-	Game.play_sound(footstep_sound, self, 256, RandomNumberGenerator.new().randf_range(0.90, 1.10))
+	play_sound(footstep_sound, 256.0, randf_range(0.90, 1.10))
 
 func set_animation(animation: String = str(DIRECTION.find_key(facing)).to_lower() + action, animation_speed: float = 0.0, animation_position: float = 0.0, from_end: bool = false) -> void:
 	if animation_player.get_animation_library("").has_animation(animation):

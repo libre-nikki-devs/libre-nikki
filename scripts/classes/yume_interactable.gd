@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -42,3 +42,23 @@ signal body_touched(body: Node2D)
 
 ## Emitted when something stepped on this node.
 signal body_stepped_on(body: Node2D)
+
+func play_sound(sound: AudioStream, distance: float = 256.0, pitch: float = 1.0,
+		volume_offset: float = 0.0) -> void:
+
+	var audio_stream_player := AudioStreamPlayer2D.new()
+	audio_stream_player.attenuation = 2.0
+	audio_stream_player.autoplay = true
+	audio_stream_player.bus = &"SFX"
+	audio_stream_player.max_distance = distance
+	audio_stream_player.pitch_scale = pitch
+	audio_stream_player.process_mode = PROCESS_MODE_ALWAYS
+	audio_stream_player.stream = sound
+	audio_stream_player.volume_db = linear_to_db(1.0 + volume_offset)
+
+	audio_stream_player.finished.connect(
+		func () -> void:
+			audio_stream_player.queue_free()
+	)
+
+	add_child(audio_stream_player)

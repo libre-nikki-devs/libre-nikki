@@ -203,33 +203,6 @@ func save_current_scene(destination: Dictionary = persistent_data) -> void:
 		if not current_scene.has_node(child_path):
 			destination["scene_data"][scene_path][child_path] = null
 
-func play_sound(sound: AudioStream, parent: Node2D, distance: int = 256, pitch: float = 1.0, volume_offset: float = 0.0) -> void:
-	if sound:
-		var audio_stream_player = AudioStreamPlayer2D.new()
-		audio_stream_player.attenuation = 2.0
-		audio_stream_player.autoplay = true
-		audio_stream_player.bus = "SFX"
-		audio_stream_player.max_distance = distance
-		audio_stream_player.pitch_scale = pitch
-		audio_stream_player.process_mode = Node.PROCESS_MODE_ALWAYS
-		audio_stream_player.stream = sound
-		audio_stream_player.volume_db = linear_to_db(1.0 + volume_offset)
-		parent.add_child(audio_stream_player)
-		await audio_stream_player.finished
-		audio_stream_player.queue_free()
-
-func play_sound_everywhere(sound: AudioStream, pitch: float = 1.0, volume_offset: float = 0.0) -> void:
-	if sound:
-		var audio_stream_player = AudioStreamPlayer.new()
-		audio_stream_player.autoplay = true
-		audio_stream_player.bus = "SFX"
-		audio_stream_player.pitch_scale = pitch
-		audio_stream_player.stream = sound
-		audio_stream_player.volume_db = linear_to_db(1.0 + volume_offset)
-		add_child(audio_stream_player)
-		await audio_stream_player.finished
-		audio_stream_player.queue_free()
-
 func take_screenshot() -> Image:
 	var viewport: Viewport = get_viewport()
 
