@@ -58,6 +58,9 @@ func _ready() -> void:
 
 		to_mimic.visibility_changed.connect(on_visibility_changed)
 
+	if mimic_properties.is_empty():
+		set_process(false)
+
 func _process(delta: float) -> void:
 	mimic()
 
