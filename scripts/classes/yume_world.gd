@@ -57,10 +57,8 @@ extends Node2D
 @export var default_footstep_sound: AudioStream = preload("res://sounds/あるく1.wav") # placeholder
 
 @export var default_mimic_data: Dictionary[String, Array] = {
-	"AnimatedSprite2D": ["animation", "frame", "global_position",
-			"sprite_frames", "visible"],
-
-	"AudioStreamPlayer2D": ["global_position"],
+	"AnimatedSprite2D": ["animation", "frame", "sprite_frames", "visible"],
+	"AudioStreamPlayer2D": [],
 	"TileMapLayer": []
 }
 
