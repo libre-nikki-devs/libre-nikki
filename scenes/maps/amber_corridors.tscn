@@ -55,7 +55,7 @@ bounds = Rect2(0, 0, 2704, 2256)
 loop = "All Sides"
 default_mimic_data = Dictionary[String, Array]({
 "AnimatedSprite2D": ["animation", "frame", "global_position", "sprite_frames", "visible", "z_index"],
-"AudioStreamPlayer2D": ["global_position"],
+"AudioStreamPlayer2D": [],
 "TileMapLayer": []
 })
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
@@ -159,6 +159,10 @@ script = ExtResource("7_arc2g")
 pretty_name = "Parallax World"
 bounds = Rect2(0, 0, 2704, 2256)
 loop = "All Sides"
+default_mimic_data = Dictionary[String, Array]({
+"AnimatedSprite2D": ["animation", "frame", "global_position", "sprite_frames", "visible", "z_index"],
+"TileMapLayer": []
+})
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 
 [connection signal="opened" from="NexusDoor" to="." method="_on_nexus_door_opened"]

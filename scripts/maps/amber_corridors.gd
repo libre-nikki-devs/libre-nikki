@@ -47,14 +47,12 @@ func _on_child_entered_tree(node: Node):
 
 	var instance: Node = node.duplicate(0)
 	instance.position = node.global_position
+	instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
+	instance.mimic_properties.append_array(mimic_properties)
+	instance.to_mimic = node
 
 	for child: Node in instance.get_children():
 		child.free()
-
-	if not mimic_properties.is_empty():
-		instance.set_script(preload("res://scripts/templates/Node2D/mimic.gd"))
-		instance.mimic_properties.append_array(mimic_properties)
-		instance.to_mimic = node
 
 	if not is_node_ready():
 		await ready
