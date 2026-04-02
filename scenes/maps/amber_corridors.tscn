@@ -54,7 +54,7 @@ pretty_name = "Amber Corridors"
 bounds = Rect2(0, 0, 2704, 2256)
 loop = "All Sides"
 default_mimic_data = Dictionary[String, Array]({
-"AnimatedSprite2D": ["animation", "frame", "global_position", "sprite_frames", "visible", "z_index"],
+"AnimatedSprite2D": [&"animation", &"frame", &"global_position", &"sprite_frames", &"visible", &"z_index"],
 "AudioStreamPlayer2D": [],
 "TileMapLayer": []
 })
@@ -160,7 +160,7 @@ pretty_name = "Parallax World"
 bounds = Rect2(0, 0, 2704, 2256)
 loop = "All Sides"
 default_mimic_data = Dictionary[String, Array]({
-"AnimatedSprite2D": ["animation", "frame", "global_position", "sprite_frames", "visible", "z_index"],
+"AnimatedSprite2D": [&"animation", &"frame", &"global_position", &"sprite_frames", &"visible", &"z_index"],
 "TileMapLayer": []
 })
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"

@@ -22,18 +22,17 @@ func _ready() -> void:
 func _on_child_entered_tree(node: Node):
 	super(node)
 
-	if loop == "None":
-		return
-
-	if node.is_in_group("Duplicate"):
+	if loop == "None" or node.is_in_group(&"Duplicate"):
 		return
 
 	var node_class: String = node.get_class()
 
-	if not node.has_meta("mimic_properties") and not default_mimic_data.has(node_class):
+	if not (node.has_meta(&"mimic_properties") or
+			default_mimic_data.has(node_class)):
+
 		return
 
-	var mimic_properties: Variant = node.get_meta("mimic_properties", [])
+	var mimic_properties: Variant = node.get_meta(&"mimic_properties", [])
 
 	if mimic_properties is not Array:
 		mimic_properties = []
@@ -42,7 +41,7 @@ func _on_child_entered_tree(node: Node):
 		mimic_properties = default_mimic_data.get(node_class, [])
 
 	for property: Variant in mimic_properties:
-		if property is not String:
+		if property is not StringName:
 			mimic_properties.erase(property)
 
 	var instance: Node = node.duplicate(0)

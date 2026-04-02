@@ -57,7 +57,7 @@ extends Node2D
 @export var default_footstep_sound: AudioStream = preload("res://sounds/あるく1.wav") # placeholder
 
 @export var default_mimic_data: Dictionary[String, Array] = {
-	"AnimatedSprite2D": ["animation", "frame", "sprite_frames", "visible"],
+	"AnimatedSprite2D": [&"animation", &"frame", &"sprite_frames", &"visible"],
 	"AudioStreamPlayer2D": [],
 	"TileMapLayer": []
 }
@@ -133,7 +133,7 @@ func _init() -> void:
 	child_exiting_tree.connect(_on_child_exiting_tree)
 
 func _on_child_entered_tree(node: Node):
-	if node is YumeWorld:
+	if node is YumeWorld or node.is_in_group(&"Duplicate"):
 		return
 
 	if not node.child_entered_tree.is_connected(_on_child_entered_tree):
@@ -141,9 +141,6 @@ func _on_child_entered_tree(node: Node):
 
 	if not node.child_exiting_tree.is_connected(_on_child_exiting_tree):
 		node.child_exiting_tree.connect(_on_child_exiting_tree)
-
-	if node.is_in_group("Duplicate"):
-		return
 
 	var node_class: String = node.get_class()
 
@@ -182,10 +179,12 @@ func _on_child_entered_tree(node: Node):
 	if loop == "None":
 		return
 
-	if not node.has_meta("mimic_properties") and not default_mimic_data.has(node_class):
+	if not (node.has_meta(&"mimic_properties") or
+			default_mimic_data.has(node_class)):
+
 		return
 
-	var mimic_properties: Variant = node.get_meta("mimic_properties", [])
+	var mimic_properties: Variant = node.get_meta(&"mimic_properties", [])
 
 	if mimic_properties is not Array:
 		mimic_properties = []
@@ -194,11 +193,11 @@ func _on_child_entered_tree(node: Node):
 		mimic_properties = default_mimic_data.get(node_class, [])
 
 	for property: Variant in mimic_properties:
-		if property is not String:
+		if property is not StringName:
 			mimic_properties.erase(property)
 
 	var template: Node = node.duplicate(0)
-	template.add_to_group("Duplicate")
+	template.add_to_group(&"Duplicate")
 
 	for child: Node in template.get_children():
 		child.free()
@@ -265,7 +264,7 @@ func _on_child_exiting_tree(node: Node):
 	if node.child_exiting_tree.is_connected(_on_child_exiting_tree):
 		node.child_exiting_tree.disconnect(_on_child_exiting_tree)
 
-	if node.is_in_group("Duplicate"):
+	if node.is_in_group(&"Duplicate"):
 		node.queue_free()
 
 	if node is Parallax2D:

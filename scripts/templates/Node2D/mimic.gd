@@ -18,7 +18,7 @@ extends Node2D
 
 ## A node that follows the properties of the other node.
 
-var mimic_properties: Array[String] = []
+var mimic_properties: Array[StringName] = []
 
 var mimic_position_offset: Vector2 = Vector2.ZERO
 
@@ -32,32 +32,32 @@ func _ready() -> void:
 		return
 
 	if to_mimic is AnimatedSprite2D:
-		if "animation" in mimic_properties:
-			mimic_properties.erase("animation")
+		if &"animation" in mimic_properties:
+			mimic_properties.erase(&"animation")
 
 			var on_animation_changed: Callable = func () -> void:
 				self.animation = to_mimic.animation
 
 			to_mimic.animation_changed.connect(on_animation_changed)
 
-		if "frame" in mimic_properties:
-			mimic_properties.erase("frame")
+		if &"frame" in mimic_properties:
+			mimic_properties.erase(&"frame")
 
 			var on_frame_changed: Callable = func () -> void:
 				self.frame = to_mimic.frame
 
 			to_mimic.frame_changed.connect(on_frame_changed)
 
-		if "sprite_frames" in mimic_properties:
-			mimic_properties.erase("sprite_frames")
+		if &"sprite_frames" in mimic_properties:
+			mimic_properties.erase(&"sprite_frames")
 
 			var on_sprite_frames_changed: Callable = func () -> void:
 				self.sprite_frames = to_mimic.sprite_frames
 
 			to_mimic.sprite_frames_changed.connect(on_sprite_frames_changed)
 
-	if "visible" in mimic_properties:
-		mimic_properties.erase("visible")
+	if &"visible" in mimic_properties:
+		mimic_properties.erase(&"visible")
 
 		var on_visibility_changed: Callable = func () -> void:
 			visible = to_mimic.visible
@@ -74,10 +74,10 @@ func mimic() -> void:
 	for property: String in mimic_properties:
 		if property in self:
 			match property:
-				"global_position", "position":
+				&"global_position", &"position":
 					set(property, to_mimic.get(property) + mimic_position_offset)
 
-				"z_index":
+				&"z_index":
 					set(property, get_global_z_index(to_mimic))
 					z_as_relative = false
 
