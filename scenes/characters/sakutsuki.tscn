@@ -1665,7 +1665,7 @@ script = ExtResource("1_5uo7l")
 shared_properties = Array[String](["equipped_effect", "last_step", "speed"])
 animation_player = NodePath("AnimationPlayer")
 metadata/_custom_type_script = "uid://3tw0tkifql18"
-metadata/persistent_properties = ["accept_events", "cancel_events", "collision_layer", "collision_mask", "equipped_effect", "facing", "global_position", "last_step", "name", "speed", "z_index"]
+metadata/persistent_properties = [&"accept_events", &"cancel_events", &"collision_layer", &"collision_mask", &"equipped_effect", &"facing", &"global_position", &"last_step", &"name", &"speed", &"z_index"]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=209230979]
 sprite_frames = ExtResource("3_l5dwh")

@@ -165,7 +165,7 @@ func save_current_scene(where: Dictionary = persistent_data) -> void:
 			func (node: Node, _recursion: Callable) -> Array[Node]:
 				var nodes: Array[Node] = []
 
-				if node.has_meta("persistent_properties"):
+				if node.has_meta(&"persistent_properties"):
 					nodes.append(node)
 
 				for child: Node in node.get_children():
@@ -185,7 +185,7 @@ func save_current_scene(where: Dictionary = persistent_data) -> void:
 			current_scene, get_persistent_nodes):
 
 		var persistent_properties: Variant = node.get_meta(
-				"persistent_properties")
+				&"persistent_properties")
 
 		if persistent_properties is Array:
 			var node_path: NodePath = current_scene.get_path_to(node)
@@ -197,9 +197,9 @@ func save_current_scene(where: Dictionary = persistent_data) -> void:
 				where["scene_data"][scene_path][node_path] = {}
 
 			for property: Variant in (persistent_properties +
-					["scene_file_path"]):
+					[&"scene_file_path"]):
 
-				if property is String:
+				if property is StringName:
 					if property in node:
 						where["scene_data"][scene_path][node_path].set(
 								property, node.get(property))

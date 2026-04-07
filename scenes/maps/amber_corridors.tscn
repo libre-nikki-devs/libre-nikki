@@ -63,7 +63,7 @@ metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1871432662]
 repeat_size = Vector2(1352, 1128)
 autoscroll = Vector2(4, 4)
-metadata/persistent_properties = ["scroll_offset"]
+metadata/persistent_properties = [&"scroll_offset"]
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=1455727376]
 z_index = -100
