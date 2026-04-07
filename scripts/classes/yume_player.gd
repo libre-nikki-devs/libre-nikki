@@ -36,7 +36,7 @@ const MOVEMENT_KEYS: Dictionary[String, DIRECTION] = {
 
 @export var menu_path: StringName = "res://scenes/ui/player_menu.tscn"
 
-@export var shared_properties: Array[String] = []
+@export var shared_properties: Array[StringName] = []
 
 var accept_events: Array[Callable] = []
 
