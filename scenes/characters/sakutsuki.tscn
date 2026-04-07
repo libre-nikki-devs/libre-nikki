@@ -1659,7 +1659,7 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qhyl"]
 size = Vector2(16, 16)
 
-[node name="Sakutsuki" type="CharacterBody2D" unique_id=827943735 node_paths=PackedStringArray("animation_player") groups=["Persist"]]
+[node name="Sakutsuki" type="CharacterBody2D" unique_id=827943735 node_paths=PackedStringArray("animation_player")]
 y_sort_enabled = true
 script = ExtResource("1_5uo7l")
 shared_properties = Array[String](["equipped_effect", "last_step", "speed"])

@@ -144,7 +144,7 @@ func change_scene(path: String) -> void:
 
 	get_tree().change_scene_to_file(path)
 
-func save_current_scene(destination: Dictionary = persistent_data) -> void:
+func save_current_scene(where: Dictionary = persistent_data) -> void:
 	var scene_tree: SceneTree = get_tree()
 	var current_scene: Node = scene_tree.current_scene
 	var scene_path = current_scene.scene_file_path
@@ -156,52 +156,65 @@ func save_current_scene(destination: Dictionary = persistent_data) -> void:
 			tween.custom_step(INF)
 			tween.kill()
 
-	if is_same(destination, persistent_data):
+	# Pack `current_scene` to `scene_data` when saving to `persistent_data`.
+	if is_same(where, persistent_data):
 		scene_data[scene_path] = PackedScene.new()
 		scene_data[scene_path].pack(current_scene)
 
-	for child: Node in scene_tree.get_nodes_in_group("Persist"):
-		if child.has_meta("persistent_properties"):
-			var persistent_properties: Variant = child.get_meta("persistent_properties")
+	var get_persistent_nodes: Callable = (
+			func (node: Node, _recursion: Callable) -> Array[Node]:
+				var nodes: Array[Node] = []
 
-			if persistent_properties is Array:
-				if not destination.has("scene_data"):
-					destination["scene_data"] = {}
+				if node.has_meta("persistent_properties"):
+					nodes.append(node)
 
-				if not destination["scene_data"].has(scene_path):
-					destination["scene_data"][scene_path] = {}
+				for child: Node in node.get_children():
+					nodes += _recursion.call(child, _recursion)
 
-				var child_path: NodePath = current_scene.get_path_to(child)
+				return nodes
+	)
 
-				if not destination["scene_data"][scene_path].has(child_path):
-					destination["scene_data"][scene_path][child_path] = {}
+	if not where.has("scene_data"):
+		where["scene_data"] = {}
 
-				if not destination["scene_data"][scene_path][child_path]:
-					destination["scene_data"][scene_path][child_path] = {}
+	if not where["scene_data"].has(scene_path):
+		where["scene_data"][scene_path] = {}
 
-				for property: Variant in persistent_properties + ["scene_file_path"]:
-					if property is String:
-						if property in child:
-							destination["scene_data"][scene_path][child_path].set(property, child.get(property))
+	# Save persistent nodes' properties to `where["scene_data"][scene_path]`.
+	for node: Node in get_persistent_nodes.call(
+			current_scene, get_persistent_nodes):
 
-	var scene: Node = load(scene_path).instantiate()
+		var persistent_properties: Variant = node.get_meta(
+				"persistent_properties")
 
-	var get_persistent_node_paths: Callable = func (node: Node, _recursion: Callable) -> Array[NodePath]:
-		var node_paths: Array[NodePath] = []
+		if persistent_properties is Array:
+			var node_path: NodePath = current_scene.get_path_to(node)
 
-		if node.is_in_group("Persist"):
-			node_paths.append(scene.get_path_to(node))
+			if not where["scene_data"][scene_path].has(node_path):
+				where["scene_data"][scene_path][node_path] = {}
 
-		for child: Node in node.get_children():
-			node_paths += _recursion.call(child, _recursion)
+			if not where["scene_data"][scene_path][node_path]:
+				where["scene_data"][scene_path][node_path] = {}
 
-		return node_paths
+			for property: Variant in (persistent_properties +
+					["scene_file_path"]):
 
-	var persistent_node_paths: Array[NodePath] = get_persistent_node_paths.call(scene, get_persistent_node_paths)
+				if property is String:
+					if property in node:
+						where["scene_data"][scene_path][node_path].set(
+								property, node.get(property))
 
-	for child_path: NodePath in persistent_node_paths:
-		if not current_scene.has_node(child_path):
-			destination["scene_data"][scene_path][child_path] = null
+	var original_scene: Node = load(scene_path).instantiate()
+
+	for node: Node in get_persistent_nodes.call(
+			original_scene, get_persistent_nodes):
+
+		var node_path: NodePath = original_scene.get_path_to(node)
+
+		# Remove persistent nodes that are in `original_scene`
+		# but are not present in `current_scene`.
+		if not current_scene.has_node(node_path):
+			where["scene_data"][scene_path][node_path] = null
 
 func take_screenshot() -> Image:
 	var viewport: Viewport = get_viewport()

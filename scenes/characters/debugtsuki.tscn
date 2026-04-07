@@ -870,7 +870,7 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0we4y"]
 size = Vector2(16, 16)
 
-[node name="Debugtsuki" type="CharacterBody2D" unique_id=2006970519 node_paths=PackedStringArray("animation_player") groups=["Persist"]]
+[node name="Debugtsuki" type="CharacterBody2D" unique_id=2006970519 node_paths=PackedStringArray("animation_player")]
 y_sort_enabled = true
 script = ExtResource("1_g35pp")
 animation_player = NodePath("AnimationPlayer")
