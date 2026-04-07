@@ -97,7 +97,8 @@ func save_game(slot: int) -> Error:
 	return error
 
 func load_game(slot: int) -> Error:
-	var file := FileAccess.open(SAVE_DIRECTORY.path_join("save%02d.libki" % (slot)), FileAccess.READ)
+	var file := FileAccess.open(SAVE_DIRECTORY.path_join(
+			"save%02d.libki" % (slot)), FileAccess.READ)
 
 	if not file:
 		return FileAccess.get_open_error()
@@ -116,31 +117,48 @@ func load_game(slot: int) -> Error:
 			for scene_path: String in data["scene_data"]:
 				var scene: Node = load(scene_path).instantiate()
 
-				for child_path: NodePath in data["scene_data"][scene_path]:
-					var child: Node = scene.get_node_or_null(child_path)
+				for node_path: NodePath in data["scene_data"][scene_path]:
+					var node: Node = scene.get_node_or_null(node_path)
 
-					if child:
-						if not data["scene_data"][scene_path][child_path]:
-							scene.remove_child(child)
+					if node:
+						if not data["scene_data"][scene_path][node_path]:
+							node.queue_free()
 							continue
 					else:
-						var child_file_path: String = data["scene_data"][scene_path][child_path].get("scene_file_path", "")
+						var node_file_path: String = (
+								data["scene_data"][scene_path][node_path]
+								.get("scene_file_path", "")
+						)
 
-						if child_file_path.is_empty():
+						if node_file_path.is_empty():
 							continue
-						else:
-							child = load(child_file_path).instantiate()
-							scene.add_child(child)
-							child.owner = scene
 
-					for property: String in data["scene_data"][scene_path][child_path]:
-						child.set(property, data["scene_data"][scene_path][child_path][property])
+						var parent_node_path: NodePath = node_path.slice(0, -1)
+
+						var parent: Node = (
+								scene if parent_node_path.is_empty()
+								else scene.get_node_or_null(parent_node_path)
+						)
+
+						if parent:
+							node = load(node_file_path).instantiate()
+							parent.add_child(node)
+							node.owner = scene
+						else:
+							continue
+
+					for property: StringName in (data["scene_data"][scene_path]
+							[node_path]):
+
+						node.set(property, data["scene_data"][scene_path]
+								[node_path][property])
 
 				Game.scene_data[scene_path] = PackedScene.new()
 				Game.scene_data[scene_path].pack(scene)
 
 	else:
-		const SAKUTSUKIS_BEDROOM_PATH: String = "res://scenes/maps/sakutsukis_bedroom.tscn"
+		const SAKUTSUKIS_BEDROOM_PATH: String = (
+				"res://scenes/maps/sakutsukis_bedroom.tscn")
 
 		var player_defaults: Dictionary = {
 			"global_position": Vector2(-56.0, 8.0),
@@ -151,7 +169,11 @@ func load_game(slot: int) -> Error:
 
 		if data.has("scene_data"):
 			if data["scene_data"].has(SAKUTSUKIS_BEDROOM_PATH):
-				var player_data: Variant = data["scene_data"][SAKUTSUKIS_BEDROOM_PATH].get(^"Sakutsuki", false)
+
+				var player_data: Variant = (
+						data["scene_data"][SAKUTSUKIS_BEDROOM_PATH]
+						.get(^"Sakutsuki", false)
+				)
 
 				if player_data is Dictionary:
 					match player_data.get("global_position", false):
