@@ -21,25 +21,11 @@ extends YumeCharacter
 
 enum { STEP_LEFT = 0, STEP_RIGHT = 1 }
 
-## [AnimationPlayer] for this character.
-@export var animation_player: AnimationPlayer
-
 ## Direction the character is facing.
 @export var facing: DIRECTION = DIRECTION.DOWN:
 	set(value):
 		facing = value
-		set_animation()
-
-## Indicates the extraordinary character behaviour (eg. ladder climbing).
-@export_enum("Default", "Bench", "Ladder", "Sit") var action: String = "Default":
-	set(value):
-		action = value
-		set_animation()
-	get:
-		if action == "Default":
-			return ""
-		else:
-			return action
+		_force_animation_update()
 
 ## True, if the character is sitting.
 @export var is_sitting: bool = false
@@ -47,6 +33,9 @@ enum { STEP_LEFT = 0, STEP_RIGHT = 1 }
 var footstep_sound: AudioStream
 
 var last_step: int = STEP_LEFT
+
+func _force_animation_update() -> void:
+	pass
 
 func _move() -> void:
 	footstep_sound = (current_world.default_footstep_sound if current_world
@@ -67,18 +56,9 @@ func _move() -> void:
 	elif ground is YumeInteractable:
 		footstep_sound = get_footstep_sound(ground.surface)
 
-	if last_step:
-		set_animation(str(DIRECTION.find_key(facing)).to_lower() + action, speed, 0.125)
-	else:
-		set_animation(str(DIRECTION.find_key(facing)).to_lower() + action + "2", speed, 0.125)
-
 	last_step = !last_step
 
 	await super()
-
-## Look this 'direction'.
-func look(direction: DIRECTION) -> void:
-	set_animation(str(DIRECTION.find_key(facing)).to_lower() + action + "Look" + str(DIRECTION.find_key(direction)).capitalize())
 
 func get_footstep_sound(ground: SURFACE) -> AudioStream:
 	match ground:
@@ -114,8 +94,3 @@ func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 
 func play_footstep_sound() -> void:
 	play_sound(footstep_sound, 256.0, randf_range(0.90, 1.10))
-
-func set_animation(animation: String = str(DIRECTION.find_key(facing)).to_lower() + action, animation_speed: float = 0.0, animation_position: float = 0.0, from_end: bool = false) -> void:
-	if animation_player.get_animation_library("").has_animation(animation):
-		animation_player.play(animation, -1, animation_speed, from_end)
-		animation_player.seek(animation_position, true)

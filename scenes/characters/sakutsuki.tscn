@@ -1659,11 +1659,10 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qhyl"]
 size = Vector2(16, 16)
 
-[node name="Sakutsuki" type="CharacterBody2D" unique_id=827943735 node_paths=PackedStringArray("animation_player")]
+[node name="Sakutsuki" type="CharacterBody2D" unique_id=827943735]
 y_sort_enabled = true
 script = ExtResource("1_5uo7l")
-shared_properties = Array[String](["equipped_effect", "last_step", "speed"])
-animation_player = NodePath("AnimationPlayer")
+shared_properties = Array[StringName]([&"equipped_effect", &"last_step", &"speed"])
 metadata/_custom_type_script = "uid://3tw0tkifql18"
 metadata/persistent_properties = [&"accept_events", &"cancel_events", &"collision_layer", &"collision_mask", &"equipped_effect", &"facing", &"global_position", &"last_step", &"name", &"speed", &"z_index"]
 

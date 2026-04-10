@@ -16,6 +16,7 @@
 
 ## A character controllable by the player.
 
+@abstract
 class_name YumePlayer
 extends YumeHumanoid
 
@@ -32,7 +33,7 @@ const MOVEMENT_KEYS: Dictionary[String, DIRECTION] = {
 @export var equipped_effect: EFFECT = EFFECT.DEFAULT:
 	set(value):
 		equipped_effect = value
-		set_animation()
+		_force_animation_update()
 
 @export var menu_path: StringName = "res://scenes/ui/player_menu.tscn"
 
@@ -170,42 +171,7 @@ func interact() -> void:
 		accept_events.pop_front()
 
 ## Play the cheek pinching animation. Wakes up the character, if is dreaming.
-func pinch_cheek() -> void:
-	var effect_name: String = EFFECT.find_key(equipped_effect).capitalize()
-
-	if animation_player.has_animation_library(effect_name):
-		if animation_player.get_animation_library(effect_name).has_animation("downPinch"):
-			is_busy = true
-
-			if facing != DIRECTION.DOWN:
-				await get_tree().create_timer(0.5, false, true).timeout
-				facing = DIRECTION.DOWN
-				await get_tree().create_timer(0.5, false, true).timeout
-
-			set_animation("downPinch", 1.0)
-			await animation_player.animation_finished
-			await get_tree().create_timer(0.25, false, true).timeout
-
-			if current_world:
-				if current_world.dreaming:
-					Game.wake_up()
-
-			set_animation("downPinch", -1.0, 1.0, true)
-			await animation_player.animation_finished
-			set_animation()
-			is_busy = false
-			return
-
-	equip()
-	pinch_cheek()
-
-func set_animation(animation: String = str(DIRECTION.find_key(facing)).to_lower() + action, animation_speed: float = 0.0, animation_position: float = 0.0, from_end: bool = false) -> void:
-	var effect_name: String = EFFECT.find_key(equipped_effect).capitalize()
-
-	if animation_player.has_animation_library(effect_name):
-		if animation_player.get_animation_library(effect_name).has_animation(animation):
-			animation_player.play(effect_name + "/" + animation, -1, animation_speed, from_end)
-			animation_player.seek(animation_position, true)
+@abstract func pinch_cheek() -> void
 
 ## Grant the player an effect.
 func grant_effect(effect: EFFECT) -> void:
