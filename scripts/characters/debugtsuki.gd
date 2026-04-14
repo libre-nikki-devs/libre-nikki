@@ -16,11 +16,32 @@
 
 extends "res://scripts/ai/YumeHumanoid/wanderer.gd"
 
+@onready var animation_player := $AnimationPlayer
+
+@onready var sprite := $AnimatedSprite2D
+
 func _init() -> void:
 	super()
 
 	if not is_connected("body_interacted", _on_body_interacted):
 		connect("body_interacted", _on_body_interacted)
+
+func _force_animation_update() -> void:
+	if not is_node_ready():
+		await ready
+
+	sprite.animation = DIRECTION.find_key(facing).to_lower()
+
+func _move() -> void:
+	var animation_name: StringName = DIRECTION.find_key(facing).to_lower()
+
+	if last_step:
+		animation_name += &"2"
+
+	animation_player.play(animation_name, -1.0, speed)
+	animation_player.seek(0.125)
+
+	await super()
 
 func _on_body_interacted(body: Node2D) -> void:
 	if not is_busy:

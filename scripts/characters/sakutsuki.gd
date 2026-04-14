@@ -1,4 +1,4 @@
-# Copyright (C) 2024-2025 Libre Nikki Developers.
+# Copyright (C) 2024-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -20,6 +20,10 @@ extends YumePlayer
 
 signal act_started(effect: EFFECT)
 signal act_finished(effect: EFFECT)
+
+@onready var animation_player := $AnimationPlayer
+
+@onready var sprite := $AnimatedSprite2D
 
 func _ready() -> void:
 	connect("accept_key_held", _on_accept_key_held)
@@ -45,8 +49,34 @@ func _physics_process(delta: float) -> void:
 				#look(direction)
 				pass
 			else:
-				facing = direction
+				if facing != direction:
+						facing = direction
+
 				move(direction)
+
+func _force_animation_update() -> void:
+	if not is_node_ready():
+		await ready
+
+	var effect_name: StringName = EFFECT.find_key(equipped_effect).capitalize()
+
+	if effect_name == &"Default":
+		effect_name = &""
+
+	sprite.animation = DIRECTION.find_key(facing).to_lower() + effect_name
+
+func _move() -> void:
+	var animation_name: StringName = EFFECT.find_key(
+			equipped_effect).capitalize().path_join(
+			DIRECTION.find_key(facing).to_lower())
+
+	if last_step:
+		animation_name += &"2"
+
+	animation_player.play(animation_name, -1.0, speed)
+	animation_player.seek(0.125)
+
+	await super()
 
 func _on_accept_key_held() -> void:
 	if not is_busy:
@@ -70,17 +100,60 @@ func act() -> void:
 		EFFECT.DEFAULT:
 			is_busy = true
 
+			var animation_name: StringName = EFFECT.find_key(
+					equipped_effect).capitalize().path_join(
+					DIRECTION.find_key(facing).to_lower()) + &"Action"
+
 			if is_sitting:
-				set_animation(str(DIRECTION.find_key(facing)).to_lower() + "Action2", 1.0)
-				await animation_player.animation_finished
-				action = "Default"
-			else:
-				set_animation(str(DIRECTION.find_key(facing)).to_lower() + "Action", 1.0)
-				await animation_player.animation_finished
-				action = "Sit"
+				animation_name += &"2"
+
+			animation_player.play(animation_name, -1.0)
+			await animation_player.animation_finished
+
+			if is_sitting:
+				_force_animation_update()
 
 			await get_tree().create_timer(0.25, false, true).timeout
 			is_sitting = !is_sitting
 			is_busy = false
 
 	act_finished.emit(equipped_effect)
+
+func pinch_cheek() -> void:
+	var timer := Timer.new()
+	timer.one_shot = true
+	add_child(timer)
+
+	while true:
+		var animation_name: StringName = EFFECT.find_key(
+				equipped_effect).capitalize().path_join(&"downPinch")
+
+		if not animation_player.has_animation(animation_name):
+			equip()
+			continue
+
+		is_busy = true
+
+		if facing != DIRECTION.DOWN:
+			timer.start(0.5)
+			await timer.timeout
+			facing = DIRECTION.DOWN
+			timer.start(0.5)
+			await timer.timeout
+
+		animation_player.play(animation_name)
+		await animation_player.animation_finished
+		timer.start(0.25)
+		await timer.timeout
+		timer.queue_free()
+
+		if current_world:
+			if current_world.dreaming:
+				Game.wake_up()
+				return
+
+		animation_player.play(animation_name, -1.0, -1.0, true)
+		await animation_player.animation_finished
+		_force_animation_update()
+		is_busy = false
+		return
