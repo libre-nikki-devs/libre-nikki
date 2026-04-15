@@ -26,8 +26,21 @@ signal act_finished(effect: EFFECT)
 @onready var sprite := $AnimatedSprite2D
 
 func _ready() -> void:
-	connect("accept_key_held", _on_accept_key_held)
-	connect("cancel_key_held", _on_cancel_key_held)
+	accept_key_held.connect(
+			func () -> void:
+				if not is_busy:
+					act()
+				else:
+					accept_key_hold_time = 0.0
+	)
+
+	cancel_key_held.connect(
+			func () -> void:
+				if not is_busy:
+					equip()
+				else:
+					cancel_key_hold_time = 0.0
+	)
 
 func _physics_process(delta: float) -> void:
 	if not is_busy:
@@ -77,18 +90,6 @@ func _move() -> void:
 	animation_player.seek(0.125)
 
 	await super()
-
-func _on_accept_key_held() -> void:
-	if not is_busy:
-		act()
-	else:
-		accept_key_hold_time = 0.0
-
-func _on_cancel_key_held() -> void:
-	if not is_busy:
-		equip()
-	else:
-		cancel_key_hold_time = 0.0
 
 ## Perform an action.
 func act() -> void:

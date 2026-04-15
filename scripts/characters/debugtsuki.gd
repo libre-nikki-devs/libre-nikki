@@ -20,11 +20,14 @@ extends "res://scripts/ai/YumeHumanoid/wanderer.gd"
 
 @onready var sprite := $AnimatedSprite2D
 
-func _init() -> void:
+func _ready() -> void:
 	super()
 
-	if not is_connected("body_interacted", _on_body_interacted):
-		connect("body_interacted", _on_body_interacted)
+	body_interacted.connect(
+			func (body: Node2D) -> void:
+				if not is_busy:
+					facing = face(body.global_position)
+	)
 
 func _force_animation_update() -> void:
 	if not is_node_ready():
@@ -42,7 +45,3 @@ func _move() -> void:
 	animation_player.seek(0.125)
 
 	await super()
-
-func _on_body_interacted(body: Node2D) -> void:
-	if not is_busy:
-		facing = face(body.global_position)
