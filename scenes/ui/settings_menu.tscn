@@ -150,35 +150,56 @@ vertical_alignment = 1
 visible = false
 layout_mode = 2
 
-[node name="CCButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer" unique_id=494383399]
+[node name="CC-BYButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer" unique_id=494383399]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../GPLButton")
 focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath("../GPLButton")
-focus_next = NodePath("../GPLButton")
+focus_neighbor_bottom = NodePath("../CC-BY-SAButton")
+focus_next = NodePath("../CC-BY-SAButton")
 focus_previous = NodePath("../GPLButton")
 text = " "
 
-[node name="Label" type="Label" parent="MainPanelContainer/LicensesVBoxContainer/CCButton" unique_id=786923517]
+[node name="Label" type="Label" parent="MainPanelContainer/LicensesVBoxContainer/CC-BYButton" unique_id=786923517]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "CC-BY-4.0"
+text = "CC-BY 4.0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CC-BY-SAButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer" unique_id=219434182]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../CC-BYButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../GPLButton")
+focus_next = NodePath("../GPLButton")
+focus_previous = NodePath("../CC-BYButton")
+text = " "
+
+[node name="Label" type="Label" parent="MainPanelContainer/LicensesVBoxContainer/CC-BY-SAButton" unique_id=1870895155]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "CC-BY-SA 4.0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="GPLButton" type="Button" parent="MainPanelContainer/LicensesVBoxContainer" unique_id=1566512541]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
-focus_neighbor_top = NodePath("../CCButton")
+focus_neighbor_top = NodePath("../CC-BY-SAButton")
 focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath("../CCButton")
-focus_next = NodePath("../CCButton")
-focus_previous = NodePath("../CCButton")
+focus_neighbor_bottom = NodePath("../CC-BYButton")
+focus_next = NodePath("../CC-BYButton")
+focus_previous = NodePath("../CC-BY-SAButton")
 text = " "
 
 [node name="Label" type="Label" parent="MainPanelContainer/LicensesVBoxContainer/GPLButton" unique_id=1533400527]
@@ -188,7 +209,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "GPL-3"
+text = "GPLv3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -268,7 +289,8 @@ vertical_alignment = 1
 [connection signal="pressed" from="MainPanelContainer/DisplayVBoxContainer/FPSCounterButton" to="." method="_on_fps_counter_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/DisplayVBoxContainer/VSyncButton" to="." method="_on_v_sync_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/DisplayVBoxContainer/MaxFPSButton" to="." method="_on_max_fps_button_pressed"]
-[connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/CCButton" to="." method="_on_cc_button_pressed"]
+[connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/CC-BYButton" to="." method="_on_ccby_button_pressed"]
+[connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/CC-BY-SAButton" to="." method="_on_ccbysa_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/GPLButton" to="." method="_on_gpl_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/DisplayButton" to="." method="_on_display_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/SideVBoxContainer/LicensesButton" to="." method="_on_licenses_button_pressed"]

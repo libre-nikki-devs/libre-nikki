@@ -151,8 +151,11 @@ func _on_licenses_button_pressed() -> void:
 			child.grab_focus()
 			break
 
-func _on_cc_button_pressed() -> void:
-	open_submenu("res://scenes/ui/license_menu.tscn", { "license_text": preload("res://scenes/ui/license_menu.tscn").instantiate().CC_FORMATTED })
+func _on_ccby_button_pressed() -> void:
+	open_submenu("res://scenes/ui/license_menu.tscn", { "license_text": preload("res://scenes/ui/license_menu.tscn").instantiate().CCBY_FORMATTED })
+
+func _on_ccbysa_button_pressed() -> void:
+	open_submenu("res://scenes/ui/license_menu.tscn", { "license_text": preload("res://scenes/ui/license_menu.tscn").instantiate().CCBYSA_FORMATTED })
 
 func _on_gpl_button_pressed() -> void:
 	open_submenu("res://scenes/ui/license_menu.tscn", { "license_text": preload("res://scenes/ui/license_menu.tscn").instantiate().GPL_FORMATTED })
