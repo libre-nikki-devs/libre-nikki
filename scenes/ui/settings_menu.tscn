@@ -46,7 +46,9 @@ Libre Nikki's source code is licensed under the terms of the GNU General Public 
 Libre Nikki features assets that use licenses compatible with the GPL-3.
 
 
-Github: [url]https://github.com/libre-nikki-devs/libre-nikki[/url]"
+Github: [url]https://github.com/libre-nikki-devs/libre-nikki[/url]
+
+Discord: [url]https://discord.gg/gp5dzFktSE[/url]"
 meta_underlined = false
 
 [node name="DisplayVBoxContainer" type="VBoxContainer" parent="MainPanelContainer" unique_id=376316123]
