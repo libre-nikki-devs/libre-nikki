@@ -52,8 +52,8 @@ func _ready() -> void:
 	focus_button = play_button
 
 func _post_open() -> void:
-	Game.transition_handler.play("fade_in", -1, 2.0)
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"fade_in", -1, 2.0)
+	await TransitionHandler.animation_finished
 	menu_container.visible = true
 	var tween: Tween = create_tween()
 	tween.tween_property(menu_container, "size", Vector2(72, 72), 0.15)
@@ -75,8 +75,8 @@ func _input(event: InputEvent) -> void:
 				greeting:
 					if not event.is_action_pressed("ui_accept") or not url_hovered or not event is InputEventMouseButton:
 						get_tree().paused = true
-						Game.transition_handler.play("fade_out")
-						await Game.transition_handler.animation_finished
+						TransitionHandler.play(&"fade_out")
+						await TransitionHandler.animation_finished
 						greeting.visible = false
 						get_tree().paused = false
 						Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
@@ -84,13 +84,13 @@ func _input(event: InputEvent) -> void:
 						Game.scene_data.clear()
 
 func _on_play_button_pressed() -> void:
-	Game.transition_handler.play("fade_out", -1, 10.0)
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"fade_out", -1, 10.0)
+	await TransitionHandler.animation_finished
 	get_tree().paused = true
 	greeting.visible = true
 	greeting_label.grab_focus()
-	Game.transition_handler.play("fade_in")
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"fade_in")
+	await TransitionHandler.animation_finished
 	get_tree().paused = false
 
 func _on_continue_button_pressed() -> void:
@@ -100,8 +100,8 @@ func _on_settings_button_pressed() -> void:
 	open_submenu("res://scenes/ui/settings_menu.tscn")
 
 func _on_quit_button_pressed() -> void:
-	Game.transition_handler.play("fade_out", -1, 2.0)
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"fade_out", -1, 2.0)
+	await TransitionHandler.animation_finished
 	get_tree().quit()
 
 func _on_greeting_label_meta_clicked(meta: Variant) -> void:

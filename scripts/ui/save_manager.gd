@@ -201,8 +201,8 @@ func load_game(slot: int) -> Error:
 
 	Game.persistent_data = data
 	Game.is_current_scene_loaded_from_file = true
-	Game.transition_handler.play("fade_out", -1, 10.0)
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"fade_out", -1, 10.0)
+	await TransitionHandler.animation_finished
 	Game.change_scene(Game.persistent_data["current_scene"])
 	queue_free()
 	return OK

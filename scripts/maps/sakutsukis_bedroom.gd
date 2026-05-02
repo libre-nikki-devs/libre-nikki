@@ -5,8 +5,8 @@ func _init() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 
 func _ready() -> void:
-	Game.transition_handler.play("pixelate_in")
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"pixelate_in")
+	await TransitionHandler.animation_finished
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func save_game(save_path: String):
@@ -16,8 +16,8 @@ func save_game(save_path: String):
 func _on_bed_body_interacted(body: Node2D) -> void:
 	if body is YumePlayer:
 		process_mode = Node.PROCESS_MODE_DISABLED
-		Game.transition_handler.play("pixelate_out")
-		await Game.transition_handler.animation_finished
+		TransitionHandler.play(&"pixelate_out")
+		await TransitionHandler.animation_finished
 		process_mode = Node.PROCESS_MODE_PAUSABLE
 		Game.sleep()
 

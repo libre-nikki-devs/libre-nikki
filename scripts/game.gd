@@ -29,8 +29,6 @@ const MAPSHOTS_DIRECTORY: String = "user://mapshots"
 
 @onready var music_player: AudioStreamPlayer = get_node("MusicPlayer")
 
-@onready var transition_handler: AnimationPlayer = get_node("TransitionHandler")
-
 var current_scene_state: SCENE_STATES = SCENE_STATES.DEFAULT
 
 var is_current_scene_loaded_from_file: bool = false
@@ -300,9 +298,9 @@ func wake_up() -> void:
 		tween = create_tween()
 		tween.tween_property(music_player, "volume_db", linear_to_db(0.01), 5.0)
 
-	transition_handler.play("pixelate_out")
+	TransitionHandler.play(&"pixelate_out")
 	scene_tree.paused = true
-	await transition_handler.animation_finished
+	await TransitionHandler.animation_finished
 	scene_tree.paused = false
 	change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
 

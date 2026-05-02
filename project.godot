@@ -29,6 +29,7 @@ buses/default_bus_layout="res://misc/audio_bus_layout.tres"
 [autoload]
 
 Game="*res://scenes/game.tscn"
+TransitionHandler="*res://scenes/transition_handler.tscn"
 
 [debug]
 

@@ -15,8 +15,8 @@ func _ready() -> void:
 		player.facing = YumeCharacter.DIRECTION.DOWN
 		player.position = Vector2(424.0, 584.0)
 
-	Game.transition_handler.play("fade_in")
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"fade_in")
+	await TransitionHandler.animation_finished
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _on_child_entered_tree(node: Node):
@@ -59,36 +59,36 @@ func _on_child_entered_tree(node: Node):
 	parallax_world.add_child.call_deferred(instance)
 
 func _on_nexus_door_opened() -> void:
-	Game.transition_handler.play("fade_out")
+	TransitionHandler.play(&"fade_out")
 	process_mode = Node.PROCESS_MODE_DISABLED
-	await Game.transition_handler.animation_finished
+	await TransitionHandler.animation_finished
 	Game.save_current_scene()
 	Game.change_scene("res://scenes/maps/nexus.tscn")
 
 func _on_snowflake_door_opened() -> void:
-	Game.transition_handler.play("fade_out")
+	TransitionHandler.play(&"fade_out")
 	process_mode = Node.PROCESS_MODE_DISABLED
-	await Game.transition_handler.animation_finished
+	await TransitionHandler.animation_finished
 	player.can_move_in_vacuum = false
 	player.collision_layer = 20
 	player.collision_mask = 20
 	player.facing = YumeCharacter.DIRECTION.DOWN
 	player.position = Vector2(2056.0, 376.0)
 	player.z_index = 2
-	Game.transition_handler.play("fade_in")
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"fade_in")
+	await TransitionHandler.animation_finished
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _on_upper_door_opened() -> void:
-	Game.transition_handler.play("fade_out")
+	TransitionHandler.play(&"fade_out")
 	process_mode = Node.PROCESS_MODE_DISABLED
-	await Game.transition_handler.animation_finished
+	await TransitionHandler.animation_finished
 	player.can_move_in_vacuum = true
 	player.collision_layer = 2
 	player.collision_mask = 2
 	player.facing = YumeCharacter.DIRECTION.DOWN
 	player.position = Vector2(440.0, 1896.0)
 	player.z_index = 1
-	Game.transition_handler.play("fade_in")
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"fade_in")
+	await TransitionHandler.animation_finished
 	process_mode = Node.PROCESS_MODE_PAUSABLE

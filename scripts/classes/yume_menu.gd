@@ -41,16 +41,16 @@ func _get_focus_grabber() -> Control:
 	return null
 
 func _pre_open() -> void:
-	Game.transition_handler.play("fade_out", -1, 10.0)
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"fade_out", -1, 10.0)
+	await TransitionHandler.animation_finished
 
 func _post_open() -> void:
-	Game.transition_handler.play("fade_in", -1, 10.0)
+	TransitionHandler.play(&"fade_in", -1, 10.0)
 
 func _pre_close() -> void:
-	Game.transition_handler.play("fade_out", -1, 10.0)
-	await Game.transition_handler.animation_finished
-	Game.transition_handler.play("fade_in", -1, 10.0)
+	TransitionHandler.play(&"fade_out", -1, 10.0)
+	await TransitionHandler.animation_finished
+	TransitionHandler.play(&"fade_in", -1, 10.0)
 
 func get_root_menu() -> YumeMenu:
 	var menu: YumeMenu = self

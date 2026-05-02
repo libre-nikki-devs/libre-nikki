@@ -19,21 +19,21 @@ func _ready() -> void:
 				player.facing = YumeCharacter.DIRECTION.DOWN
 				player.position = Vector2(8.0, 24.0)
 
-	Game.transition_handler.play("fade_in")
-	await Game.transition_handler.animation_finished
+	TransitionHandler.play(&"fade_in")
+	await TransitionHandler.animation_finished
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _on_door_opened() -> void:
-	Game.transition_handler.play("fade_out")
+	TransitionHandler.play(&"fade_out")
 	process_mode = Node.PROCESS_MODE_DISABLED
-	await Game.transition_handler.animation_finished
+	await TransitionHandler.animation_finished
 	Game.save_current_scene()
 	Game.change_scene("res://scenes/maps/sakutsukis_dream_bedroom.tscn")
 
 func _on_amber_corridors_door_opened() -> void:
-	Game.transition_handler.play("fade_out")
+	TransitionHandler.play(&"fade_out")
 	process_mode = Node.PROCESS_MODE_DISABLED
-	await Game.transition_handler.animation_finished
+	await TransitionHandler.animation_finished
 	Game.save_current_scene()
 	Game.change_scene("res://scenes/maps/amber_corridors.tscn")
 
