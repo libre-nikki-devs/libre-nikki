@@ -25,15 +25,6 @@ enum SURFACE { SILENT = -1, DEFAULT = 0, CONCRETE = 1, METAL = 2,
 
 @export var surface: SURFACE = SURFACE.DEFAULT
 
-## Pixel-perfect position.
-var pixel_position: Vector2i:
-	get:
-		return Vector2i(round(position))
-
-	set(value):
-		position = value
-		pixel_position = value
-
 ## Emitted when something interacted with this node.
 signal body_interacted(body: Node2D)
 
