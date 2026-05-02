@@ -27,6 +27,7 @@ func _on_door_opened() -> void:
 	TransitionHandler.play(&"fade_out")
 	process_mode = Node.PROCESS_MODE_DISABLED
 	await TransitionHandler.animation_finished
+	await RenderingServer.frame_post_draw
 	Game.save_current_scene()
 	Game.change_scene("res://scenes/maps/sakutsukis_dream_bedroom.tscn")
 
@@ -34,6 +35,7 @@ func _on_amber_corridors_door_opened() -> void:
 	TransitionHandler.play(&"fade_out")
 	process_mode = Node.PROCESS_MODE_DISABLED
 	await TransitionHandler.animation_finished
+	await RenderingServer.frame_post_draw
 	Game.save_current_scene()
 	Game.change_scene("res://scenes/maps/amber_corridors.tscn")
 

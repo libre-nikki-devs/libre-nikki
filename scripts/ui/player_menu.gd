@@ -124,8 +124,10 @@ func _on_actions_button_pressed() -> void:
 		actions_grid_container.get_children()[0].grab_focus()
 
 func _on_quit_button_pressed() -> void:
-	await close()
+	await _pre_close()
+	await RenderingServer.frame_post_draw
 	Game.change_scene("res://scenes/ui/main_menu.tscn")
+	get_root_menu().queue_free()
 
 func _on_effects_button_pressed() -> void:
 	player_container.hide()

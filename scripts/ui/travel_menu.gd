@@ -94,10 +94,9 @@ func _get_focus_grabber() -> Control:
 	return map_container
 
 func _on_map_button_pressed(scene: String) -> void:
-	TransitionHandler.play(&"fade_out", -1, 10.0)
-	await TransitionHandler.animation_finished
-	TransitionHandler.seek(0.0, true)
-	TransitionHandler.stop()
+	await _pre_close()
+	await RenderingServer.frame_post_draw
+	TransitionHandler.play(&"RESET")
 	Game.change_scene(scene)
 	get_root_menu().queue_free()
 

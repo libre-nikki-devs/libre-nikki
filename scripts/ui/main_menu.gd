@@ -77,6 +77,7 @@ func _input(event: InputEvent) -> void:
 						get_tree().paused = true
 						TransitionHandler.play(&"fade_out")
 						await TransitionHandler.animation_finished
+						await RenderingServer.frame_post_draw
 						greeting.visible = false
 						get_tree().paused = false
 						Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")

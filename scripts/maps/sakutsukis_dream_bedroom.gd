@@ -22,4 +22,5 @@ func _on_door_opened() -> void:
 	TransitionHandler.play(&"fade_out")
 	process_mode = Node.PROCESS_MODE_DISABLED
 	await TransitionHandler.animation_finished
+	await RenderingServer.frame_post_draw
 	Game.change_scene("res://scenes/maps/nexus.tscn")

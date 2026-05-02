@@ -109,6 +109,9 @@ func load_game(slot: int) -> Error:
 	if data is not Dictionary:
 		return ERR_INVALID_DATA
 
+	await _pre_close()
+	await RenderingServer.frame_post_draw
+
 	if OS.is_debug_build():
 		if data.has("scene_data"):
 			Game.scene_data.clear()
@@ -201,8 +204,6 @@ func load_game(slot: int) -> Error:
 
 	Game.persistent_data = data
 	Game.is_current_scene_loaded_from_file = true
-	TransitionHandler.play(&"fade_out", -1, 10.0)
-	await TransitionHandler.animation_finished
 	Game.change_scene(Game.persistent_data["current_scene"])
 	queue_free()
 	return OK

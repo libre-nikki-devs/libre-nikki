@@ -301,6 +301,7 @@ func wake_up() -> void:
 	TransitionHandler.play(&"pixelate_out")
 	scene_tree.paused = true
 	await TransitionHandler.animation_finished
+	await RenderingServer.frame_post_draw
 	scene_tree.paused = false
 	change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
 

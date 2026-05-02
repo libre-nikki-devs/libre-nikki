@@ -18,6 +18,7 @@ func _on_bed_body_interacted(body: Node2D) -> void:
 		process_mode = Node.PROCESS_MODE_DISABLED
 		TransitionHandler.play(&"pixelate_out")
 		await TransitionHandler.animation_finished
+		await RenderingServer.frame_post_draw
 		process_mode = Node.PROCESS_MODE_PAUSABLE
 		Game.sleep()
 
