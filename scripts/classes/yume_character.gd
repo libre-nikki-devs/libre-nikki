@@ -157,20 +157,12 @@ func _get_current_collider() -> YumeCharacter:
 	return null
 
 func _move() -> void:
-	var sum: float = target_position.x + target_position.y
-
-	if sum == 0.0:
-		return
-
-	var interpolate: Callable = (
-			func (v: float) -> float:
-				return roundf(v * sum) / sum
-	)
-
 	var tween: Tween = create_tween()
 
-	(tween.tween_property(self, "position", target_position, 0.25 / speed)
-			.as_relative().set_custom_interpolator(interpolate))
+	tween.tween_method(
+			func (value: Vector2) -> void:
+				position = value.round()
+	, position, position + target_position, 0.25 / speed)
 
 	for collision_shape: CollisionShape2D in collision_shapes:
 		collision_shape.position += target_position
