@@ -236,11 +236,13 @@ func _update_detector_positions(target_vector: Vector2) -> void:
 
 func face(what: Vector2) -> DIRECTION:
 	var closest: Vector2 = global_position
-	var distance: float = global_position.distance_to(what)
 
 	if current_world:
+		var distance: float = global_position.distance_squared_to(what)
+
 		for duplicate_position: Vector2 in current_world.duplicate_positions:
-			var duplicate_distance: float = (global_position + duplicate_position).distance_to(what)
+			var duplicate_distance: float = (global_position +
+					duplicate_position).distance_squared_to(what)
 
 			if duplicate_distance < distance:
 				distance = duplicate_distance
