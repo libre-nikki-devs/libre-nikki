@@ -17,5 +17,22 @@
 extends AnimationPlayer
 
 
+@onready var texture_rect: TextureRect = $TextureRect
+
+
 func _ready() -> void:
 	reparent.call_deferred(Game)
+
+
+func prepare_texture() -> Error:
+	var screenshot: Image = await Game.take_screenshot()
+
+	if not screenshot:
+		return ERR_CANT_CREATE
+
+	var texture := ImageTexture.create_from_image(screenshot)
+	texture_rect.texture = texture
+	texture_rect.modulate.a = 1.0
+	texture_rect.show()
+
+	return OK
