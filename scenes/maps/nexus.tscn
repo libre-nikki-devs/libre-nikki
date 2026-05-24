@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://duwhwgmgo6w7q" path="res://scripts/maps/nexus.gd" id="1_j3gsm"]
 [ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/characters/sakutsuki.tscn" id="2_gfkke"]
 [ext_resource type="Texture2D" uid="uid://lnpbkktyvhvj" path="res://tilesets/images/nexus.png" id="2_jrd6r"]
+[ext_resource type="TileSet" uid="uid://coerf867dbgen" path="res://tilesets/rusted_cubes_world.tres" id="4_4ua7i"]
 [ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="4_8rcjt"]
 [ext_resource type="Script" uid="uid://cwerewsxa8758" path="res://scripts/props/door.gd" id="4_y2428"]
 [ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="5_865kj"]
@@ -73,6 +74,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2kjem"]
 size = Vector2(16, 16)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ua7i"]
+size = Vector2(16, 16)
+
 [node name="Nexus" type="Node2D" unique_id=1329966386]
 y_sort_enabled = true
 script = ExtResource("1_j3gsm")
@@ -93,15 +97,22 @@ centered = false
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1620149099]
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAD6/wAAAAAAAAAAAAAGAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAD0/wAAAAAAAAAAAAD6//r/AAAAAAAAAAAAAPr/AAAAAAAAAAAGAPr/AAAAAAAAAAAMAPr/AAAAAAAAAAD0//r/AAAAAAAAAAAAAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAAMAAYAAAAAAAAAAAD6/wYAAAAAAAAAAAD0/wYAAAAAAAAAAAAMAPT/AAAAAAAAAAAGAPT/AAAAAAAAAAAAAPT/AAAAAAAAAAD6//T/AAAAAAAAAAD0//T/AAAAAAAAAAAAAAwAAAAAAAAAAAAGAAwAAAAAAAAAAAAMAAwAAAAAAAAAAAD6/wwAAAAAAAAAAAD0/wwAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAD6/wAAAAAAAAAAAAAGAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAD0/wAAAAAAAAAAAAD6//r/AAAAAAAAAAAAAPr/AAAAAAAAAAAMAPr/AAAAAAAAAAD0//r/AAAAAAAAAAAAAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAAMAAYAAAAAAAAAAAD6/wYAAAAAAAAAAAD0/wYAAAAAAAAAAAAMAPT/AAAAAAAAAAAGAPT/AAAAAAAAAAAAAPT/AAAAAAAAAAD6//T/AAAAAAAAAAD0//T/AAAAAAAAAAAAAAwAAAAAAAAAAAAGAAwAAAAAAAAAAAAMAAwAAAAAAAAAAAD6/wwAAAAAAAAAAAD0/wwAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_2k5aw")
 physics_quadrant_size = 1
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=786083454]
+z_index = 1
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAAGAPr/AAAGAAEAAAA=")
+tile_set = ExtResource("4_4ua7i")
 
 [node name="Sakutsuki" parent="." unique_id=1540589616 instance=ExtResource("2_gfkke")]
 z_index = 1
 position = Vector2(8, 24)
 collision_layer = 2
 collision_mask = 2
+shared_properties = Array[StringName]([&"equipped_effect", &"facing", &"last_step", &"speed"])
 
 [node name="Door" type="CharacterBody2D" parent="." unique_id=539606245 node_paths=PackedStringArray("animated_sprite")]
 z_index = 1
@@ -118,24 +129,6 @@ sprite_frames = SubResource("SpriteFrames_5xw31")
 animation = &"open"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=483533819]
-shape = SubResource("RectangleShape2D_yuqbu")
-
-[node name="AmberCorridorsDoor" type="CharacterBody2D" parent="." unique_id=182545929 node_paths=PackedStringArray("animated_sprite")]
-z_index = 1
-y_sort_enabled = true
-position = Vector2(104, -88)
-collision_layer = 2
-collision_mask = 2
-script = ExtResource("4_y2428")
-animated_sprite = NodePath("AnimatedSprite2D")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="AmberCorridorsDoor" unique_id=275856518]
-modulate = Color(1, 0.69411767, 0, 1)
-position = Vector2(0, -8)
-sprite_frames = SubResource("SpriteFrames_5xw31")
-animation = &"open"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AmberCorridorsDoor" unique_id=1873050686]
 shape = SubResource("RectangleShape2D_yuqbu")
 
 [node name="Debugtsuki" parent="." unique_id=259895248 instance=ExtResource("6_dsb3x")]
@@ -158,6 +151,18 @@ sprite_frames = SubResource("SpriteFrames_76nev")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bike" unique_id=1762549440]
 shape = SubResource("RectangleShape2D_2kjem")
 
+[node name="RustedCubesTeleport" type="CharacterBody2D" parent="." unique_id=177971627]
+z_index = 1
+y_sort_enabled = true
+position = Vector2(104, -88)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("4_8rcjt")
+metadata/_custom_type_script = "uid://c4kernc5sdtfb"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RustedCubesTeleport" unique_id=1008850308]
+shape = SubResource("RectangleShape2D_4ua7i")
+
 [connection signal="opened" from="Door" to="." method="_on_door_opened"]
-[connection signal="opened" from="AmberCorridorsDoor" to="." method="_on_amber_corridors_door_opened"]
 [connection signal="body_interacted" from="Bike" to="." method="_on_bike_body_interacted"]
+[connection signal="body_interacted" from="RustedCubesTeleport" to="." method="_on_rusted_cubes_teleport_body_interacted"]

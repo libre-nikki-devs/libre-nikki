@@ -84,7 +84,7 @@ shape = SubResource("RectangleShape2D_pest3")
 [node name="AmberCorridorsDoor" type="CharacterBody2D" parent="." unique_id=207022966 node_paths=PackedStringArray("animated_sprite")]
 z_index = 1
 y_sort_enabled = true
-position = Vector2(-936, -745)
+position = Vector2(-936, -744)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("4_15bdu")
@@ -104,6 +104,7 @@ z_index = 1
 position = Vector2(-264, -312)
 collision_layer = 2
 collision_mask = 2
+shared_properties = Array[StringName]([&"facing", &"equipped_effect", &"last_step", &"speed"])
 
 [connection signal="body_interacted" from="NexusTeleport" to="." method="_on_nexus_teleport_body_interacted"]
 [connection signal="opened" from="AmberCorridorsDoor" to="." method="_on_amber_corridors_door_opened"]

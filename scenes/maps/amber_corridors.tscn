@@ -53,6 +53,7 @@ script = ExtResource("1_8u0t7")
 pretty_name = "Amber Corridors"
 bounds = Rect2(0, 0, 2704, 2256)
 loop = "All Sides"
+depth = "2"
 default_mimic_data = Dictionary[String, Array]({
 "AnimatedSprite2D": [&"animation", &"frame", &"global_position", &"sprite_frames", &"visible", &"z_index"],
 "AudioStreamPlayer2D": [],
@@ -72,7 +73,7 @@ scale = Vector2(0.5, 0.5)
 texture = SubResource("ViewportTexture_8u0t7")
 centered = false
 
-[node name="NexusDoor" type="CharacterBody2D" parent="." unique_id=1107825142 node_paths=PackedStringArray("animated_sprite")]
+[node name="RustedCubesDoor" type="CharacterBody2D" parent="." unique_id=1107825142 node_paths=PackedStringArray("animated_sprite")]
 z_index = 1
 y_sort_enabled = true
 position = Vector2(424, 568)
@@ -81,13 +82,13 @@ collision_mask = 2
 script = ExtResource("3_2464w")
 animated_sprite = NodePath("AnimatedSprite2D")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="NexusDoor" unique_id=377389549]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RustedCubesDoor" unique_id=377389549]
 modulate = Color(1, 0.69411767, 0, 1)
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_hwbim")
 animation = &"open"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="NexusDoor" unique_id=214716390]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RustedCubesDoor" unique_id=214716390]
 shape = SubResource("RectangleShape2D_njbgn")
 
 [node name="SnowflakeDoor" type="CharacterBody2D" parent="." unique_id=380953041 node_paths=PackedStringArray("animated_sprite")]
@@ -165,6 +166,6 @@ default_mimic_data = Dictionary[String, Array]({
 })
 metadata/_custom_type_script = "uid://d1fy5qfo5j0he"
 
-[connection signal="opened" from="NexusDoor" to="." method="_on_nexus_door_opened"]
+[connection signal="opened" from="RustedCubesDoor" to="." method="_on_rusted_cubes_door_opened"]
 [connection signal="opened" from="SnowflakeDoor" to="." method="_on_snowflake_door_opened"]
 [connection signal="opened" from="UpperDoor" to="." method="_on_upper_door_opened"]

@@ -58,13 +58,15 @@ func _on_child_entered_tree(node: Node):
 
 	parallax_world.add_child.call_deferred(instance)
 
-func _on_nexus_door_opened() -> void:
+
+func _on_rusted_cubes_door_opened() -> void:
 	TransitionHandler.play(&"fade_out")
 	process_mode = Node.PROCESS_MODE_DISABLED
 	await TransitionHandler.animation_finished
 	await RenderingServer.frame_post_draw
 	Game.save_current_scene()
-	Game.change_scene("res://scenes/maps/nexus.tscn")
+	Game.change_scene("res://scenes/maps/rusted_cubes_world.tscn")
+
 
 func _on_snowflake_door_opened() -> void:
 	TransitionHandler.play(&"fade_out")
