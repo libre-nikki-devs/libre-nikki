@@ -259,30 +259,31 @@ func face(what: Vector2) -> DIRECTION:
 	else:
 		return DIRECTION.LEFT
 
-func move(direction: DIRECTION) -> void:
-	_update_detectors(direction)
-	var collider: Object = collision_detector.get_collider()
+func move(direction: DIRECTION, respect_collisions: bool = true) -> void:
+	if respect_collisions:
+		_update_detectors(direction)
+		var collider: Object = collision_detector.get_collider()
 
-	if collider:
-		if collider is YumeInteractable:
-			collider.emit_signal("body_touched", self)
+		if collider:
+			if collider is YumeInteractable:
+				collider.body_touched.emit(self)
 
-		return
+			return
 
-	var ground: Object = surface_detector.get_collider()
+		var ground: Object = surface_detector.get_collider()
 
-	if ground:
-		if ground is YumeInteractable:
-			ground.emit_signal.call_deferred("body_stepped_on", self)
+		if ground:
+			if ground is YumeInteractable:
+				ground.body_stepped_on.emit.call_deferred(self)
 
-	elif not can_move_in_vacuum:
-		return
+		elif not can_move_in_vacuum:
+			return
 
-	var current_collider: YumeCharacter = _get_current_collider()
+		var current_collider: YumeCharacter = _get_current_collider()
 
-	if current_collider:
-		current_collider.body_touched.emit(self)
-		return
+		if current_collider:
+			current_collider.body_touched.emit(self)
+			return
 
 	for collision_shape: CollisionShape2D in collision_shapes:
 		current_collisions.append(collision_shape)

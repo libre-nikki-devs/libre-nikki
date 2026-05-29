@@ -57,4 +57,4 @@ func _move_loop():
 
 			if can_move:
 				facing = picked_direction
-				move(picked_direction)
+				move(picked_direction, false)
