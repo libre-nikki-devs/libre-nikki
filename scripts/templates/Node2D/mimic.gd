@@ -38,6 +38,7 @@ func _ready() -> void:
 			var on_animation_changed: Callable = func () -> void:
 				self.animation = to_mimic.animation
 
+			on_animation_changed.call()
 			to_mimic.animation_changed.connect(on_animation_changed)
 
 		if &"frame" in mimic_properties:
@@ -46,6 +47,7 @@ func _ready() -> void:
 			var on_frame_changed: Callable = func () -> void:
 				self.frame = to_mimic.frame
 
+			on_frame_changed.call()
 			to_mimic.frame_changed.connect(on_frame_changed)
 
 		if &"sprite_frames" in mimic_properties:
@@ -54,6 +56,7 @@ func _ready() -> void:
 			var on_sprite_frames_changed: Callable = func () -> void:
 				self.sprite_frames = to_mimic.sprite_frames
 
+			on_sprite_frames_changed.call()
 			to_mimic.sprite_frames_changed.connect(on_sprite_frames_changed)
 
 	if &"visible" in mimic_properties:
@@ -62,6 +65,7 @@ func _ready() -> void:
 		var on_visibility_changed: Callable = func () -> void:
 			visible = to_mimic.visible
 
+		on_visibility_changed.call()
 		to_mimic.visibility_changed.connect(on_visibility_changed)
 
 	if mimic_properties.is_empty():
