@@ -16,9 +16,9 @@
 
 extends YumeMenu
 
-enum MODES { SAVE = 0, LOAD = 1 }
+enum Mode { SAVE = 0, LOAD = 1 }
 
-const SAVE_SLOTS: int = 16
+const MAX_SLOTS: int = 16
 
 const SAVE_DIRECTORY: String = "user://saves"
 
@@ -26,20 +26,20 @@ const SAVE_DIRECTORY: String = "user://saves"
 
 @onready var label: Label = get_node("VBoxContainer/LabelContainer/Label")
 
-var mode: MODES = MODES.SAVE
+var mode := Mode.SAVE
 
 func _ready() -> void:
-	if mode == MODES.SAVE:
+	if mode == Mode.SAVE:
 		label.text = "Save to which slot?"
 	else:
 		label.text = "Load from which slot?"
 
-	for slot: int in range(1, SAVE_SLOTS + 1):
+	for slot: int in range(1, MAX_SLOTS + 1):
 		var save_slot: PanelContainer = preload("res://scenes/ui/save_slot.tscn").instantiate()
 		save_container.add_child(save_slot)
 		save_slot.label.text = "Save %02d" % slot
 
-		if mode == MODES.SAVE:
+		if mode == Mode.SAVE:
 			save_slot.button.connect("pressed", _on_save_button_pressed.bind(slot))
 		else:
 			save_slot.button.connect("pressed", _on_load_button_pressed.bind(slot))
@@ -165,7 +165,7 @@ func load_game(slot: int) -> Error:
 
 		var player_defaults: Dictionary = {
 			"global_position": Vector2(-56.0, 8.0),
-			"facing": YumeCharacter.DIRECTION.LEFT
+			"facing": YumeCharacter.Direction.LEFT
 		}
 
 		data["current_scene"] = SAKUTSUKIS_BEDROOM_PATH
@@ -183,13 +183,13 @@ func load_game(slot: int) -> Error:
 						Vector2(-72.0, -8.0):
 							player_defaults = {
 								"global_position": Vector2(-72.0, -8.0),
-								"facing": YumeCharacter.DIRECTION.DOWN
+								"facing": YumeCharacter.Direction.DOWN
 							}
 
 						Vector2(-72.0, 24.0):
 							player_defaults = {
 								"global_position": Vector2(-72.0, 24.0),
-								"facing": YumeCharacter.DIRECTION.UP
+								"facing": YumeCharacter.Direction.UP
 							}
 
 		var scene: Node = preload(SAKUTSUKIS_BEDROOM_PATH).instantiate()

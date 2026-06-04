@@ -11,8 +11,8 @@ func _init() -> void:
 func _ready() -> void:
 	await Game.scene_changed
 
-	if Game.current_scene_state != Game.SCENE_STATES.FROM_FILE:
-		player.facing = YumeCharacter.DIRECTION.DOWN
+	if Game.current_scene_state != Game.SceneLoadState.FROM_FILE:
+		player.facing = YumeCharacter.Direction.DOWN
 		player.position = Vector2(424.0, 584.0)
 
 	TransitionHandler.play(&"fade_in")
@@ -75,7 +75,7 @@ func _on_snowflake_door_opened() -> void:
 	player.can_move_in_vacuum = false
 	player.collision_layer = 20
 	player.collision_mask = 20
-	player.facing = YumeCharacter.DIRECTION.DOWN
+	player.facing = YumeCharacter.Direction.DOWN
 	player.position = Vector2(2056.0, 376.0)
 	player.z_index = 2
 	TransitionHandler.play(&"fade_in")
@@ -89,7 +89,7 @@ func _on_upper_door_opened() -> void:
 	player.can_move_in_vacuum = true
 	player.collision_layer = 2
 	player.collision_mask = 2
-	player.facing = YumeCharacter.DIRECTION.DOWN
+	player.facing = YumeCharacter.Direction.DOWN
 	player.position = Vector2(440.0, 1896.0)
 	player.z_index = 1
 	TransitionHandler.play(&"fade_in")

@@ -19,7 +19,7 @@ extends CanvasLayer
 ## An autoload singleton that handles the game's most important data as well as
 ## it provides functions specific to Libre Nikki.
 
-enum SCENE_STATES { DEFAULT = 0, PACKED = 1, FROM_FILE = 2 }
+enum SceneLoadState { DEFAULT = 0, PACKED = 1, FROM_FILE = 2 }
 
 const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 
@@ -29,7 +29,7 @@ const MAPSHOTS_DIRECTORY: String = "user://mapshots"
 
 @onready var music_player: AudioStreamPlayer = get_node("MusicPlayer")
 
-var current_scene_state: SCENE_STATES = SCENE_STATES.DEFAULT
+var current_scene_state: SceneLoadState = SceneLoadState.DEFAULT
 
 var is_current_scene_loaded_from_file: bool = false
 
@@ -115,15 +115,15 @@ func _on_scene_changed() -> void:
 		scene_path = persistent_data["current_scene"]
 
 		if is_current_scene_loaded_from_file:
-			current_scene_state = SCENE_STATES.FROM_FILE
+			current_scene_state = SceneLoadState.FROM_FILE
 			is_current_scene_loaded_from_file = false
 			emit_scene_changed.call()
 			return
 		else:
-			current_scene_state = SCENE_STATES.PACKED
+			current_scene_state = SceneLoadState.PACKED
 	else:
 		persistent_data["current_scene"] = scene_path
-		current_scene_state = SCENE_STATES.DEFAULT
+		current_scene_state = SceneLoadState.DEFAULT
 
 	if not persistent_data.has("scene_visits"):
 		persistent_data["scene_visits"] = {}

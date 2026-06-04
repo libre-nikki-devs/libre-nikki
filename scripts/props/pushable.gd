@@ -22,7 +22,7 @@ func _init() -> void:
 
 func _on_body_touched(body: Node2D):
 	if body is YumeCharacter and not is_busy:
-		var direction: DIRECTION = body.face(global_position)
+		var direction: Direction = body.face(global_position)
 
 		if not is_colliding(direction):
 			move(direction)

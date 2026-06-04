@@ -18,8 +18,8 @@ extends YumePlayer
 
 ## A default player character. Libre Nikki protagonist.
 
-signal act_started(effect: EFFECT)
-signal act_finished(effect: EFFECT)
+signal act_started(effect: Effect)
+signal act_finished(effect: Effect)
 
 @onready var animation_player := $AnimationPlayer
 
@@ -45,7 +45,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not is_busy:
 		if current_movement_keys.size() > 0:
-			var direction: DIRECTION = MOVEMENT_KEYS[current_movement_keys[-1]]
+			var direction: Direction = MOVEMENT_KEYS[current_movement_keys[-1]]
 
 			# Do not move when calling opposite movement events (eg. pressing
 			# both 'up' and 'down' keys at once).
@@ -71,17 +71,17 @@ func _force_animation_update() -> void:
 	if not is_node_ready():
 		await ready
 
-	var effect_name: StringName = EFFECT.find_key(equipped_effect).capitalize()
+	var effect_name: StringName = Effect.find_key(equipped_effect).capitalize()
 
 	if effect_name == &"Default":
 		effect_name = &""
 
-	sprite.animation = DIRECTION.find_key(facing).to_lower() + effect_name
+	sprite.animation = Direction.find_key(facing).to_lower() + effect_name
 
 func _move() -> void:
-	var animation_name: StringName = EFFECT.find_key(
+	var animation_name: StringName = Effect.find_key(
 			equipped_effect).capitalize().path_join(
-			DIRECTION.find_key(facing).to_lower())
+			Direction.find_key(facing).to_lower())
 
 	if last_step:
 		animation_name += &"2"
@@ -96,14 +96,14 @@ func act() -> void:
 	act_started.emit(equipped_effect)
 
 	match equipped_effect:
-		EFFECT.BIKE:
+		Effect.BIKE:
 			return
-		EFFECT.DEFAULT:
+		Effect.DEFAULT:
 			is_busy = true
 
-			var animation_name: StringName = EFFECT.find_key(
+			var animation_name: StringName = Effect.find_key(
 					equipped_effect).capitalize().path_join(
-					DIRECTION.find_key(facing).to_lower()) + &"Action"
+					Direction.find_key(facing).to_lower()) + &"Action"
 
 			if is_sitting:
 				animation_name += &"2"
@@ -126,7 +126,7 @@ func pinch_cheek() -> void:
 	add_child(timer)
 
 	while true:
-		var animation_name: StringName = EFFECT.find_key(
+		var animation_name: StringName = Effect.find_key(
 				equipped_effect).capitalize().path_join(&"downPinch")
 
 		if not animation_player.has_animation(animation_name):
@@ -135,10 +135,10 @@ func pinch_cheek() -> void:
 
 		is_busy = true
 
-		if facing != DIRECTION.DOWN:
+		if facing != Direction.DOWN:
 			timer.start(0.5)
 			await timer.timeout
-			facing = DIRECTION.DOWN
+			facing = Direction.DOWN
 			timer.start(0.5)
 			await timer.timeout
 

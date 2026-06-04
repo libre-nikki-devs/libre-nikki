@@ -9,10 +9,10 @@ func _init() -> void:
 func _ready() -> void:
 	await Game.scene_changed
 
-	if Game.current_scene_state != Game.SCENE_STATES.FROM_FILE:
+	if Game.current_scene_state != Game.SceneLoadState.FROM_FILE:
 		if Game.persistent_data.get("entered_from", "") == "res://scenes/maps/nexus.tscn":
 			player.position = Vector2(48, -48)
-			player.facing = YumeCharacter.DIRECTION.DOWN
+			player.facing = YumeCharacter.Direction.DOWN
 
 	TransitionHandler.play(&"pixelate_in")
 	await TransitionHandler.animation_finished

@@ -50,14 +50,14 @@ func _ready() -> void:
 		money_panel.anchors_preset = Control.PRESET_BOTTOM_LEFT
 
 	if Game.persistent_data.has("acquired_effects"):
-		for effect: YumePlayer.EFFECT in YumePlayer.EFFECT.values():
+		for effect: YumePlayer.Effect in YumePlayer.Effect.values():
 			if Game.persistent_data["acquired_effects"] & effect:
 				var button: Button = Button.new()
 				#button.text = YumePlayer.EFFECT.find_key(effect).capitalize()
 				button.text = " "
 				button.size_flags_horizontal = 3
 				var label: Label = Label.new()
-				label.text = YumePlayer.EFFECT.find_key(effect).capitalize()
+				label.text = YumePlayer.Effect.find_key(effect).capitalize()
 				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 				label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 				label.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -135,7 +135,7 @@ func _on_effects_button_pressed() -> void:
 	actions_grid_container.hide()
 	effects_grid_container.get_children()[0].grab_focus()
 
-func _on_effect_button_pressed(effect: YumePlayer.EFFECT) -> void:
+func _on_effect_button_pressed(effect: YumePlayer.Effect) -> void:
 	await close()
 
 	if player.equipped_effect == effect:

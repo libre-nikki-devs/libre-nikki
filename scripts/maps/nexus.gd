@@ -9,20 +9,20 @@ func _init() -> void:
 func _ready() -> void:
 	await Game.scene_changed
 
-	if Game.current_scene_state != Game.SCENE_STATES.FROM_FILE:
+	if Game.current_scene_state != Game.SceneLoadState.FROM_FILE:
 		match Game.persistent_data.get("entered_from", false):
 			"res://scenes/maps/rusted_cubes_world.tscn":
 				match player.facing:
-					YumeCharacter.DIRECTION.LEFT:
+					YumeCharacter.Direction.LEFT:
 						player.position = Vector2(120.0, -88.0)
 
-					YumeCharacter.DIRECTION.DOWN:
+					YumeCharacter.Direction.DOWN:
 						player.position = Vector2(104.0, -104.0)
 
-					YumeCharacter.DIRECTION.UP:
+					YumeCharacter.Direction.UP:
 						player.position = Vector2(104.0, -72.0)
 
-					YumeCharacter.DIRECTION.RIGHT:
+					YumeCharacter.Direction.RIGHT:
 						player.position = Vector2(88.0, -88.0)
 
 				TransitionHandler.play(&"blend_in")
@@ -31,7 +31,7 @@ func _ready() -> void:
 				return
 
 			"res://scenes/maps/sakutsukis_dream_bedroom.tscn":
-				player.facing = YumeCharacter.DIRECTION.DOWN
+				player.facing = YumeCharacter.Direction.DOWN
 				player.position = Vector2(8.0, 24.0)
 
 	TransitionHandler.play(&"fade_in")
@@ -49,8 +49,8 @@ func _on_door_opened() -> void:
 
 func _on_bike_body_interacted(body: Node2D) -> void:
 	if body is YumePlayer:
-		body.grant_effect(YumePlayer.EFFECT.BIKE)
-		body.equip(YumePlayer.EFFECT.BIKE)
+		body.grant_effect(YumePlayer.Effect.BIKE)
+		body.equip(YumePlayer.Effect.BIKE)
 
 
 func _on_rusted_cubes_teleport_body_interacted(body: Node2D) -> void:

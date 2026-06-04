@@ -43,6 +43,6 @@ func _move_loop():
 		await waited
 
 		if follow and not is_busy:
-			var direction: DIRECTION = face(follow.global_position)
+			var direction: Direction = face(follow.global_position)
 			facing = direction
 			move(direction)

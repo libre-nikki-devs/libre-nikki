@@ -20,17 +20,17 @@
 class_name YumePlayer
 extends YumeHumanoid
 
-enum EFFECT { DEFAULT = 0, BIKE = 1 }
+enum Effect { DEFAULT = 0, BIKE = 1 }
 
-const MOVEMENT_KEYS: Dictionary[String, DIRECTION] = {
-	"ui_left": DIRECTION.LEFT,
-	"ui_down": DIRECTION.DOWN,
-	"ui_up": DIRECTION.UP,
-	"ui_right": DIRECTION.RIGHT
+const MOVEMENT_KEYS: Dictionary[String, Direction] = {
+	"ui_left": Direction.LEFT,
+	"ui_down": Direction.DOWN,
+	"ui_up": Direction.UP,
+	"ui_right": Direction.RIGHT
 }
 
 ## Currently equipped effect.
-@export var equipped_effect: EFFECT = EFFECT.DEFAULT:
+@export var equipped_effect := Effect.DEFAULT:
 	set(value):
 		equipped_effect = value
 		_force_animation_update()
@@ -57,7 +57,7 @@ signal accept_key_held()
 signal cancel_key_held()
 
 ## Emitted when the character equips an effect.
-signal equipped(effect: EFFECT)
+signal equipped(effect: Effect)
 
 func _init() -> void:
 	super()
@@ -141,11 +141,11 @@ func _move() -> void:
 			Game.persistent_data.get("steps_taken", 0) + 1)
 
 ## Equip this [param effect].
-func equip(effect: EFFECT = EFFECT.DEFAULT, silently: bool = false) -> void:
+func equip(effect: Effect = Effect.DEFAULT) -> void:
 	equipped_effect = effect
 
 	match effect:
-		EFFECT.BIKE:
+		Effect.BIKE:
 			speed = 2
 		_:
 			speed = 1
@@ -174,14 +174,14 @@ func interact() -> void:
 @abstract func pinch_cheek() -> void
 
 ## Grant the player an effect.
-func grant_effect(effect: EFFECT) -> void:
+func grant_effect(effect: Effect) -> void:
 	if not Game.persistent_data.has("acquired_effects"):
 		Game.persistent_data["acquired_effects"] = 0
 
 	if Game.persistent_data["acquired_effects"] & effect == 0:
 		Game.persistent_data["acquired_effects"] ^= effect
 
-func revoke_effect(effect: EFFECT) -> void:
+func revoke_effect(effect: Effect) -> void:
 	if Game.persistent_data.has("acquired_effects"):
 		if Game.persistent_data["acquired_effects"] & effect:
 			Game.persistent_data["acquired_effects"] -= effect

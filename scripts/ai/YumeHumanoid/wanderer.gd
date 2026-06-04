@@ -38,14 +38,14 @@ func _physics_process(delta: float) -> void:
 
 func _move_loop():
 	while true:
-		var available_directions: Array[DIRECTION] = [DIRECTION.LEFT,
-				DIRECTION.DOWN, DIRECTION.UP, DIRECTION.RIGHT]
+		var available_directions: Array[Direction] = [Direction.LEFT,
+				Direction.DOWN, Direction.UP, Direction.RIGHT]
 
 		await waited
 
 		if not is_busy:
 			var can_move: bool = false
-			var picked_direction: DIRECTION
+			var picked_direction: Direction
 
 			while not (available_directions.is_empty() or can_move):
 				picked_direction = available_directions.pick_random()

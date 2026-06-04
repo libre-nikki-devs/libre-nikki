@@ -22,7 +22,7 @@ extends YumeCharacter
 enum { STEP_LEFT = 0, STEP_RIGHT = 1 }
 
 ## Direction the character is facing.
-@export var facing: DIRECTION = DIRECTION.DOWN:
+@export var facing: Direction = Direction.DOWN:
 	set(value):
 		facing = value
 		_force_animation_update()
@@ -60,19 +60,19 @@ func _move() -> void:
 
 	await super()
 
-func get_footstep_sound(ground: SURFACE) -> AudioStream:
+func get_footstep_sound(ground: Surface) -> AudioStream:
 	match ground:
-		SURFACE.SILENT:
+		Surface.SILENT:
 			return
-		#SURFACE.CONCRETE:
-		#SURFACE.METAL:
-		#SURFACE.GRASS:
-		#SURFACE.DIRT:
-		#SURFACE.SAND:
-		#SURFACE.WATER:
-		#SURFACE.SNOW:
-		#SURFACE.WOOD:
-		#SURFACE.CARPET:
+		#Surface.CONCRETE:
+		#Surface.METAL:
+		#Surface.GRASS:
+		#Surface.DIRT:
+		#Surface.SAND:
+		#Surface.WATER:
+		#Surface.SNOW:
+		#Surface.WOOD:
+		#Surface.CARPET:
 
 	if current_world:
 		if current_world.default_footstep_sound:
@@ -84,7 +84,8 @@ func get_footstep_sound(ground: SURFACE) -> AudioStream:
 func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 	if tile_data:
 		if tile_data.has_custom_data("surface"):
-			return get_footstep_sound(tile_data.get_custom_data("surface") as YumeInteractable.SURFACE)
+			return get_footstep_sound(tile_data.get_custom_data("surface")
+					as Surface)
 
 	if current_world:
 		if current_world.default_footstep_sound:

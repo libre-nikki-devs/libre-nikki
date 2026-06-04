@@ -26,18 +26,18 @@ var data: Dictionary = Game.persistent_data
 func _ready() -> void:
 	if data.has("player_data"):
 		if data["player_data"].has("equipped_effect"):
-			if data["player_data"]["equipped_effect"] == YumePlayer.EFFECT.DEFAULT:
+			if data["player_data"]["equipped_effect"] == YumePlayer.Effect.DEFAULT:
 				avatar.animation = "down"
 			else:
-				avatar.animation = "down" + YumePlayer.EFFECT.find_key(data["player_data"]["equipped_effect"]).capitalize()
+				avatar.animation = "down" + YumePlayer.Effect.find_key(data["player_data"]["equipped_effect"]).capitalize()
 
 		if data["player_data"].has("name"):
 			player_label.text = data["player_data"]["name"]
 
 	if data.has("acquired_effects"):
-		effects_label.text = "✨: " + str(_count_ones(data["acquired_effects"])) + "/" + str(YumePlayer.EFFECT.size() - 1)
+		effects_label.text = "✨: " + str(_count_ones(data["acquired_effects"])) + "/" + str(YumePlayer.Effect.size() - 1)
 	else:
-		effects_label.text = "✨: 0/" + str(YumePlayer.EFFECT.size() - 1)
+		effects_label.text = "✨: 0/" + str(YumePlayer.Effect.size() - 1)
 
 	if data.has("health"):
 		health_label.text = "❤️: " + str(data["health"])

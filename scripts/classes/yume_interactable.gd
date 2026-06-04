@@ -19,11 +19,11 @@ extends CharacterBody2D
 
 ## A simple node that can be interacted with.
 
-enum SURFACE { SILENT = -1, DEFAULT = 0, CONCRETE = 1, METAL = 2,
+enum Surface { SILENT = -1, DEFAULT = 0, CONCRETE = 1, METAL = 2,
 		GRASS = 3, DIRT = 4, SAND = 5, WATER = 6, SNOW = 7,
 		WOOD = 8, CARPET = 9 }
 
-@export var surface: SURFACE = SURFACE.DEFAULT
+@export var surface: Surface = Surface.DEFAULT
 
 ## Emitted when something interacted with this node.
 signal body_interacted(body: Node2D)

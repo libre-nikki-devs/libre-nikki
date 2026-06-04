@@ -32,7 +32,7 @@ func _ready() -> void:
 				.pick_random(), 512.0)
 
 func _on_door_body_interacted(body: Node2D):
-	if body is YumePlayer and body.facing == YumeCharacter.DIRECTION.UP:
+	if body is YumePlayer and body.facing == YumeCharacter.Direction.UP:
 		body.is_busy = true
 		animated_sprite.play("open")
 		play_sound(preload("res://sounds/boot_steel_door_open-1.wav"), 512.0)

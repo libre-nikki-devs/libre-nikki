@@ -21,14 +21,14 @@ extends YumeInteractable
 
 enum { ALL = 15, HORIZONTAL = 9, VERTICAL = 6 }
 
-enum DIRECTION { NULL = 0, LEFT = 1, DOWN = 2, UP = 4, RIGHT = 8 }
+enum Direction { NULL = 0, LEFT = 1, DOWN = 2, UP = 4, RIGHT = 8 }
 
-const DIRECTIONS: Dictionary[DIRECTION, Vector2] = {
-	DIRECTION.NULL: Vector2.ZERO,
-	DIRECTION.LEFT: Vector2.LEFT,
-	DIRECTION.DOWN: Vector2.DOWN,
-	DIRECTION.UP: Vector2.UP,
-	DIRECTION.RIGHT: Vector2.RIGHT,
+const DIRECTIONS: Dictionary[Direction, Vector2] = {
+	Direction.NULL: Vector2.ZERO,
+	Direction.LEFT: Vector2.LEFT,
+	Direction.DOWN: Vector2.DOWN,
+	Direction.UP: Vector2.UP,
+	Direction.RIGHT: Vector2.RIGHT,
 }
 
 ## If true, prevent the character from performing certain actions.
@@ -54,7 +54,7 @@ const DIRECTIONS: Dictionary[DIRECTION, Vector2] = {
 var current_world: YumeWorld = null
 
 ## Direction the character is moving.
-var moving := DIRECTION.NULL
+var moving := Direction.NULL
 
 ## Target movement point.
 var target_position: Vector2
@@ -174,7 +174,7 @@ func _move() -> void:
 
 	await tween.finished
 
-func _update_detectors(direction: DIRECTION) -> void:
+func _update_detectors(direction: Direction) -> void:
 	collision_detector.collision_mask = collision_mask
 	surface_detector.collision_mask = collision_mask >> 1
 	target_position = DIRECTIONS[direction] * tile_size
@@ -234,7 +234,7 @@ func _update_detector_positions(target_vector: Vector2) -> void:
 
 	surface_detector.global_position = collision_detector.global_position
 
-func face(what: Vector2) -> DIRECTION:
+func face(what: Vector2) -> Direction:
 	var closest: Vector2 = global_position
 
 	if current_world:
@@ -251,15 +251,15 @@ func face(what: Vector2) -> DIRECTION:
 	var closest_angle: float = closest.angle_to_point(what)
 
 	if closest_angle >= -0.25 * PI and closest_angle <= 0.25 * PI:
-		return DIRECTION.RIGHT
+		return Direction.RIGHT
 	elif closest_angle > 0.25 * PI and closest_angle < 0.75 * PI:
-		return DIRECTION.DOWN
+		return Direction.DOWN
 	elif closest_angle > -0.75 * PI and closest_angle < -0.25 * PI:
-		return DIRECTION.UP
+		return Direction.UP
 	else:
-		return DIRECTION.LEFT
+		return Direction.LEFT
 
-func move(direction: DIRECTION, respect_collisions: bool = true) -> void:
+func move(direction: Direction, respect_collisions: bool = true) -> void:
 	if respect_collisions:
 		_update_detectors(direction)
 		var collider: Object = collision_detector.get_collider()
@@ -293,10 +293,10 @@ func move(direction: DIRECTION, respect_collisions: bool = true) -> void:
 	moving = direction
 	await _move()
 	is_busy = false
-	moving = DIRECTION.NULL
+	moving = Direction.NULL
 	moved.emit()
 
-func is_colliding(direction: DIRECTION) -> bool:
+func is_colliding(direction: Direction) -> bool:
 	_update_detectors(direction)
 
 	if collision_detector.is_colliding():
@@ -320,23 +320,23 @@ func wrap_around_world() -> void:
 			global_position = wrapped_position
 			wrapped.emit(previous_position)
 
-func get_next_direction(direction: DIRECTION) -> DIRECTION:
+func get_next_direction(direction: Direction) -> Direction:
 	match direction:
-		DIRECTION.LEFT:
-			return DIRECTION.UP
-		DIRECTION.DOWN:
-			return DIRECTION.LEFT
-		DIRECTION.UP:
-			return DIRECTION.RIGHT
-		DIRECTION.RIGHT:
-			return DIRECTION.DOWN
+		Direction.LEFT:
+			return Direction.UP
+		Direction.DOWN:
+			return Direction.LEFT
+		Direction.UP:
+			return Direction.RIGHT
+		Direction.RIGHT:
+			return Direction.DOWN
 
 	return direction
 
-func get_opposite_direction(direction: DIRECTION) -> DIRECTION:
-	if direction == DIRECTION.NULL:
+func get_opposite_direction(direction: Direction) -> Direction:
+	if direction == Direction.NULL:
 		return direction
 	elif direction & HORIZONTAL:
-		return (~direction & ALL) ^ VERTICAL as DIRECTION
+		return (~direction & ALL) ^ VERTICAL as Direction
 	else:
-		return (~direction & ALL) ^ HORIZONTAL as DIRECTION
+		return (~direction & ALL) ^ HORIZONTAL as Direction

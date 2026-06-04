@@ -7,21 +7,21 @@ extends YumeWorld
 func _ready() -> void:
 	match Game.persistent_data.get("entered_from", false):
 		"res://scenes/maps/amber_corridors.tscn":
-			player.facing = YumeCharacter.DIRECTION.DOWN
+			player.facing = YumeCharacter.Direction.DOWN
 			player.position = Vector2(-936.0, -728.0)
 
 		"res://scenes/maps/nexus.tscn":
 			match player.facing:
-				YumeCharacter.DIRECTION.LEFT:
+				YumeCharacter.Direction.LEFT:
 					player.position = Vector2(-248.0, -328.0)
 
-				YumeCharacter.DIRECTION.DOWN:
+				YumeCharacter.Direction.DOWN:
 					player.position = Vector2(-264.0, -344.0)
 
-				YumeCharacter.DIRECTION.UP:
+				YumeCharacter.Direction.UP:
 					player.position = Vector2(-264.0, -312.0)
 
-				YumeCharacter.DIRECTION.RIGHT:
+				YumeCharacter.Direction.RIGHT:
 					player.position = Vector2(-280.0, -328.0)
 
 			TransitionHandler.play(&"blend_in")

@@ -33,10 +33,10 @@ func _force_animation_update() -> void:
 	if not is_node_ready():
 		await ready
 
-	sprite.animation = DIRECTION.find_key(facing).to_lower()
+	sprite.animation = Direction.find_key(facing).to_lower()
 
 func _move() -> void:
-	var animation_name: StringName = DIRECTION.find_key(facing).to_lower()
+	var animation_name: StringName = Direction.find_key(facing).to_lower()
 
 	if last_step:
 		animation_name += &"2"

@@ -95,7 +95,7 @@ func _on_play_button_pressed() -> void:
 	get_tree().paused = false
 
 func _on_continue_button_pressed() -> void:
-	open_submenu("res://scenes/ui/save_manager.tscn", { "mode": preload("res://scenes/ui/save_manager.tscn").instantiate().MODES.LOAD })
+	open_submenu("res://scenes/ui/save_manager.tscn", { "mode": preload("res://scenes/ui/save_manager.tscn").instantiate().Mode.LOAD })
 
 func _on_settings_button_pressed() -> void:
 	open_submenu("res://scenes/ui/settings_menu.tscn")
