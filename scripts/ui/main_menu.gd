@@ -80,9 +80,12 @@ func _input(event: InputEvent) -> void:
 						await RenderingServer.frame_post_draw
 						greeting.visible = false
 						get_tree().paused = false
-						Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
 						Game.persistent_data = Game.Data.new()
 						Game.scene_data.clear()
+
+						Game.change_scene(
+								"res://scenes/maps/sakutsukis_bedroom.tscn"
+						)
 
 func _on_play_button_pressed() -> void:
 	TransitionHandler.play(&"fade_out", -1, 10.0)

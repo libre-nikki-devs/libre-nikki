@@ -209,8 +209,15 @@ func load_game(slot: int) -> Error:
 			Game.scene_data[SAKUTSUKIS_BEDROOM_PATH].pack(scene)
 
 	Game.persistent_data = data
-	Game.is_current_scene_loaded_from_file = true
-	Game.change_scene(Game.persistent_data.current_scene)
+	Game.current_scene_load_state = Game.SceneLoadState.FROM_SAVE_FILE
+
+	if Game.scene_data.has(Game.persistent_data.current_scene):
+		get_tree().change_scene_to_packed(
+				Game.scene_data[Game.persistent_data.current_scene])
+
+	else:
+		get_tree().change_scene_to_file(Game.persistent_data.current_scene)
+
 	queue_free()
 	return OK
 

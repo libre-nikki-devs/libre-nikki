@@ -7,9 +7,7 @@ func _init() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 
 func _ready() -> void:
-	await Game.scene_changed
-
-	if Game.current_scene_state != Game.SceneLoadState.FROM_FILE:
+	if Game.current_scene_load_state != Game.SceneLoadState.FROM_SAVE_FILE:
 		match Game.persistent_data.previous_scene:
 			"res://scenes/maps/rusted_cubes_world.tscn":
 				match player.facing:

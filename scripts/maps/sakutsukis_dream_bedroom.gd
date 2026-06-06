@@ -7,9 +7,7 @@ func _init() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 
 func _ready() -> void:
-	await Game.scene_changed
-
-	if Game.current_scene_state != Game.SceneLoadState.FROM_FILE:
+	if Game.current_scene_load_state != Game.SceneLoadState.FROM_SAVE_FILE:
 		if Game.persistent_data.previous_scene == "res://scenes/maps/nexus.tscn":
 			player.position = Vector2(48.0, -48.0)
 			player.facing = YumeCharacter.Direction.DOWN

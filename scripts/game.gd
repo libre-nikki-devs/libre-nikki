@@ -19,7 +19,12 @@ extends CanvasLayer
 ## An autoload singleton that handles the game's most important data as well as
 ## it provides functions specific to Libre Nikki.
 
-enum SceneLoadState { DEFAULT = 0, PACKED = 1, FROM_FILE = 2 }
+enum SceneLoadState {
+	UNKNOWN = 0,
+	FROM_SCENE_FILE = 1,
+	FROM_PACKED_SCENE = 2,
+	FROM_SAVE_FILE = 3
+}
 
 const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 
@@ -29,9 +34,7 @@ const MAPSHOTS_DIRECTORY: String = "user://mapshots"
 
 @onready var music_player: AudioStreamPlayer = get_node("MusicPlayer")
 
-var current_scene_state: SceneLoadState = SceneLoadState.DEFAULT
-
-var is_current_scene_loaded_from_file: bool = false
+var current_scene_load_state: SceneLoadState = SceneLoadState.UNKNOWN
 
 var key_hold_time: float = 0.5
 
@@ -43,7 +46,6 @@ var scene_data: Dictionary[String, PackedScene] = {}
 ## Contains settings data.
 var settings := ConfigFile.new()
 
-signal scene_changed
 
 func _init() -> void:
 	if settings.load("user://settings.ini") == OK:
@@ -82,10 +84,30 @@ func _init() -> void:
 		fast_forward_indicator.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 		add_child(fast_forward_indicator)
 
+
 func _ready() -> void:
-	_on_scene_changed()
-	get_tree().connect("scene_changed", _on_scene_changed)
+	var scene_tree: SceneTree = get_tree()
+	persistent_data.current_scene = scene_tree.current_scene.scene_file_path
+
+	scene_tree.scene_changed.connect(
+			func () -> void:
+				if current_scene_load_state == SceneLoadState.FROM_SAVE_FILE:
+					return
+
+				var current_scene: Node = scene_tree.current_scene
+				var scene_path: String = current_scene.scene_file_path
+
+				if scene_path.is_empty():
+					scene_path = persistent_data.current_scene
+
+				persistent_data.scene_visits[scene_path] = (
+						persistent_data.scene_visits.get(scene_path, 0) + 1
+				)
+	)
+
+	scene_tree.scene_changed.emit()
 	get_window().min_size = Vector2i(640, 480)
+
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
@@ -101,45 +123,17 @@ func _input(event: InputEvent) -> void:
 
 			screenshot.save_png(SCREENSHOTS_DIRECTORY.path_join(get_timestamp() + ".png"))
 
-func _on_scene_changed() -> void:
-	var current_scene: Node = get_tree().current_scene
-	var scene_path: String = current_scene.scene_file_path
-
-	var emit_scene_changed: Callable = func ():
-		if not current_scene.is_node_ready():
-			await current_scene.ready
-
-		scene_changed.emit()
-
-	if scene_path.is_empty():
-		scene_path = persistent_data.current_scene
-
-		if is_current_scene_loaded_from_file:
-			current_scene_state = SceneLoadState.FROM_FILE
-			is_current_scene_loaded_from_file = false
-			emit_scene_changed.call()
-			return
-		else:
-			current_scene_state = SceneLoadState.PACKED
-	else:
-		persistent_data.current_scene = scene_path
-		current_scene_state = SceneLoadState.DEFAULT
-
-	persistent_data.scene_visits[scene_path] = (
-			persistent_data.scene_visits.get(scene_path, 0) + 1
-	)
-
-	emit_scene_changed.call()
 
 func change_scene(path: String) -> void:
-	if not is_current_scene_loaded_from_file:
-		persistent_data.previous_scene = persistent_data.current_scene
+	persistent_data.previous_scene = persistent_data.current_scene
+	persistent_data.current_scene = path
 
 	if scene_data.has(path):
+		current_scene_load_state = SceneLoadState.FROM_PACKED_SCENE
 		get_tree().change_scene_to_packed(scene_data[path])
-		persistent_data.current_scene = path
 		return
 
+	current_scene_load_state = SceneLoadState.FROM_SCENE_FILE
 	get_tree().change_scene_to_file(path)
 
 func save_current_scene(where: Dictionary = persistent_data.scene_data) -> void:
