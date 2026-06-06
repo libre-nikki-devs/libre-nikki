@@ -81,7 +81,7 @@ func _input(event: InputEvent) -> void:
 						greeting.visible = false
 						get_tree().paused = false
 						Game.change_scene("res://scenes/maps/sakutsukis_bedroom.tscn")
-						Game.persistent_data.clear()
+						Game.persistent_data = Game.Data.new()
 						Game.scene_data.clear()
 
 func _on_play_button_pressed() -> void:

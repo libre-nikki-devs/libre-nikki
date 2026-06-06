@@ -51,8 +51,10 @@ func _ready() -> void:
 			file.close()
 
 			if data is Dictionary:
-				var player_panel: HBoxContainer = preload("res://scenes/ui/player_panel.tscn").instantiate()
-				player_panel.data = data
+				var player_panel: HBoxContainer = preload(
+						"res://scenes/ui/player_panel.tscn").instantiate()
+
+				player_panel.data = Game.Data.new().from_dictionary(data)
 				save_slot.v_box_container.add_child(player_panel)
 
 	for child: Control in save_container.get_children():
@@ -87,8 +89,13 @@ func save_game(slot: int) -> Error:
 	if not file:
 		return FileAccess.get_open_error()
 
-	var data: Dictionary = Game.persistent_data.duplicate_deep()
-	Game.save_current_scene(data)
+	var scene_data: Dictionary = (Game.persistent_data.scene_data
+			.duplicate_deep())
+
+	Game.save_current_scene(scene_data)
+
+	var data: Dictionary = Game.persistent_data.to_dictionary()
+	data[&"scene_data"] = scene_data
 
 	if not file.store_var(data):
 		error = file.get_error()
@@ -112,52 +119,53 @@ func load_game(slot: int) -> Error:
 	await _pre_close()
 	await RenderingServer.frame_post_draw
 
+	data = Game.Data.new().from_dictionary(data)
+
 	if OS.is_debug_build():
-		if data.has("scene_data"):
-			Game.scene_data.clear()
-			YumePlayer.shared_data.clear()
+		Game.scene_data.clear()
+		YumePlayer.shared_data.clear()
 
-			for scene_path: String in data["scene_data"]:
-				var scene: Node = load(scene_path).instantiate()
+		for scene_path: String in data.scene_data:
+			var scene: Node = load(scene_path).instantiate()
 
-				for node_path: NodePath in data["scene_data"][scene_path]:
-					var node: Node = scene.get_node_or_null(node_path)
+			for node_path: NodePath in data.scene_data[scene_path]:
+				var node: Node = scene.get_node_or_null(node_path)
 
-					if node:
-						if not data["scene_data"][scene_path][node_path]:
-							node.queue_free()
-							continue
+				if node:
+					if not data.scene_data[scene_path][node_path]:
+						node.queue_free()
+						continue
+				else:
+					var node_file_path: String = (
+							data.scene_data[scene_path][node_path]
+							.get("scene_file_path", "")
+					)
+
+					if node_file_path.is_empty():
+						continue
+
+					var parent_node_path: NodePath = node_path.slice(0, -1)
+
+					var parent: Node = (
+							scene if parent_node_path.is_empty()
+							else scene.get_node_or_null(parent_node_path)
+					)
+
+					if parent:
+						node = load(node_file_path).instantiate()
+						parent.add_child(node)
+						node.owner = scene
 					else:
-						var node_file_path: String = (
-								data["scene_data"][scene_path][node_path]
-								.get("scene_file_path", "")
-						)
+						continue
 
-						if node_file_path.is_empty():
-							continue
+				for property: StringName in (data.scene_data[scene_path]
+						[node_path]):
 
-						var parent_node_path: NodePath = node_path.slice(0, -1)
+					node.set(property, data.scene_data[scene_path]
+							[node_path][property])
 
-						var parent: Node = (
-								scene if parent_node_path.is_empty()
-								else scene.get_node_or_null(parent_node_path)
-						)
-
-						if parent:
-							node = load(node_file_path).instantiate()
-							parent.add_child(node)
-							node.owner = scene
-						else:
-							continue
-
-					for property: StringName in (data["scene_data"][scene_path]
-							[node_path]):
-
-						node.set(property, data["scene_data"][scene_path]
-								[node_path][property])
-
-				Game.scene_data[scene_path] = PackedScene.new()
-				Game.scene_data[scene_path].pack(scene)
+			Game.scene_data[scene_path] = PackedScene.new()
+			Game.scene_data[scene_path].pack(scene)
 
 	else:
 		const SAKUTSUKIS_BEDROOM_PATH: String = (
@@ -168,29 +176,27 @@ func load_game(slot: int) -> Error:
 			"facing": YumeCharacter.Direction.LEFT
 		}
 
-		data["current_scene"] = SAKUTSUKIS_BEDROOM_PATH
+		data.current_scene = SAKUTSUKIS_BEDROOM_PATH
 
-		if data.has("scene_data"):
-			if data["scene_data"].has(SAKUTSUKIS_BEDROOM_PATH):
+		if data.scene_data.has(SAKUTSUKIS_BEDROOM_PATH):
+			var player_data: Variant = (
+					data.scene_data[SAKUTSUKIS_BEDROOM_PATH]
+					.get(^"Sakutsuki", false)
+			)
 
-				var player_data: Variant = (
-						data["scene_data"][SAKUTSUKIS_BEDROOM_PATH]
-						.get(^"Sakutsuki", false)
-				)
+			if player_data is Dictionary:
+				match player_data.get("global_position", false):
+					Vector2(-72.0, -8.0):
+						player_defaults = {
+							"global_position": Vector2(-72.0, -8.0),
+							"facing": YumeCharacter.Direction.DOWN
+						}
 
-				if player_data is Dictionary:
-					match player_data.get("global_position", false):
-						Vector2(-72.0, -8.0):
-							player_defaults = {
-								"global_position": Vector2(-72.0, -8.0),
-								"facing": YumeCharacter.Direction.DOWN
-							}
-
-						Vector2(-72.0, 24.0):
-							player_defaults = {
-								"global_position": Vector2(-72.0, 24.0),
-								"facing": YumeCharacter.Direction.UP
-							}
+					Vector2(-72.0, 24.0):
+						player_defaults = {
+							"global_position": Vector2(-72.0, 24.0),
+							"facing": YumeCharacter.Direction.UP
+						}
 
 		var scene: Node = preload(SAKUTSUKIS_BEDROOM_PATH).instantiate()
 		var player: Node = scene.get_node_or_null(^"Sakutsuki")
@@ -204,7 +210,7 @@ func load_game(slot: int) -> Error:
 
 	Game.persistent_data = data
 	Game.is_current_scene_loaded_from_file = true
-	Game.change_scene(Game.persistent_data["current_scene"])
+	Game.change_scene(Game.persistent_data.current_scene)
 	queue_free()
 	return OK
 

@@ -32,13 +32,14 @@ extends YumeMenu
 
 signal button_finished
 
+
 func _ready() -> void:
-	if Game.persistent_data.has("acquired_effects"):
-		effects_button.disabled = false
-		effects_label.modulate.a = 1.0
-	else:
+	if Game.persistent_data.acquired_effects == 0:
 		effects_button.disabled = true
 		effects_label.modulate.a = 0.5
+	else:
+		effects_button.disabled = false
+		effects_label.modulate.a = 1.0
 
 	var current_scene: Node = get_tree().current_scene
 
@@ -49,27 +50,26 @@ func _ready() -> void:
 		world_panel.hide()
 		money_panel.anchors_preset = Control.PRESET_BOTTOM_LEFT
 
-	if Game.persistent_data.has("acquired_effects"):
-		for effect: YumePlayer.Effect in YumePlayer.Effect.values():
-			if Game.persistent_data["acquired_effects"] & effect:
-				var button: Button = Button.new()
-				#button.text = YumePlayer.EFFECT.find_key(effect).capitalize()
-				button.text = " "
-				button.size_flags_horizontal = 3
-				var label: Label = Label.new()
-				label.text = YumePlayer.Effect.find_key(effect).capitalize()
-				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-				label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-				label.set_anchors_preset(Control.PRESET_FULL_RECT)
-				button.add_child(label)
-				button.pressed.connect(_on_effect_button_pressed.bind(effect))
+	for effect: YumePlayer.Effect in YumePlayer.Effect.values():
+		if Game.persistent_data.acquired_effects & effect:
+			var button: Button = Button.new()
+			#button.text = YumePlayer.EFFECT.find_key(effect).capitalize()
+			button.text = " "
+			button.size_flags_horizontal = 3
+			var label: Label = Label.new()
+			label.text = YumePlayer.Effect.find_key(effect).capitalize()
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			label.set_anchors_preset(Control.PRESET_FULL_RECT)
+			button.add_child(label)
+			button.pressed.connect(_on_effect_button_pressed.bind(effect))
 
-				if current_scene is YumeWorld:
-					if not current_scene.dreaming:
-						button.disabled = true
-						label.modulate.a = 0.5
+			if current_scene is YumeWorld:
+				if not current_scene.dreaming:
+					button.disabled = true
+					label.modulate.a = 0.5
 
-				effects_grid_container.add_child(button)
+			effects_grid_container.add_child(button)
 
 	for child: Node in effects_grid_container.get_children():
 		child.focus_neighbor_left = effects_grid_container.get_child((child.get_index() - 1) % effects_grid_container.get_child_count()).get_path()
@@ -109,11 +109,13 @@ func _input(event: InputEvent) -> void:
 				side_menu:
 					close()
 
-func _get_focus_grabber() -> Control:
-	if Game.persistent_data.has("acquired_effects"):
-		return effects_button
 
-	return actions_button
+func _get_focus_grabber() -> Control:
+	if Game.persistent_data.acquired_effects == 0:
+		return actions_button
+
+	return effects_button
+
 
 func _on_actions_button_pressed() -> void:
 	player_container.hide()

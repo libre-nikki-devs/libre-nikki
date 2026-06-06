@@ -65,6 +65,9 @@ func _init() -> void:
 
 func _notification(what: int) -> void:
 	match what:
+		NOTIFICATION_READY:
+			Game.persistent_data.player_path = get_path()
+
 		NOTIFICATION_ENTER_TREE:
 			for property: String in shared_properties:
 				if property in self and shared_data.has(property):
@@ -134,11 +137,11 @@ func _input(event: InputEvent) -> void:
 
 		mapshot.save_png(Game.MAPSHOTS_DIRECTORY.path_join(Game.get_timestamp() + ".png"))
 
+
 func _move() -> void:
 	await super()
+	Game.persistent_data.steps_taken += 1
 
-	Game.persistent_data["steps_taken"] = (
-			Game.persistent_data.get("steps_taken", 0) + 1)
 
 ## Equip this [param effect].
 func equip(effect: Effect = Effect.DEFAULT) -> void:
@@ -173,18 +176,17 @@ func interact() -> void:
 ## Play the cheek pinching animation. Wakes up the character, if is dreaming.
 @abstract func pinch_cheek() -> void
 
+
 ## Grant the player an effect.
 func grant_effect(effect: Effect) -> void:
-	if not Game.persistent_data.has("acquired_effects"):
-		Game.persistent_data["acquired_effects"] = 0
+	if Game.persistent_data.acquired_effects & effect == 0:
+		Game.persistent_data.acquired_effects ^= effect
 
-	if Game.persistent_data["acquired_effects"] & effect == 0:
-		Game.persistent_data["acquired_effects"] ^= effect
 
 func revoke_effect(effect: Effect) -> void:
-	if Game.persistent_data.has("acquired_effects"):
-		if Game.persistent_data["acquired_effects"] & effect:
-			Game.persistent_data["acquired_effects"] -= effect
+	if Game.persistent_data.acquired_effects & effect:
+		Game.persistent_data.acquired_effects -= effect
+
 
 func open_menu() -> void:
 	if cancel_events.is_empty():

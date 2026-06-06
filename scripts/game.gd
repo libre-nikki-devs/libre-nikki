@@ -36,7 +36,7 @@ var is_current_scene_loaded_from_file: bool = false
 var key_hold_time: float = 0.5
 
 ## Contains data that are preserved in a save file.
-var persistent_data: Dictionary = {}
+var persistent_data := Data.new()
 
 var scene_data: Dictionary[String, PackedScene] = {}
 
@@ -112,7 +112,7 @@ func _on_scene_changed() -> void:
 		scene_changed.emit()
 
 	if scene_path.is_empty():
-		scene_path = persistent_data["current_scene"]
+		scene_path = persistent_data.current_scene
 
 		if is_current_scene_loaded_from_file:
 			current_scene_state = SceneLoadState.FROM_FILE
@@ -122,40 +122,42 @@ func _on_scene_changed() -> void:
 		else:
 			current_scene_state = SceneLoadState.PACKED
 	else:
-		persistent_data["current_scene"] = scene_path
+		persistent_data.current_scene = scene_path
 		current_scene_state = SceneLoadState.DEFAULT
 
-	if not persistent_data.has("scene_visits"):
-		persistent_data["scene_visits"] = {}
+	persistent_data.scene_visits[scene_path] = (
+			persistent_data.scene_visits.get(scene_path, 0) + 1
+	)
 
-	persistent_data["scene_visits"][scene_path] = persistent_data["scene_visits"].get(scene_path, 0) + 1
 	emit_scene_changed.call()
 
 func change_scene(path: String) -> void:
 	if not is_current_scene_loaded_from_file:
-		persistent_data["entered_from"] = persistent_data["current_scene"]
+		persistent_data.previous_scene = persistent_data.current_scene
 
 	if scene_data.has(path):
 		get_tree().change_scene_to_packed(scene_data[path])
-		persistent_data["current_scene"] = path
+		persistent_data.current_scene = path
 		return
 
 	get_tree().change_scene_to_file(path)
 
-func save_current_scene(where: Dictionary = persistent_data) -> void:
+func save_current_scene(where: Dictionary = persistent_data.scene_data) -> void:
 	var scene_tree: SceneTree = get_tree()
 	var current_scene: Node = scene_tree.current_scene
 	var scene_path = current_scene.scene_file_path
-	if scene_path == "":
-		scene_path = persistent_data["current_scene"]
+
+	if scene_path.is_empty():
+		scene_path = persistent_data.current_scene
 
 	for tween: Tween in scene_tree.get_processed_tweens():
 		if tween.is_running():
 			tween.custom_step(INF)
 			tween.kill()
 
-	# Pack `current_scene` to `scene_data` when saving to `persistent_data`.
-	if is_same(where, persistent_data):
+	# Pack `current_scene` to `scene_data` when saving to
+	# `persistent_data.scene_data`.
+	if is_same(where, persistent_data.scene_data):
 		scene_data[scene_path] = PackedScene.new()
 		scene_data[scene_path].pack(current_scene)
 
@@ -172,13 +174,10 @@ func save_current_scene(where: Dictionary = persistent_data) -> void:
 				return nodes
 	)
 
-	if not where.has("scene_data"):
-		where["scene_data"] = {}
+	if not where.has(scene_path):
+		where[scene_path] = {}
 
-	if not where["scene_data"].has(scene_path):
-		where["scene_data"][scene_path] = {}
-
-	# Save persistent nodes' properties to `where["scene_data"][scene_path]`.
+	# Save persistent nodes' properties to `where[scene_path]`.
 	for node: Node in get_persistent_nodes.call(
 			current_scene, get_persistent_nodes):
 
@@ -188,18 +187,18 @@ func save_current_scene(where: Dictionary = persistent_data) -> void:
 		if persistent_properties is Array:
 			var node_path: NodePath = current_scene.get_path_to(node)
 
-			if not where["scene_data"][scene_path].has(node_path):
-				where["scene_data"][scene_path][node_path] = {}
+			if not where[scene_path].has(node_path):
+				where[scene_path][node_path] = {}
 
-			if not where["scene_data"][scene_path][node_path]:
-				where["scene_data"][scene_path][node_path] = {}
+			if not where[scene_path][node_path]:
+				where[scene_path][node_path] = {}
 
 			for property: Variant in (persistent_properties +
 					[&"scene_file_path"]):
 
 				if property is StringName:
 					if property in node:
-						where["scene_data"][scene_path][node_path].set(
+						where[scene_path][node_path].set(
 								property, node.get(property))
 
 	var original_scene: Node = load(scene_path).instantiate()
@@ -212,7 +211,7 @@ func save_current_scene(where: Dictionary = persistent_data) -> void:
 		# Remove persistent nodes that are in `original_scene`
 		# but are not present in `current_scene`.
 		if not current_scene.has_node(node_path):
-			where["scene_data"][scene_path][node_path] = null
+			where[scene_path][node_path] = null
 
 func take_screenshot() -> Image:
 	var viewport: Viewport = get_viewport()
@@ -283,13 +282,13 @@ func open_menu(menu_path: String, menu_property_list: Dictionary = {}) -> void:
 
 ## Start the dream session.
 func sleep() -> void:
-	persistent_data["random"] = RandomNumberGenerator.new().randi_range(0, 255)
-	persistent_data["times_slept"] = persistent_data.get("times_slept", 0) + 1
+	persistent_data.random = randi_range(0, 255)
+	persistent_data.times_slept += 1
 	change_scene("res://scenes/maps/sakutsukis_dream_bedroom.tscn")
 
 ## End the dream session.
 func wake_up() -> void:
-	persistent_data["scene_data"] = {}
+	persistent_data.scene_data.clear()
 	scene_data.clear()
 	var scene_tree: SceneTree = get_tree()
 	var tween: Tween
@@ -318,5 +317,43 @@ func get_timestamp() -> String:
 func _on_mouse_timer_timeout() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
+
 func _on_playtime_timer_timeout() -> void:
-	persistent_data["playtime"] = persistent_data.get("playtime", 0) + 1
+	persistent_data.playtime += 1
+
+
+class Data:
+	var acquired_effects: int = 0
+	var current_scene: String = ""
+	var health: int = 0
+	var money: int = 0
+	var player_path: NodePath = ^""
+	var playtime: int = 0
+	var previous_scene: String = ""
+	var random: int = -1
+	var scene_data: Dictionary[String, Dictionary] = {}
+	var scene_visits: Dictionary[String, int] = {}
+	var steps_taken: int = 0
+	var times_slept: int = 0
+
+	var other: Dictionary[StringName, Variant] = {}
+
+
+	func from_dictionary(dictionary: Dictionary) -> Data:
+		var data := Data.new()
+
+		for property: StringName in dictionary:
+			if property in data:
+				data.set(property, dictionary[property])
+
+		return data
+
+
+	func to_dictionary() -> Dictionary:
+		var dictionary: Dictionary = {}
+		var properties: Array[Dictionary] = get_property_list()
+
+		for i: int in range(3, properties.size()):
+			dictionary[properties[i].name] = get(properties[i].name)
+
+		return dictionary

@@ -5,7 +5,7 @@ extends YumeWorld
 
 
 func _ready() -> void:
-	match Game.persistent_data.get("entered_from", false):
+	match Game.persistent_data.previous_scene:
 		"res://scenes/maps/amber_corridors.tscn":
 			player.facing = YumeCharacter.Direction.DOWN
 			player.position = Vector2(-936.0, -728.0)

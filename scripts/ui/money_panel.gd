@@ -18,8 +18,6 @@ extends PanelContainer
 
 @onready var label: Label = get_node("Label")
 
+
 func _ready() -> void:
-	if Game.persistent_data.has("money"):
-		label.text = str(Game.persistent_data["money"]) + "♎"
-	else:
-		label.text = "0♎"
+	label.text = str(Game.persistent_data.money) + "♎"

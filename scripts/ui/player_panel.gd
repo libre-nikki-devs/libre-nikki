@@ -21,34 +21,51 @@ extends HBoxContainer
 @onready var effects_label: Label = get_node("VBoxContainer/HBoxContainer/EffectsLabel")
 @onready var health_label: Label = get_node("VBoxContainer/HBoxContainer/HealthLabel")
 
-var data: Dictionary = Game.persistent_data
+var data: Game.Data = Game.persistent_data
+
 
 func _ready() -> void:
-	if data.has("player_data"):
-		if data["player_data"].has("equipped_effect"):
-			if data["player_data"]["equipped_effect"] == YumePlayer.Effect.DEFAULT:
-				avatar.animation = "down"
-			else:
-				avatar.animation = "down" + YumePlayer.Effect.find_key(data["player_data"]["equipped_effect"]).capitalize()
+	var player: YumePlayer = get_node_or_null(data.player_path)
 
-		if data["player_data"].has("name"):
-			player_label.text = data["player_data"]["name"]
+	if player:
+		player_label.text = player.name
 
-	if data.has("acquired_effects"):
-		effects_label.text = "✨: " + str(_count_ones(data["acquired_effects"])) + "/" + str(YumePlayer.Effect.size() - 1)
+		if player.equipped_effect == YumePlayer.Effect.DEFAULT:
+			avatar.animation = "down"
+		else:
+			avatar.animation = "down" + YumePlayer.Effect.find_key(
+					player.equipped_effect).capitalize()
+
 	else:
-		effects_label.text = "✨: 0/" + str(YumePlayer.Effect.size() - 1)
+		if data.scene_data.has(data.current_scene):
+			var player_path: NodePath = data.player_path.slice(2)
 
-	if data.has("health"):
-		health_label.text = "❤️: " + str(data["health"])
-	else:
-		health_label.text = "❤️: 0"
+			if data.scene_data[data.current_scene].has(player_path):
+				var player_properties: Dictionary = (
+						data.scene_data[data.current_scene][player_path]
+				)
 
-func _count_ones(number: int) -> int:
-	var ones_count: int = 0
+				if player_properties.has(&"name"):
+					player_label.text = player_properties[&"name"]
 
-	while number > 0:
-		ones_count += number % 2;
-		number /= 2;
+				if player_properties.get(
+						&"equipped_effect", 0) == YumePlayer.Effect.DEFAULT:
 
-	return ones_count
+					avatar.animation = &"down"
+				else:
+					avatar.animation = &"down" + YumePlayer.Effect.find_key(
+							player_properties[&"equipped_effect"]).capitalize()
+
+	var count_ones: Callable = func (n: int) -> int:
+		var ones: int = 0
+
+		while n > 0:
+			ones += n % 2;
+			n /= 2;
+
+		return ones
+
+	effects_label.text = "✨: " + str(count_ones.call(
+			data.acquired_effects)) + "/" + str(YumePlayer.Effect.size() - 1)
+
+	health_label.text = "❤️: " + str(data.health)
