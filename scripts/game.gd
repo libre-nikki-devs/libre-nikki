@@ -32,8 +32,6 @@ const MAPSHOTS_DIRECTORY: String = "user://mapshots"
 
 @onready var mouse_timer: Timer = get_node("MouseTimer")
 
-@onready var music_player: AudioStreamPlayer = get_node("MusicPlayer")
-
 var current_scene_load_state: SceneLoadState = SceneLoadState.UNKNOWN
 
 var key_hold_time: float = 0.5
@@ -287,9 +285,9 @@ func wake_up() -> void:
 	var scene_tree: SceneTree = get_tree()
 	var tween: Tween
 
-	if music_player.playing:
+	if MusicPlayer.playing:
 		tween = create_tween()
-		tween.tween_property(music_player, "volume_db", linear_to_db(0.01), 5.0)
+		tween.tween_property(MusicPlayer, "volume_db", linear_to_db(0.01), 5.0)
 
 	TransitionHandler.play(&"pixelate_out")
 	scene_tree.paused = true
@@ -301,7 +299,7 @@ func wake_up() -> void:
 	if tween:
 		if tween.is_running():
 			await tween.finished
-			music_player.stop()
+			MusicPlayer.stop()
 
 func get_timestamp() -> String:
 	var date: Dictionary = Time.get_datetime_dict_from_system()
