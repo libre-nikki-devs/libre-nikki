@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bojy2o2nyo8y2"]
 
-[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_kk08f"]
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://resources/themes/default_theme.tres" id="1_kk08f"]
 [ext_resource type="Script" uid="uid://d1ofgp8iifwmr" path="res://scripts/ui/travel_menu.gd" id="2_ii56h"]
 
 [node name="TravelMenu" type="Control" unique_id=626076588]

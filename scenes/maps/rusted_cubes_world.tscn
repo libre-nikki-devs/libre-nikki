@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dd7sahypqys3o" path="res://scripts/maps/rusted_cubes_world.gd" id="1_cjnnr"]
 [ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/characters/sakutsuki.tscn" id="2_4i7bj"]
-[ext_resource type="TileSet" uid="uid://coerf867dbgen" path="res://tilesets/rusted_cubes_world.tres" id="3_cjnnr"]
+[ext_resource type="TileSet" uid="uid://coerf867dbgen" path="res://resources/tilesets/rusted_cubes_world.tres" id="3_cjnnr"]
 [ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="3_uhaer"]
 [ext_resource type="Script" uid="uid://cwerewsxa8758" path="res://scripts/props/door.gd" id="4_15bdu"]
-[ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="5_uhaer"]
+[ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://resources/spritesheets/assets/door.png" id="5_uhaer"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pest3"]
 size = Vector2(16, 16)

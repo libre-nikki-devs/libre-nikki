@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dw4mho31qt4k0"]
 
 [ext_resource type="Script" uid="uid://bpv4sw8uurybh" path="res://scripts/ui/fps_counter.gd" id="1_tx82a"]
-[ext_resource type="FontFile" uid="uid://b0qlr2tc8xin1" path="res://spritesheets/images/font.png" id="2_ms405"]
+[ext_resource type="FontFile" uid="uid://b0qlr2tc8xin1" path="res://resources/spritesheets/assets/font.png" id="2_ms405"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h1dj2"]
 bg_color = Color(0, 0, 0, 0.5)

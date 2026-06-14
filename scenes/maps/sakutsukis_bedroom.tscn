@@ -1,11 +1,11 @@
 [gd_scene format=4 uid="uid://bra2nosjgdw7m"]
 
 [ext_resource type="Script" uid="uid://dekpdnansexi6" path="res://scripts/maps/sakutsukis_bedroom.gd" id="1_bvmiv"]
-[ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://tilesets/images/sakutsuki's_room.png" id="2_0kkjn"]
+[ext_resource type="Texture2D" uid="uid://b5l77jgeno0pu" path="res://resources/tilesets/assets/sakutsuki's_room.png" id="2_0kkjn"]
 [ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/characters/sakutsuki.tscn" id="3_wt7fi"]
 [ext_resource type="Script" uid="uid://c4kernc5sdtfb" path="res://scripts/classes/yume_interactable.gd" id="4_gh7np"]
-[ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://spritesheets/images/test.png" id="5_k7kuo"]
-[ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="6_nlgcx"]
+[ext_resource type="Texture2D" uid="uid://fuxeju48v6hf" path="res://resources/spritesheets/assets/test.png" id="5_k7kuo"]
+[ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://resources/spritesheets/assets/door.png" id="6_nlgcx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l57qo"]
 texture = ExtResource("2_0kkjn")
@@ -114,7 +114,7 @@ z_index = 1
 position = Vector2(-8, 8)
 collision_layer = 2
 collision_mask = 2
-shared_properties = Array[String]([])
+shared_properties = Array[StringName]([])
 can_move_in_vacuum = false
 
 [node name="Desk" type="CharacterBody2D" parent="." unique_id=272638602]

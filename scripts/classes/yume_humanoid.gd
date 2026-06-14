@@ -39,7 +39,7 @@ func _force_animation_update() -> void:
 
 func _move() -> void:
 	footstep_sound = (current_world.default_footstep_sound if current_world
-			else load("res://sounds/step.wav"))
+			else load("res://resources/sounds/step.wav"))
 
 	var ground: Object = surface_detector.get_collider()
 
@@ -78,7 +78,7 @@ func get_footstep_sound(ground: Surface) -> AudioStream:
 		if current_world.default_footstep_sound:
 			return current_world.default_footstep_sound
 
-	return load("res://sounds/step.wav")
+	return load("res://resources/sounds/step.wav")
 
 ## Get a footstep sound based on a tile.
 func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
@@ -91,7 +91,7 @@ func get_tile_footstep_sound(tile_data: TileData) -> AudioStream:
 		if current_world.default_footstep_sound:
 			return current_world.default_footstep_sound
 
-	return load("res://sounds/step.wav")
+	return load("res://resources/sounds/step.wav")
 
 func play_footstep_sound() -> void:
 	play_sound(footstep_sound, 256.0, randf_range(0.90, 1.10))

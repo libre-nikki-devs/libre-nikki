@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://icwpnu4canmm"]
 
 [ext_resource type="Script" uid="uid://cij0kdti16hhk" path="res://scripts/ui/player_panel.gd" id="1_udy6i"]
-[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_y3yhk"]
-[ext_resource type="Texture2D" uid="uid://rcvhyw1t0f3e" path="res://themes/images/frame.png" id="2_lc16r"]
-[ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://spritesheets/sakutsuki.tres" id="3_y3yhk"]
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://resources/themes/default_theme.tres" id="1_y3yhk"]
+[ext_resource type="Texture2D" uid="uid://rcvhyw1t0f3e" path="res://resources/themes/assets/frame.png" id="2_lc16r"]
+[ext_resource type="SpriteFrames" uid="uid://bmytf1km3iu35" path="res://resources/spritesheets/sakutsuki.tres" id="3_y3yhk"]
 
 [node name="PlayerPanel" type="HBoxContainer" unique_id=1677532686]
 theme = ExtResource("1_y3yhk")

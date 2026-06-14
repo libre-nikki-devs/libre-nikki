@@ -54,7 +54,9 @@ extends Node2D
 
 ## If there are no tiles on the surface, [YumeHumanoid]s will use this sound for
 ## footsteps.
-@export var default_footstep_sound: AudioStream = preload("res://sounds/step.wav")
+@export var default_footstep_sound: AudioStream = (
+	preload("res://resources/sounds/step.wav")
+)
 
 @export var default_mimic_data: Dictionary[String, Array] = {
 	"AnimatedSprite2D": [&"animation", &"frame", &"sprite_frames", &"visible"],

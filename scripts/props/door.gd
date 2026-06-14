@@ -27,15 +27,22 @@ func _ready() -> void:
 	if animated_sprite.frame != 0:
 		animated_sprite.frame = 0
 
-		play_sound([preload("res://sounds/boot_steel_door_close-1.wav"),
-				preload("res://sounds/boot_steel_door_close-2.wav")]
-				.pick_random(), 512.0)
+		play_sound(
+				[preload("res://resources/sounds/boot_steel_door_close-1.wav"),
+				preload("res://resources/sounds/boot_steel_door_close-2.wav")]
+				.pick_random(), 512.0
+		)
+
 
 func _on_door_body_interacted(body: Node2D):
 	if body is YumePlayer and body.facing == YumeCharacter.Direction.UP:
 		body.is_busy = true
 		animated_sprite.play("open")
-		play_sound(preload("res://sounds/boot_steel_door_open-1.wav"), 512.0)
+
+		play_sound(
+				preload("res://resources/sounds/boot_steel_door_open-1.wav")
+		, 512.0)
+
 		await animated_sprite.animation_finished
 		body.is_busy = false
 		opened.emit()

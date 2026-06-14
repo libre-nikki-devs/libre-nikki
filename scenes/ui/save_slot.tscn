@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b460ilvlm5418"]
 
-[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_l5iig"]
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://resources/themes/default_theme.tres" id="1_l5iig"]
 [ext_resource type="Script" uid="uid://b1ygccqjhw3k3" path="res://scripts/ui/save_slot.gd" id="2_l5iig"]
 
 [node name="SaveSlot" type="PanelContainer" unique_id=1111289727]

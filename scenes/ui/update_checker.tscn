@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://davlmpwfjrkvd"]
 
-[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://themes/default_theme.tres" id="1_4anwf"]
+[ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://resources/themes/default_theme.tres" id="1_4anwf"]
 [ext_resource type="Script" uid="uid://cjfep8ns55ob5" path="res://scripts/ui/update_checker.gd" id="2_qyxqr"]
 
 [node name="UpdateChecker" type="Control" unique_id=974084570]

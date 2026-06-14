@@ -24,7 +24,7 @@ config/windows_native_icon="res://libre_nikki.ico"
 
 [audio]
 
-buses/default_bus_layout="res://misc/audio_bus_layout.tres"
+buses/default_bus_layout="res://resources/audio_bus_layout.tres"
 
 [autoload]
 

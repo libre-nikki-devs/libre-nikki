@@ -13,10 +13,12 @@ Copyright (C) 2024-2026 boot <bootovy@proton.me>. All rights reserved.
 Following files are licensed under the terms of the
 Creative Commons Attribution-ShareAlike 4.0 International Public License:
 
-tilesets/images/boot_amber_corridors.png,
-tilesets/images/boot_rusted_cubes_world.png, sounds/boot_steel_door_close-1.wav,
-sounds/boot_steel_door_close-2.wav, sounds/boot_steel_door_locked-1.wav,
-sounds/boot_steel_door_open-1.wav.
+resources/tilesets/assets/boot_amber_corridors.png,
+resources/tilesets/assets/boot_rusted_cubes_world.png,
+resources/sounds/boot_steel_door_close-1.wav,
+resources/sounds/boot_steel_door_close-2.wav,
+resources/sounds/boot_steel_door_locked-1.wav,
+resources/sounds/boot_steel_door_open-1.wav.
 
 
 Copyright (C) 2026 emizip. All rights reserved.
@@ -24,4 +26,4 @@ Copyright (C) 2026 emizip. All rights reserved.
 Following files are licensed under the terms of the
 Creative Commons Attribution-ShareAlike 4.0 International Public License:
 
-sounds/step.wav
+resources/sounds/step.wav.

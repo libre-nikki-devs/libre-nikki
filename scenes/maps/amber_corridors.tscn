@@ -1,11 +1,11 @@
 [gd_scene format=4 uid="uid://bcn3nvodg7gq5"]
 
 [ext_resource type="Script" uid="uid://dv0k48ajxdkl4" path="res://scripts/maps/amber_corridors.gd" id="1_8u0t7"]
-[ext_resource type="TileSet" uid="uid://b1skvxc5ssinq" path="res://tilesets/amber_corridors.tres" id="2_h3nb6"]
+[ext_resource type="TileSet" uid="uid://b1skvxc5ssinq" path="res://resources/tilesets/amber_corridors.tres" id="2_h3nb6"]
 [ext_resource type="Shader" uid="uid://bnymis2k0r6ff" path="res://shaders/blur.gdshader" id="2_hwbim"]
 [ext_resource type="PackedScene" uid="uid://8wulc2ysaubr" path="res://scenes/characters/sakutsuki.tscn" id="3_8u0t7"]
 [ext_resource type="Script" uid="uid://cwerewsxa8758" path="res://scripts/props/door.gd" id="3_2464w"]
-[ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://spritesheets/images/door.png" id="4_arc2g"]
+[ext_resource type="Texture2D" uid="uid://2wqjf4f6oe3k" path="res://resources/spritesheets/assets/door.png" id="4_arc2g"]
 [ext_resource type="Script" uid="uid://d1fy5qfo5j0he" path="res://scripts/classes/yume_world.gd" id="7_arc2g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_njbgn"]

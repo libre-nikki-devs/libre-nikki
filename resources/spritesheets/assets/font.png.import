@@ -1,0 +1,25 @@
+[remap]
+
+importer="font_data_image"
+type="FontFile"
+uid="uid://b0qlr2tc8xin1"
+path="res://.godot/imported/font.png-2d1d12944ed919e93e57201a671c8c1b.fontdata"
+
+[deps]
+
+source_file="res://resources/spritesheets/assets/font.png"
+dest_files=["res://.godot/imported/font.png-2d1d12944ed919e93e57201a671c8c1b.fontdata"]
+
+[params]
+
+character_ranges=PackedStringArray("32-127")
+kerning_pairs=PackedStringArray()
+columns=16
+rows=6
+image_margin=Rect2i(0, 0, 0, 0)
+character_margin=Rect2i(0, 0, 0, 0)
+ascent=0
+descent=0
+fallbacks=[Resource("uid://cppsm1qljevil", "res://resources/spritesheets/assets/font_emoji.png")]
+compress=true
+scaling_mode=1

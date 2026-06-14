@@ -8,9 +8,9 @@ Libre Nikki is a surreal walking simulator running on Godot Engine, heavily insp
 
 ## Screenshots
 
-| Amber Corridors                                  | Player Menu                                 |
-|--------------------------------------------------|---------------------------------------------|
-| ![Amber Corridors](./misc/screenshots/amber.png) | ![Player Menu](./misc/screenshots/menu.png) |
+| Amber Corridors                                       | Player Menu                                      |
+|-------------------------------------------------------|--------------------------------------------------|
+| ![Amber Corridors](./resources/screenshots/amber.png) | ![Player Menu](./resources/screenshots/menu.png) |
 
 ## Downloading
 
