@@ -20,8 +20,6 @@ enum Mode { SAVE = 0, LOAD = 1 }
 
 const MAX_SLOTS: int = 16
 
-const SAVE_DIRECTORY: String = "user://saves"
-
 @onready var save_container: VBoxContainer = get_node("VBoxContainer/SaveContainer/ScrollContainer/VBoxContainer")
 
 @onready var label: Label = get_node("VBoxContainer/LabelContainer/Label")
@@ -44,7 +42,10 @@ func _ready() -> void:
 		else:
 			save_slot.button.connect("pressed", _on_load_button_pressed.bind(slot))
 
-		var file: FileAccess = FileAccess.open(SAVE_DIRECTORY.path_join("save%02d.libki" % slot), FileAccess.READ)
+		var file := FileAccess.open(
+				Game.SAVES_DIRECTORY
+				.path_join("save%02d.libki" % slot), FileAccess.READ
+		)
 
 		if file:
 			var data: Variant = file.get_var()
@@ -78,13 +79,16 @@ func _get_focus_grabber() -> Control:
 func save_game(slot: int) -> Error:
 	var error := Error.OK
 
-	if not DirAccess.dir_exists_absolute(SAVE_DIRECTORY):
-		error = DirAccess.make_dir_absolute(SAVE_DIRECTORY)
+	if not DirAccess.dir_exists_absolute(Game.SAVES_DIRECTORY):
+		error = DirAccess.make_dir_absolute(Game.SAVES_DIRECTORY)
 
 		if error != OK:
 			return error
 
-	var file := FileAccess.open(SAVE_DIRECTORY.path_join("save%02d.libki" % (slot)), FileAccess.WRITE)
+	var file := FileAccess.open(
+			Game.SAVES_DIRECTORY
+			.path_join("save%02d.libki" % (slot)), FileAccess.WRITE
+	)
 
 	if not file:
 		return FileAccess.get_open_error()
@@ -104,8 +108,10 @@ func save_game(slot: int) -> Error:
 	return error
 
 func load_game(slot: int) -> Error:
-	var file := FileAccess.open(SAVE_DIRECTORY.path_join(
-			"save%02d.libki" % (slot)), FileAccess.READ)
+	var file := FileAccess.open(
+			Game.SAVES_DIRECTORY
+			.path_join("save%02d.libki" % (slot)), FileAccess.READ
+	)
 
 	if not file:
 		return FileAccess.get_open_error()

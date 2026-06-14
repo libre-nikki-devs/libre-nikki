@@ -38,10 +38,8 @@ func _ready() -> void:
 	quit_button.visible = false
 	version_label.text = ProjectSettings.get_setting("application/config/version")
 
-	var save_directory: String = (preload("res://scenes/ui/save_manager.tscn").instantiate().SAVE_DIRECTORY)
-
-	if DirAccess.dir_exists_absolute(save_directory):
-		if not DirAccess.get_files_at(save_directory).is_empty():
+	if DirAccess.dir_exists_absolute(Game.SAVES_DIRECTORY):
+		if not DirAccess.get_files_at(Game.SAVES_DIRECTORY).is_empty():
 			continue_button.disabled = false
 			continue_label.modulate.a = 1.0
 			focus_button = continue_button

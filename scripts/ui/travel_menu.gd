@@ -16,17 +16,16 @@
 
 extends YumeMenu
 
-const MAP_DIRECTORY: String = "res://scenes/maps"
-
 @onready var filter_bar: LineEdit = get_node("FilterBar")
 
 @onready var map_container: VBoxContainer = get_node("PanelContainer/MapContainer")
 
 func _ready() -> void:
-	var maps: PackedStringArray = ResourceLoader.list_directory(MAP_DIRECTORY)
+	var maps: PackedStringArray = ResourceLoader.list_directory(
+			Game.MAPS_DIRECTORY)
 
 	for map_name: String in maps:
-		map_name = MAP_DIRECTORY + "/" + map_name
+		map_name = Game.MAPS_DIRECTORY.path_join(map_name)
 		var map: Resource = load(map_name)
 
 		if map is PackedScene:

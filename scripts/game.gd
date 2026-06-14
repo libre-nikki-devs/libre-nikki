@@ -26,6 +26,10 @@ enum SceneLoadState {
 	FROM_SAVE_FILE = 3
 }
 
+const MAPS_DIRECTORY: String = "res://scenes/maps"
+
+const SAVES_DIRECTORY: String = "user://saves"
+
 const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 
 const MAPSHOTS_DIRECTORY: String = "user://mapshots"
