@@ -39,10 +39,6 @@ const MOVEMENT_KEYS: Dictionary[String, Direction] = {
 
 @export var shared_properties: Array[StringName] = []
 
-var accept_events: Array[Callable] = []
-
-var cancel_events: Array[Callable] = []
-
 var current_movement_keys: Array[String] = []
 
 var accept_key_hold_time: float = 0.0
@@ -121,10 +117,10 @@ func _input(event: InputEvent) -> void:
 				if not menu_queued:
 					menu_queued = true
 					await moved
-					open_menu()
+					Game.open_menu(menu_path, { "player": self })
 					menu_queued = false
 		else:
-			open_menu()
+			Game.open_menu(menu_path, { "player": self })
 
 	if event.is_action_pressed("mapshot") and OS.is_debug_build() and current_world:
 		var mapshot: Image = await Game.take_mapshot(current_world)
@@ -155,23 +151,17 @@ func equip(effect: Effect = Effect.DEFAULT) -> void:
 
 	equipped.emit()
 
+
 func interact() -> void:
-	if accept_events.is_empty():
-		if not is_sitting and is_inside_tree():
-			await get_tree().physics_frame
-			_update_detectors(facing)
-			var collider: Object = collision_detector.get_collider()
+	if not is_sitting and is_inside_tree():
+		await get_tree().physics_frame
+		_update_detectors(facing)
+		var collider: Object = collision_detector.get_collider()
 
-			if collider is YumeInteractable:
-				collider.body_interacted.emit(self)
-				collider.body_touched.emit(self)
-	else:
-		if accept_events.front().get_argument_count() > 0:
-			accept_events.front().call(self)
-		else:
-			accept_events.front().call()
+		if collider is YumeInteractable:
+			collider.body_interacted.emit(self)
+			collider.body_touched.emit(self)
 
-		accept_events.pop_front()
 
 ## Play the cheek pinching animation. Wakes up the character, if is dreaming.
 @abstract func pinch_cheek() -> void
@@ -186,15 +176,3 @@ func grant_effect(effect: Effect) -> void:
 func revoke_effect(effect: Effect) -> void:
 	if Game.persistent_data.acquired_effects & effect:
 		Game.persistent_data.acquired_effects -= effect
-
-
-func open_menu() -> void:
-	if cancel_events.is_empty():
-		Game.open_menu(menu_path, { "player": self })
-	else:
-		if cancel_events.front().get_argument_count() > 0:
-			cancel_events.front().call(self)
-		else:
-			cancel_events.front().call()
-
-		cancel_events.pop_front()
