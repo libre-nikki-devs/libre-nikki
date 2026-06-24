@@ -60,11 +60,11 @@ layout_mode = 2
 [node name="FPSCounterButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer" unique_id=1809326005]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
-focus_neighbor_top = NodePath("../MaxFPSButton")
+focus_neighbor_top = NodePath("../WorldNotificationsButton")
 focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../VSyncButton")
 focus_next = NodePath("../VSyncButton")
-focus_previous = NodePath("../MaxFPSButton")
+focus_previous = NodePath("../WorldNotificationsButton")
 text = " "
 
 [node name="FPSCounterLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/FPSCounterButton" unique_id=2070546900]
@@ -124,8 +124,8 @@ layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath("../VSyncButton")
 focus_neighbor_right = NodePath(".")
-focus_neighbor_bottom = NodePath("../FPSCounterButton")
-focus_next = NodePath("../FPSCounterButton")
+focus_neighbor_bottom = NodePath("../WorldNotificationsButton")
+focus_next = NodePath("../WorldNotificationsButton")
 focus_previous = NodePath("../VSyncButton")
 text = " "
 
@@ -147,6 +147,37 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "INF "
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="WorldNotificationsButton" type="Button" parent="MainPanelContainer/DisplayVBoxContainer" unique_id=844049684]
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../MaxFPSButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../FPSCounterButton")
+focus_next = NodePath("../FPSCounterButton")
+focus_previous = NodePath("../MaxFPSButton")
+text = " "
+
+[node name="WorldNotificationsLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/WorldNotificationsButton" unique_id=1291699042]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = " World Notifications"
+vertical_alignment = 1
+
+[node name="ValueLabel" type="Label" parent="MainPanelContainer/DisplayVBoxContainer/WorldNotificationsButton" unique_id=1553576912]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "[OFF] "
 horizontal_alignment = 2
 vertical_alignment = 1
 
@@ -293,6 +324,7 @@ vertical_alignment = 1
 [connection signal="pressed" from="MainPanelContainer/DisplayVBoxContainer/FPSCounterButton" to="." method="_on_fps_counter_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/DisplayVBoxContainer/VSyncButton" to="." method="_on_v_sync_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/DisplayVBoxContainer/MaxFPSButton" to="." method="_on_max_fps_button_pressed"]
+[connection signal="pressed" from="MainPanelContainer/DisplayVBoxContainer/WorldNotificationsButton" to="." method="_on_world_notifications_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/CC-BYButton" to="." method="_on_ccby_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/CC-BY-SAButton" to="." method="_on_ccbysa_button_pressed"]
 [connection signal="pressed" from="MainPanelContainer/LicensesVBoxContainer/GPLButton" to="." method="_on_gpl_button_pressed"]

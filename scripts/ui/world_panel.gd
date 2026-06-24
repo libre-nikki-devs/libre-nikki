@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Libre Nikki Developers.
+# Copyright (C) 2025-2026 Libre Nikki Developers.
 #
 # This file is part of Libre Nikki.
 #
@@ -14,18 +14,17 @@
 # You should have received a copy of the GNU General Public License along with
 # Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends HFlowContainer
+extends PanelContainer
 
-@onready var depth_label: Label = get_node("DepthContainer/Label")
-@onready var world_label: Label = get_node("WorldContainer/Label")
+
+@onready var label: Label = $Label
+
 
 func _ready() -> void:
 	var current_scene: Node = get_tree().current_scene
 
 	if current_scene is YumeWorld:
-		depth_label.text = current_scene.depth
-
-		if current_scene.pretty_name.is_empty():
-			world_label.text = current_scene.name
-		else:
-			world_label.text = current_scene.pretty_name
+		label.text = (
+				current_scene.name if current_scene.pretty_name.is_empty()
+				else current_scene.pretty_name
+		)

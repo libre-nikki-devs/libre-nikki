@@ -48,6 +48,8 @@ var scene_data: Dictionary[String, PackedScene] = {}
 ## Contains settings data.
 var settings := ConfigFile.new()
 
+var world_notifications: bool = false
+
 
 func _init() -> void:
 	if settings.load("user://settings.ini") == OK:
@@ -77,6 +79,14 @@ func _init() -> void:
 				DisplayServer.window_set_vsync_mode(
 						vsync as DisplayServer.VSyncMode)
 
+		if settings.has_section_key("display", "world_notifications"):
+			var world_notifications_value: Variant = settings.get_value(
+					"display", "world_notifications", false)
+
+			if world_notifications_value is bool:
+				if world_notifications_value:
+					world_notifications = world_notifications_value
+
 	if OS.is_debug_build():
 		var fast_forward_indicator: Control = preload(
 				"res://scenes/ui/fast_forward_indicator.tscn").instantiate()
@@ -105,6 +115,45 @@ func _ready() -> void:
 				persistent_data.scene_visits[scene_path] = (
 						persistent_data.scene_visits.get(scene_path, 0) + 1
 				)
+
+				if current_scene is YumeWorld and world_notifications:
+						var world_notification: Control = preload(
+								"res://scenes/ui/world_panel.tscn"
+						).instantiate()
+
+						world_notification.z_index = 1
+
+						world_notification.set_anchors_preset(
+								Control.PRESET_BOTTOM_LEFT
+						)
+
+						add_child(world_notification)
+
+						var tween: Tween = create_tween()
+
+						tween.tween_property(world_notification, "position:y",
+								world_notification.position.y -
+								world_notification.size.y *
+								world_notification.scale.y, 0.5)
+
+						await tween.finished
+
+						var timer := Timer.new()
+						timer.autostart = true
+						timer.one_shot = true
+						timer.wait_time = 5.0
+						world_notification.add_child(timer)
+
+						await timer.timeout
+						tween = create_tween()
+
+						tween.tween_property(world_notification, "position:y",
+								world_notification.position.y +
+								world_notification.size.y *
+								world_notification.scale.y, 0.5)
+
+						await tween.finished
+						world_notification.queue_free()
 	)
 
 	scene_tree.scene_changed.emit()

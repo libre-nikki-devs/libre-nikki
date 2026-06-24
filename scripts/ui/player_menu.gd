@@ -26,7 +26,8 @@ extends YumeMenu
 @onready var money_panel = get_node("MoneyPanel")
 @onready var player_container = get_node("MainPanelContainer/VBoxContainer")
 @onready var effects_grid_container = get_node("MainPanelContainer/EffectsGridContainer")
-@onready var world_panel = get_node("WorldPanel")
+@onready var world_panel: Container = $WorldContainer
+@onready var depth_label: Label = $WorldContainer/DepthPanel/Label
 @onready var actions_grid_container = get_node("MainPanelContainer/ActionsGridContainer")
 @onready var player: YumePlayer
 
@@ -45,6 +46,7 @@ func _ready() -> void:
 
 	if current_scene is YumeWorld:
 		world_panel.show()
+		depth_label.text = current_scene.depth
 		money_panel.anchors_preset = Control.PRESET_BOTTOM_RIGHT
 	else:
 		world_panel.hide()

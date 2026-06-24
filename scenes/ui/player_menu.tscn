@@ -234,15 +234,30 @@ offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="WorldPanel" parent="." unique_id=1035984542 instance=ExtResource("6_pg55v")]
+[node name="WorldContainer" type="HFlowContainer" parent="." unique_id=1035984542]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_top = -24.0
 offset_right = 232.0
-offset_bottom = 0.0
 grow_vertical = 0
+theme = ExtResource("1_enftr")
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+
+[node name="WorldPanel" parent="WorldContainer" unique_id=1635534221 instance=ExtResource("6_pg55v")]
+layout_mode = 2
+
+[node name="DepthPanel" type="PanelContainer" parent="WorldContainer" unique_id=499381830]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="WorldContainer/DepthPanel" unique_id=1791649998]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="MainPanelContainer/ActionsGridContainer/PinchCheekButton" to="." method="_on_pinch_cheek_button_pressed"]
 [connection signal="pressed" from="SidePanelContainer/VBoxContainer/EffectsButton" to="." method="_on_effects_button_pressed"]

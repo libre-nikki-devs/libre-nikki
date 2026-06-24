@@ -21,6 +21,12 @@ extends YumeMenu
 @onready var fps_counter_value := $MainPanelContainer/DisplayVBoxContainer/FPSCounterButton/ValueLabel
 @onready var vsync_value := $MainPanelContainer/DisplayVBoxContainer/VSyncButton/ValueLabel
 @onready var max_fps_value := $MainPanelContainer/DisplayVBoxContainer/MaxFPSButton/ValueLabel
+
+@onready var world_notifications_value: Label = (
+		$MainPanelContainer/DisplayVBoxContainer/WorldNotificationsButton/
+		ValueLabel
+)
+
 @onready var licenses_button := $SidePanelContainer/SideVBoxContainer/LicensesButton
 @onready var licenses_menu := $MainPanelContainer/LicensesVBoxContainer
 @onready var side_menu := $SidePanelContainer/SideVBoxContainer
@@ -46,6 +52,12 @@ func _ready() -> void:
 		fps_counter_value.text = "[ON] "
 	else:
 		fps_counter_value.text = "[OFF] "
+
+	if Game.world_notifications:
+		world_notifications_value.text = "[ON] "
+	else:
+		world_notifications_value.text = "[OFF] "
+
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_go_back"):
@@ -140,6 +152,19 @@ func _on_max_fps_button_pressed() -> void:
 
 	Engine.max_fps = max_fps
 	Game.settings.set_value("display", "max_fps", max_fps)
+
+
+func _on_world_notifications_button_pressed() -> void:
+	Game.world_notifications = !Game.world_notifications
+
+	Game.settings.set_value("display", "world_notifications",
+			Game.world_notifications)
+
+	if Game.world_notifications:
+		world_notifications_value.text = "[ON] "
+	else:
+		world_notifications_value.text = "[OFF] "
+
 
 func _on_licenses_button_pressed() -> void:
 	main_label.hide()
