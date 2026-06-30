@@ -1,11 +1,24 @@
 [gd_scene format=3 uid="uid://dhnn80wdox05k"]
 
 [ext_resource type="Script" uid="uid://c305spui1e7hh" path="res://scripts/game.gd" id="1_w2k2j"]
+[ext_resource type="PackedScene" uid="uid://o018hjpcyot8" path="res://scenes/ui/money_panel.tscn" id="2_yqjtg"]
 
 [node name="Game" type="CanvasLayer" unique_id=721847319]
 process_mode = 3
 layer = 100
 script = ExtResource("1_w2k2j")
+
+[node name="MoneyPanel" parent="." unique_id=754265015 instance=ExtResource("2_yqjtg")]
+z_index = 2
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -176.0
+offset_right = -88.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="MouseTimer" type="Timer" parent="." unique_id=1631483705]
 wait_time = 5.0

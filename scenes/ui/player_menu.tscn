@@ -233,6 +233,7 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 0
+scale = Vector2(1, 1)
 
 [node name="WorldContainer" type="HFlowContainer" parent="." unique_id=1035984542]
 layout_mode = 1

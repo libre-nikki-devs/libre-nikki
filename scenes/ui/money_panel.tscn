@@ -3,14 +3,38 @@
 [ext_resource type="Theme" uid="uid://dudh2k1jjvgdk" path="res://resources/themes/default_theme.tres" id="1_4bmpl"]
 [ext_resource type="Script" uid="uid://c0t24c04jxsie" path="res://scripts/ui/money_panel.gd" id="2_e61dm"]
 
-[node name="MoneyPanel" type="PanelContainer" unique_id=754265015]
+[node name="MoneyPanel" type="Control" unique_id=1828625824]
+layout_mode = 3
+anchors_preset = 0
 offset_right = 88.0
 offset_bottom = 24.0
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
 theme = ExtResource("1_4bmpl")
 script = ExtResource("2_e61dm")
 
-[node name="Label" type="Label" parent="." unique_id=1135274584]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=754265015]
+layout_mode = 0
+offset_right = 88.0
+offset_bottom = 24.0
+
+[node name="Label" type="Label" parent="PanelContainer" unique_id=1135274584]
 layout_mode = 2
 text = "0♎"
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="Label" type="Label" parent="." unique_id=1674428645]
+visible = false
+layout_mode = 0
+offset_left = -8.0
+offset_top = -40.0
+offset_right = 72.0
+offset_bottom = -28.0
+text = "+0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="." unique_id=613632522]
+wait_time = 5.0
+one_shot = true

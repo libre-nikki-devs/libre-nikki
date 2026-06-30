@@ -34,6 +34,8 @@ const SCREENSHOTS_DIRECTORY: String = "user://screenshots"
 
 const MAPSHOTS_DIRECTORY: String = "user://mapshots"
 
+@onready var money_panel: Control = $MoneyPanel
+
 @onready var mouse_timer: Timer = get_node("MouseTimer")
 
 var current_scene_load_state: SceneLoadState = SceneLoadState.UNKNOWN
