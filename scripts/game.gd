@@ -123,7 +123,7 @@ func _ready() -> void:
 								"res://scenes/ui/world_panel.tscn"
 						).instantiate()
 
-						world_notification.z_index = 1
+						world_notification.z_index = 2
 
 						world_notification.set_anchors_preset(
 								Control.PRESET_BOTTOM_LEFT
