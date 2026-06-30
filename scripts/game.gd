@@ -105,18 +105,17 @@ func _ready() -> void:
 
 	scene_tree.scene_changed.connect(
 			func () -> void:
-				if current_scene_load_state == SceneLoadState.FROM_SAVE_FILE:
-					return
-
 				var current_scene: Node = scene_tree.current_scene
-				var scene_path: String = current_scene.scene_file_path
 
-				if scene_path.is_empty():
-					scene_path = persistent_data.current_scene
+				if current_scene_load_state != SceneLoadState.FROM_SAVE_FILE:
+					var scene_path: String = current_scene.scene_file_path
 
-				persistent_data.scene_visits[scene_path] = (
-						persistent_data.scene_visits.get(scene_path, 0) + 1
-				)
+					if scene_path.is_empty():
+						scene_path = persistent_data.current_scene
+
+					persistent_data.scene_visits[scene_path] = (
+							persistent_data.scene_visits.get(scene_path, 0) + 1
+					)
 
 				if current_scene is YumeWorld and world_notifications:
 						var world_notification: Control = preload(
@@ -134,9 +133,8 @@ func _ready() -> void:
 						var tween: Tween = create_tween()
 
 						tween.tween_property(world_notification, "position:y",
-								world_notification.position.y -
-								world_notification.size.y *
-								world_notification.scale.y, 0.5)
+								-world_notification.size.y *
+								world_notification.scale.y, 0.5).as_relative()
 
 						await tween.finished
 
@@ -150,9 +148,8 @@ func _ready() -> void:
 						tween = create_tween()
 
 						tween.tween_property(world_notification, "position:y",
-								world_notification.position.y +
 								world_notification.size.y *
-								world_notification.scale.y, 0.5)
+								world_notification.scale.y, 0.5).as_relative()
 
 						await tween.finished
 						world_notification.queue_free()
