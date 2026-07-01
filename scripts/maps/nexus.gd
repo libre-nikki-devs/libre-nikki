@@ -1,6 +1,10 @@
 extends YumeWorld
 
-@onready var player: YumePlayer = get_node("Sakutsuki")
+
+@onready var player: YumePlayer = $Sakutsuki
+
+@onready var coin: YumeInteractable = get_node_or_null(^"Coin")
+
 
 func _init() -> void:
 	super()
@@ -51,9 +55,23 @@ func _on_bike_body_interacted(body: Node2D) -> void:
 		body.equip(YumePlayer.Effect.BIKE)
 
 
+func _on_coin_body_interacted(body: Node2D) -> void:
+	Game.money_panel.raise(100)
+	Game.persistent_data.money += 100
+	coin.queue_free()
+
+
 func _on_rusted_cubes_teleport_body_interacted(body: Node2D) -> void:
 	process_mode = PROCESS_MODE_DISABLED
 	await TransitionHandler.prepare_texture()
 	await RenderingServer.frame_post_draw
 	Game.save_current_scene()
 	Game.change_scene("res://scenes/maps/rusted_cubes_world.tscn")
+
+
+func _on_vending_machine_body_interacted(body: Node2D) -> void:
+	Game.money_panel.raise(-100)
+
+	if Game.persistent_data.money >= 100:
+		Game.persistent_data.health += 1
+		Game.persistent_data.money -= 100
