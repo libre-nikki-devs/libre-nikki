@@ -131,6 +131,7 @@ func _ready() -> void:
 						add_child(world_notification)
 
 						var tween: Tween = create_tween()
+						tween.set_meta(&"keep_between_saved_scenes", true)
 
 						tween.tween_property(world_notification, "position:y",
 								-world_notification.size.y *
@@ -146,6 +147,7 @@ func _ready() -> void:
 
 						await timer.timeout
 						tween = create_tween()
+						tween.set_meta(&"keep_between_saved_scenes", true)
 
 						tween.tween_property(world_notification, "position:y",
 								world_notification.size.y *
@@ -194,7 +196,12 @@ func save_current_scene(where: Dictionary = persistent_data.scene_data) -> void:
 	if scene_path.is_empty():
 		scene_path = persistent_data.current_scene
 
+	# Snap running tweens to their final values before saving to avoid them
+	# getting stuck when restoring the scene.
 	for tween: Tween in scene_tree.get_processed_tweens():
+		if tween.get_meta(&"keep_between_saved_scenes", false):
+			continue
+
 		if tween.is_running():
 			tween.custom_step(INF)
 			tween.kill()

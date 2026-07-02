@@ -62,6 +62,7 @@ func raise(difference: int):
 					add_child(label)
 
 					var tween: Tween = create_tween()
+					tween.set_meta(&"keep_between_saved_scenes", true)
 					tween.tween_property(label, "modulate:a", 0.0, 5.0)
 					tween.parallel()
 
@@ -80,6 +81,7 @@ func raise(difference: int):
 		if _tween.is_running():
 			_tween.kill()
 			_tween = create_tween()
+			_tween.set_meta(&"keep_between_saved_scenes", true)
 
 			_tween.tween_property(container, "position:y", _raise_position,
 					(_raise_position - container.position.y) /
@@ -92,11 +94,13 @@ func raise(difference: int):
 		return
 
 	_tween = create_tween()
+	_tween.set_meta(&"keep_between_saved_scenes", true)
 	_tween.tween_property(container, "position:y", _raise_position, 0.5)
 	await _tween.finished
 	timer.start()
 	await timer.timeout
 	_tween = create_tween()
+	_tween.set_meta(&"keep_between_saved_scenes", true)
 
 	_tween.tween_property(container, "position:y",
 			container.size.y * container.scale.y, 0.5).as_relative()
