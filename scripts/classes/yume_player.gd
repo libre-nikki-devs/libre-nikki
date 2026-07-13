@@ -134,8 +134,8 @@ func _input(event: InputEvent) -> void:
 		mapshot.save_png(Game.MAPSHOTS_DIRECTORY.path_join(Game.get_timestamp() + ".png"))
 
 
-func _move() -> void:
-	await super()
+func _move(motion: Vector2, ground_result: Dictionary) -> void:
+	await super(motion, ground_result)
 	Game.persistent_data.steps_taken += 1
 
 
@@ -155,12 +155,14 @@ func equip(effect: Effect = Effect.DEFAULT) -> void:
 func interact() -> void:
 	if not is_sitting and is_inside_tree():
 		await get_tree().physics_frame
-		_update_detectors(facing)
-		var collider: Object = collision_detector.get_collider()
+		var result: Dictionary = collide_ray(get_offset_and_motion(facing))
 
-		if collider is YumeInteractable:
-			collider.body_interacted.emit(self)
-			collider.body_touched.emit(self)
+		if result:
+			var collider: Object = result.collider
+
+			if collider is YumeInteractable:
+				collider.body_interacted.emit(self)
+				collider.body_touched.emit(self)
 
 
 ## Play the cheek pinching animation. Wakes up the character, if is dreaming.

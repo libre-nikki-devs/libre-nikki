@@ -44,16 +44,16 @@ func _move_loop():
 		await waited
 
 		if not is_busy:
-			var can_move: bool = false
 			var picked_direction: Direction
 
-			while not (available_directions.is_empty() or can_move):
+			while not available_directions.is_empty():
 				picked_direction = available_directions.pick_random()
 
-				if is_colliding(picked_direction):
+				var offset_and_motion: PackedVector2Array = (
+						get_offset_and_motion(picked_direction))
+
+				if is_colliding(offset_and_motion):
 					available_directions.erase(picked_direction)
 				else:
-					can_move = true
-
-			if can_move:
-				move(picked_direction, false)
+					move(picked_direction, offset_and_motion, false)
+					break

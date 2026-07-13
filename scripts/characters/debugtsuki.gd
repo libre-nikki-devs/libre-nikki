@@ -35,7 +35,8 @@ func _force_animation_update() -> void:
 
 	sprite.animation = Direction.find_key(facing).to_lower()
 
-func _move() -> void:
+
+func _move(motion: Vector2, ground_result: Dictionary) -> void:
 	var animation_name: StringName = Direction.find_key(facing).to_lower()
 
 	if last_step:
@@ -44,4 +45,4 @@ func _move() -> void:
 	animation_player.play(animation_name, -1.0, speed)
 	animation_player.seek(0.125)
 
-	await super()
+	await super(motion, ground_result)
