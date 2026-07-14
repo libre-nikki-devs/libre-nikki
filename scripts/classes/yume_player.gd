@@ -56,7 +56,6 @@ signal cancel_key_held()
 signal equipped(effect: Effect)
 
 func _init() -> void:
-	super()
 	set_process(true)
 
 func _notification(what: int) -> void:

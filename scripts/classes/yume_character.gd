@@ -56,8 +56,6 @@ var current_world: YumeWorld = null
 ## Direction the character is moving.
 var moving := Direction.NULL
 
-var collision_shapes: Array[CollisionShape2D] = []
-
 static var current_collisions: Array[CollisionShape2D] = []
 
 static var collisions_last_checked: int = 0
@@ -67,18 +65,6 @@ signal moved
 
 ## Emitted when the character has been wrapped around [member current_world].
 signal wrapped(previous_position: Vector2)
-
-func _init() -> void:
-	var on_child_entered_tree: Callable = func (node: Node):
-		if node is CollisionShape2D:
-			collision_shapes.append(node)
-
-	var on_child_exiting_tree: Callable = func (node: Node):
-		if node is CollisionShape2D:
-			collision_shapes.erase(node)
-
-	child_entered_tree.connect(on_child_entered_tree)
-	child_exiting_tree.connect(on_child_exiting_tree)
 
 
 func _notification(what: int) -> void:
@@ -110,23 +96,25 @@ func _get_current_collider(motion: Vector2) -> YumeCharacter:
 			if collision_mask & current_collision_shape_parent.collision_layer \
 					and not current_collision_shape.disabled:
 
-				for collision_shape: CollisionShape2D in collision_shapes:
+				for i: int in get_shape_owners():
+					var shape_owner: Object = shape_owner_get_owner(i)
+
 					var target_origin: Vector2 = (
 							current_world.wrap_around_world(
-							collision_shape.global_transform.origin + \
+							shape_owner.global_transform.origin + \
 							motion) - \
-							collision_shape.global_transform.origin \
+							shape_owner.global_transform.origin \
 							if current_world else motion
 					)
 
-					var shape: Shape2D = collision_shape.shape
 					var current_shape: Shape2D = current_collision_shape.shape
 					var target_transform := \
-							Transform2D(collision_shape.global_transform)
+							Transform2D(shape_owner.global_transform)
 
 					target_transform.origin += target_origin
 
-					if not shape.collide_and_get_contacts(target_transform,
+					if not shape_owner_get_shape(i, 0).collide_and_get_contacts(
+							target_transform,
 							current_shape,
 							current_collision_shape.global_transform) \
 							.is_empty():
@@ -147,12 +135,13 @@ func _move(motion: Vector2, ground_result: Dictionary) -> void:
 				position = value.round()
 	, position, position + motion, 0.25 / speed)
 
-	for collision_shape: CollisionShape2D in collision_shapes:
-		collision_shape.position += motion
+	for i: int in get_shape_owners():
+		var shape_owner: Object = shape_owner_get_owner(i)
+		shape_owner.position += motion
 
 		tween.parallel()
 
-		tween.tween_property(collision_shape, "position",
+		tween.tween_property(shape_owner, "position",
 				-motion, 0.25 / speed).as_relative()
 
 	await tween.finished
@@ -166,13 +155,16 @@ func collide_point(motion: Vector2, mask: int = collision_mask) -> Dictionary:
 	var space_state: PhysicsDirectSpaceState2D = (
 			get_world_2d().direct_space_state)
 
-	for collision_shape: CollisionShape2D in collision_shapes:
+	# Check collisions for each collision shape individually.
+	for i: int in get_shape_owners():
+		var shape_owner: Object = shape_owner_get_owner(i)
+
 		if current_world:
 			parameters.position = (current_world.wrap_around_world(
-					collision_shape.global_position + motion))
+					shape_owner.global_position + motion))
 		else:
 			parameters.position = (
-					collision_shape.global_position + motion)
+					shape_owner.global_position + motion)
 
 		var result: Array[Dictionary] = space_state.intersect_point(
 				parameters, 1)
@@ -198,10 +190,11 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 			get_world_2d().direct_space_state)
 
 	# Check collisions for each collision shape individually.
-	for collision_shape: CollisionShape2D in collision_shapes:
+	for i: int in get_shape_owners():
 		var result: Dictionary = {}
-		var to: Vector2 = collision_shape.global_position + motion
-		parameters.from = collision_shape.global_position + offset
+		var shape_owner: Object = shape_owner_get_owner(i)
+		var to: Vector2 = shape_owner.global_position + motion
+		parameters.from = shape_owner.global_position + offset
 
 		if current_world:
 			# Wrap the ray to ensure that `parameters.from` is within bounds.
@@ -347,8 +340,8 @@ func move(direction: Direction,
 			current_collider.body_touched.emit(self)
 			return
 
-	for collision_shape: CollisionShape2D in collision_shapes:
-		current_collisions.append(collision_shape)
+	for i: int in get_shape_owners():
+		current_collisions.append(shape_owner_get_owner(i))
 
 	wrap_around_world(motion)
 	is_busy = true
