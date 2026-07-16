@@ -56,10 +56,6 @@ var current_world: YumeWorld = null
 ## Direction the character is moving.
 var moving := Direction.NULL
 
-static var current_collisions: Array[CollisionShape2D] = []
-
-static var collisions_last_checked: int = 0
-
 ## Emitted when the character has moved.
 signal moved
 
@@ -83,48 +79,6 @@ func _notification(what: int) -> void:
 				if parent is YumeWorld:
 					current_world = parent
 					return
-
-
-func _get_current_collider(motion: Vector2) -> YumeCharacter:
-	var physics_frames: int = Engine.get_physics_frames()
-
-	if collisions_last_checked == physics_frames:
-		for current_collision_shape: CollisionShape2D in current_collisions:
-			var current_collision_shape_parent: YumeCharacter = \
-					current_collision_shape.get_parent()
-
-			if collision_mask & current_collision_shape_parent.collision_layer \
-					and not current_collision_shape.disabled:
-
-				for i: int in get_shape_owners():
-					var shape_owner: Object = shape_owner_get_owner(i)
-
-					var target_origin: Vector2 = (
-							current_world.wrap_around_world(
-							shape_owner.global_transform.origin + \
-							motion) - \
-							shape_owner.global_transform.origin \
-							if current_world else motion
-					)
-
-					var current_shape: Shape2D = current_collision_shape.shape
-					var target_transform := \
-							Transform2D(shape_owner.global_transform)
-
-					target_transform.origin += target_origin
-
-					if not shape_owner_get_shape(i, 0).collide_and_get_contacts(
-							target_transform,
-							current_shape,
-							current_collision_shape.global_transform) \
-							.is_empty():
-
-						return current_collision_shape_parent
-	else:
-		current_collisions.clear()
-		collisions_last_checked = physics_frames
-
-	return null
 
 
 func _move(motion: Vector2, ground_result: Dictionary) -> void:
@@ -189,6 +143,9 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 	var space_state: PhysicsDirectSpaceState2D = (
 			get_world_2d().direct_space_state)
 
+	var network_collider: CollisionObject2D = null
+	Game.collision_network.update()
+
 	# Check collisions for each collision shape individually.
 	for i: int in get_shape_owners():
 		var result: Dictionary = {}
@@ -214,6 +171,12 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 				if result:
 					return result
 
+				network_collider = Game.collision_network.collide(
+						self, parameters.from, parameters.to)
+
+				if network_collider:
+					return Dictionary({ "collider": network_collider })
+
 			# If ray is intersecting with bounds, break it down into two parts.
 			# First part: within bounds, second part: out of bounds. Then wrap
 			# the second part and check for collisions for each part.
@@ -224,6 +187,12 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 				if result:
 					return result
 
+				network_collider = Game.collision_network.collide(
+						self, parameters.from, parameters.to)
+
+				if network_collider:
+					return Dictionary({ "collider": network_collider })
+
 				# Hack for `@GlobalScope.wrap`'s `max` exclusiveness.
 				parameters.from = current_world.wrap_around_world(
 						intersection + motion) - motion
@@ -233,6 +202,12 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 
 				if result:
 					return result
+
+				network_collider = Game.collision_network.collide(
+						self, parameters.from, parameters.to)
+
+				if network_collider:
+					return Dictionary({ "collider": network_collider })
 
 	return {}
 
@@ -334,14 +309,11 @@ func move(direction: Direction,
 		elif not can_move_in_vacuum:
 			return
 
-		var current_collider: YumeCharacter = _get_current_collider(motion)
-
-		if current_collider:
-			current_collider.body_touched.emit(self)
-			return
+	else:
+		Game.collision_network.update()
 
 	for i: int in get_shape_owners():
-		current_collisions.append(shape_owner_get_owner(i))
+		Game.collision_network.peers.append(shape_owner_get_owner(i))
 
 	wrap_around_world(motion)
 	is_busy = true
@@ -356,14 +328,9 @@ func is_colliding(offset_and_motion: PackedVector2Array) -> bool:
 	if collide_ray(offset_and_motion):
 		return true
 
-	var motion: Vector2 = offset_and_motion[1]
-
 	if not can_move_in_vacuum:
-		if collide_point(motion, collision_mask >> 1):
+		if collide_point(offset_and_motion[1], collision_mask >> 1):
 			return true
-
-	if _get_current_collider(motion):
-		return true
 
 	return false
 

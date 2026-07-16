@@ -38,7 +38,9 @@ const MAPSHOTS_DIRECTORY: String = "user://mapshots"
 
 @onready var mouse_timer: Timer = get_node("MouseTimer")
 
-var current_scene_load_state: SceneLoadState = SceneLoadState.UNKNOWN
+var collision_network := TileBasedCollisionNetwork.new()
+
+var current_scene_load_state := SceneLoadState.UNKNOWN
 
 var key_hold_time: float = 0.5
 
@@ -408,3 +410,48 @@ class Data:
 			dictionary[properties[i].name] = get(properties[i].name)
 
 		return dictionary
+
+
+class TileBasedCollisionNetwork:
+	var last_checked: int = 0
+	var peers: Array[CollisionShape2D] = []
+
+
+	func collide(object: CollisionObject2D,
+			from: Vector2, to: Vector2) -> CollisionObject2D:
+
+		for peer: CollisionShape2D in peers:
+			var peer_parent: CollisionObject2D = peer.get_parent()
+
+			if (object.collision_mask & peer_parent.collision_layer == 0 or
+					peer.disabled):
+
+				continue
+
+			var rect: Rect2 = peer.shape.get_rect()
+
+			var polygon: PackedVector2Array = [
+				peer.global_position + rect.position,
+
+				Vector2(peer.global_position.x + rect.end.x,
+						peer.global_position.y + rect.position.y),
+
+				peer.global_position + rect.end,
+
+				Vector2(peer.global_position.x + rect.position.x,
+						peer.global_position.y + rect.end.y)]
+
+			if Geometry2D.intersect_polyline_with_polygon(
+					PackedVector2Array([from, to]), polygon):
+
+					return peer_parent
+
+		return null
+
+
+	func update() -> void:
+		var physics_frames: int = Engine.get_physics_frames()
+
+		if last_checked != physics_frames:
+			last_checked = physics_frames
+			peers.clear()
