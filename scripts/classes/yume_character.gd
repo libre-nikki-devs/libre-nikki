@@ -116,9 +116,9 @@ func collide_point(motion: Vector2, mask: int = collision_mask) -> Dictionary:
 		if current_world:
 			parameters.position = (current_world.wrap_around_world(
 					shape_owner.global_position + motion))
+
 		else:
-			parameters.position = (
-					shape_owner.global_position + motion)
+			parameters.position = shape_owner.global_position + motion
 
 		var result: Array[Dictionary] = space_state.intersect_point(
 				parameters, 1)
@@ -208,6 +208,19 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 
 				if network_collider:
 					return Dictionary({ "collider": network_collider })
+
+		else:
+			parameters.to = to
+			result = space_state.intersect_ray(parameters)
+
+			if result:
+				return result
+
+			network_collider = Game.collision_network.collide(
+					self, parameters.from, to)
+
+			if network_collider:
+				return Dictionary({ "collider": network_collider })
 
 	return {}
 
