@@ -101,6 +101,30 @@ func _move(motion: Vector2, ground_result: Dictionary) -> void:
 	await tween.finished
 
 
+func collide(offset_and_motion: PackedVector2Array,
+		mask: int = collision_mask) -> Dictionary:
+
+	# Check collisions for each collision shape individually.
+	for i: int in get_shape_owners():
+		var shape_owner: Object = shape_owner_get_owner(i)
+
+		var target_position: Vector2 = (
+				shape_owner.global_position + offset_and_motion[1])
+
+		if current_world:
+			target_position = current_world.wrap_around_world(target_position)
+
+		Game.collision_network.validate_tile(target_position)
+
+		var collider: CollisionObject2D = Game.collision_network.collide(
+				self, target_position, mask)
+
+		if collider:
+			return { "collider": collider }
+
+	return collide_ray(offset_and_motion, mask)
+
+
 func collide_point(motion: Vector2, mask: int = collision_mask) -> Dictionary:
 	var parameters := PhysicsPointQueryParameters2D.new()
 	parameters.collision_mask = mask
@@ -143,9 +167,6 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 	var space_state: PhysicsDirectSpaceState2D = (
 			get_world_2d().direct_space_state)
 
-	var network_collider: CollisionObject2D = null
-	Game.collision_network.update()
-
 	# Check collisions for each collision shape individually.
 	for i: int in get_shape_owners():
 		var result: Dictionary = {}
@@ -171,12 +192,6 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 				if result:
 					return result
 
-				network_collider = Game.collision_network.collide(
-						self, parameters.from, parameters.to)
-
-				if network_collider:
-					return Dictionary({ "collider": network_collider })
-
 			# If ray is intersecting with bounds, break it down into two parts.
 			# First part: within bounds, second part: out of bounds. Then wrap
 			# the second part and check for collisions for each part.
@@ -186,12 +201,6 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 
 				if result:
 					return result
-
-				network_collider = Game.collision_network.collide(
-						self, parameters.from, parameters.to)
-
-				if network_collider:
-					return Dictionary({ "collider": network_collider })
 
 				# Hack for `@GlobalScope.wrap`'s `max` exclusiveness.
 				parameters.from = current_world.wrap_around_world(
@@ -203,24 +212,12 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 				if result:
 					return result
 
-				network_collider = Game.collision_network.collide(
-						self, parameters.from, parameters.to)
-
-				if network_collider:
-					return Dictionary({ "collider": network_collider })
-
 		else:
 			parameters.to = to
 			result = space_state.intersect_ray(parameters)
 
 			if result:
 				return result
-
-			network_collider = Game.collision_network.collide(
-					self, parameters.from, to)
-
-			if network_collider:
-				return Dictionary({ "collider": network_collider })
 
 	return {}
 
@@ -301,7 +298,7 @@ func move(direction: Direction,
 	var result: Dictionary = {}
 
 	if respect_collisions:
-		result = collide_ray(offset_and_motion, collision_mask)
+		result = collide(offset_and_motion)
 
 		if result:
 			var collider: Object = result.collider
@@ -322,13 +319,8 @@ func move(direction: Direction,
 		elif not can_move_in_vacuum:
 			return
 
-	else:
-		Game.collision_network.update()
-
-	for i: int in get_shape_owners():
-		Game.collision_network.peers.append(shape_owner_get_owner(i))
-
-	wrap_around_world(motion)
+	Game.collision_network.free_tile(self, global_position)
+	Game.collision_network.occupy_tile(self, wrap_around_world(motion) + motion)
 	is_busy = true
 	moving = direction
 	await _move(motion, result)
@@ -338,7 +330,7 @@ func move(direction: Direction,
 
 
 func is_colliding(offset_and_motion: PackedVector2Array) -> bool:
-	if collide_ray(offset_and_motion):
+	if collide(offset_and_motion):
 		return true
 
 	if not can_move_in_vacuum:
@@ -348,7 +340,7 @@ func is_colliding(offset_and_motion: PackedVector2Array) -> bool:
 	return false
 
 
-func wrap_around_world(motion: Vector2) -> void:
+func wrap_around_world(motion: Vector2) -> Vector2:
 	if current_world:
 		var wrapped_position: Vector2 = current_world.wrap_around_world(
 				global_position + motion) - motion
@@ -357,6 +349,10 @@ func wrap_around_world(motion: Vector2) -> void:
 			var previous_position: Vector2 = global_position
 			global_position = wrapped_position
 			wrapped.emit(previous_position)
+
+		return wrapped_position
+
+	return global_position
 
 func get_next_direction(direction: Direction) -> Direction:
 	match direction:

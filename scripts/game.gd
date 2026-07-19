@@ -107,6 +107,8 @@ func _ready() -> void:
 
 	scene_tree.scene_changed.connect(
 			func () -> void:
+				collision_network.clear()
+
 				var current_scene: Node = scene_tree.current_scene
 
 				if current_scene_load_state != SceneLoadState.FROM_SAVE_FILE:
@@ -413,45 +415,47 @@ class Data:
 
 
 class TileBasedCollisionNetwork:
-	var last_checked: int = 0
-	var peers: Array[CollisionShape2D] = []
+	var _occupied_tiles: Dictionary[Vector2, Array] = {}
 
 
-	func collide(object: CollisionObject2D,
-			from: Vector2, to: Vector2) -> CollisionObject2D:
+	func clear() -> void:
+		_occupied_tiles.clear()
 
-		for peer: CollisionShape2D in peers:
-			var peer_parent: CollisionObject2D = peer.get_parent()
 
-			if (object.collision_mask & peer_parent.collision_layer == 0 or
-					peer.disabled):
+	func collide(object: CollisionObject2D, tile: Vector2,
+			mask = object.collision_mask) -> CollisionObject2D:
 
-				continue
+		if not _occupied_tiles.has(tile):
+			return null
 
-			var rect: Rect2 = peer.shape.get_rect()
-
-			var polygon: PackedVector2Array = [
-				peer.global_position + rect.position,
-
-				Vector2(peer.global_position.x + rect.end.x,
-						peer.global_position.y + rect.position.y),
-
-				peer.global_position + rect.end,
-
-				Vector2(peer.global_position.x + rect.position.x,
-						peer.global_position.y + rect.end.y)]
-
-			if Geometry2D.intersect_polyline_with_polygon(
-					PackedVector2Array([from, to]), polygon):
-
-					return peer_parent
+		for collider: CollisionObject2D in _occupied_tiles[tile]:
+			if mask & collider.collision_layer:
+				return collider
 
 		return null
 
 
-	func update() -> void:
-		var physics_frames: int = Engine.get_physics_frames()
+	func free_tile(object: CollisionObject2D, tile: Vector2) -> void:
+		if not _occupied_tiles.has(tile):
+			return
 
-		if last_checked != physics_frames:
-			last_checked = physics_frames
-			peers.clear()
+		if _occupied_tiles[tile].size() == 1:
+			_occupied_tiles.erase(tile)
+		else:
+			_occupied_tiles[tile].erase(object)
+
+
+	func occupy_tile(object: CollisionObject2D, tile: Vector2) -> void:
+		if not _occupied_tiles.has(tile):
+			_occupied_tiles[tile] = []
+
+		_occupied_tiles[tile].append(object)
+
+
+	func validate_tile(tile: Vector2) -> void:
+		if not _occupied_tiles.has(tile):
+			return
+
+		for entry: Variant in _occupied_tiles[tile]:
+			if entry == null:
+				_occupied_tiles[tile].erase(entry)

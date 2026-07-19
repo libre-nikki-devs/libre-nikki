@@ -154,7 +154,7 @@ func equip(effect: Effect = Effect.DEFAULT) -> void:
 func interact() -> void:
 	if not is_sitting and is_inside_tree():
 		await get_tree().physics_frame
-		var result: Dictionary = collide_ray(get_offset_and_motion(facing))
+		var result: Dictionary = collide(get_offset_and_motion(facing))
 
 		if result:
 			var collider: Object = result.collider
