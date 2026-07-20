@@ -37,28 +37,27 @@ var last_step: int = STEP_LEFT
 func _force_animation_update() -> void:
 	pass
 
-func _move() -> void:
+
+func _move(motion: Vector2, ground_result: Dictionary) -> void:
 	footstep_sound = (current_world.default_footstep_sound if current_world
 			else load("res://resources/sounds/step.wav"))
 
-	var ground: Object = surface_detector.get_collider()
+	if ground_result:
+		var ground: Object = ground_result.collider
 
-	if ground is TileMapLayer:
-		var current_tile: Vector2i = (ground.local_to_map(
-			current_world.wrap_around_world(surface_detector.global_position +
-			surface_detector.target_position)) if current_world else
-			ground.local_to_map(surface_detector.global_position +
-			surface_detector.target_position))
+		if ground is TileMapLayer:
+			var current_tile: Vector2i = ground.local_to_map(
+					ground_result.position)
 
-		var tile_data: TileData = ground.get_cell_tile_data(current_tile)
-		footstep_sound = get_tile_footstep_sound(tile_data)
+			var tile_data: TileData = ground.get_cell_tile_data(current_tile)
+			footstep_sound = get_tile_footstep_sound(tile_data)
 
-	elif ground is YumeInteractable:
-		footstep_sound = get_footstep_sound(ground.surface)
+		elif ground is YumeInteractable:
+			footstep_sound = get_footstep_sound(ground.surface)
 
 	last_step = !last_step
 
-	await super()
+	await super(motion, ground_result)
 
 func get_footstep_sound(ground: Surface) -> AudioStream:
 	match ground:

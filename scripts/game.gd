@@ -38,7 +38,9 @@ const MAPSHOTS_DIRECTORY: String = "user://mapshots"
 
 @onready var mouse_timer: Timer = get_node("MouseTimer")
 
-var current_scene_load_state: SceneLoadState = SceneLoadState.UNKNOWN
+var collision_network := TileBasedCollisionNetwork.new()
+
+var current_scene_load_state := SceneLoadState.UNKNOWN
 
 var key_hold_time: float = 0.5
 
@@ -105,6 +107,8 @@ func _ready() -> void:
 
 	scene_tree.scene_changed.connect(
 			func () -> void:
+				collision_network.clear()
+
 				var current_scene: Node = scene_tree.current_scene
 
 				if current_scene_load_state != SceneLoadState.FROM_SAVE_FILE:
@@ -408,3 +412,50 @@ class Data:
 			dictionary[properties[i].name] = get(properties[i].name)
 
 		return dictionary
+
+
+class TileBasedCollisionNetwork:
+	var _occupied_tiles: Dictionary[Vector2, Array] = {}
+
+
+	func clear() -> void:
+		_occupied_tiles.clear()
+
+
+	func collide(object: CollisionObject2D, tile: Vector2,
+			mask = object.collision_mask) -> CollisionObject2D:
+
+		if not _occupied_tiles.has(tile):
+			return null
+
+		for collider: CollisionObject2D in _occupied_tiles[tile]:
+			if mask & collider.collision_layer:
+				return collider
+
+		return null
+
+
+	func free_tile(object: CollisionObject2D, tile: Vector2) -> void:
+		if not _occupied_tiles.has(tile):
+			return
+
+		if _occupied_tiles[tile].size() == 1:
+			_occupied_tiles.erase(tile)
+		else:
+			_occupied_tiles[tile].erase(object)
+
+
+	func occupy_tile(object: CollisionObject2D, tile: Vector2) -> void:
+		if not _occupied_tiles.has(tile):
+			_occupied_tiles[tile] = []
+
+		_occupied_tiles[tile].append(object)
+
+
+	func validate_tile(tile: Vector2) -> void:
+		if not _occupied_tiles.has(tile):
+			return
+
+		for entry: Variant in _occupied_tiles[tile]:
+			if entry == null:
+				_occupied_tiles[tile].erase(entry)

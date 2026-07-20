@@ -273,6 +273,49 @@ func _on_child_exiting_tree(node: Node):
 		if parallaxes.has(node):
 			parallaxes.erase(node)
 
+
+func intersect_segment_with_bounds(from: Vector2, to: Vector2) -> Variant:
+	if not bounds.has_area():
+		return null
+
+	var lines: Array[PackedVector2Array] = []
+
+	match loop:
+		"All Sides":
+			lines = [[bounds.position, Vector2.RIGHT],
+				[bounds.position, Vector2.DOWN],
+				[bounds.end, Vector2.RIGHT],
+				[bounds.end, Vector2.DOWN]]
+
+		"Horizontally":
+			lines = [[bounds.position, Vector2.DOWN],
+				[bounds.end, Vector2.DOWN]]
+
+		"Vertically":
+			lines = [[bounds.position, Vector2.RIGHT],
+				[bounds.end, Vector2.RIGHT]]
+
+		_:
+			return null
+
+	var direction: Vector2 = to - from
+
+	for line: PackedVector2Array in lines:
+		var intersection: Variant = Geometry2D.line_intersects_line(
+				line[0], line[1], from, direction)
+
+		if intersection == null:
+			continue
+
+		var t: float = (intersection - from).dot(
+				direction) / (direction).length_squared()
+
+		if t >= 0.0 and t <= 1.0:
+			return intersection
+
+	return null
+
+
 func wrap_around_world(value: Vector2) -> Vector2:
 	if bounds.has_area():
 		match loop:

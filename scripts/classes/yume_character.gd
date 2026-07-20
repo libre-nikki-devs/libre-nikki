@@ -56,49 +56,12 @@ var current_world: YumeWorld = null
 ## Direction the character is moving.
 var moving := Direction.NULL
 
-## Target movement point.
-var target_position: Vector2
-
-var surface_detector: RayCast2D = RayCast2D.new()
-
-var collision_detector: RayCast2D = RayCast2D.new()
-
-var collision_shapes: Array[CollisionShape2D] = []
-
-static var current_collisions: Array[CollisionShape2D] = []
-
-static var collisions_last_checked: int = 0
-
 ## Emitted when the character has moved.
 signal moved
 
 ## Emitted when the character has been wrapped around [member current_world].
 signal wrapped(previous_position: Vector2)
 
-func _init() -> void:
-	var on_child_entered_tree: Callable = func (node: Node):
-		if node is CollisionShape2D:
-			collision_shapes.append(node)
-
-	var on_child_exiting_tree: Callable = func (node: Node):
-		if node is CollisionShape2D:
-			collision_shapes.erase(node)
-
-	child_entered_tree.connect(on_child_entered_tree)
-	child_exiting_tree.connect(on_child_exiting_tree)
-
-	collision_detector.name = "CollisionDetector"
-	collision_detector.enabled = false
-	collision_detector.light_mask = 0
-	collision_detector.visibility_layer = 0
-
-	surface_detector.name = "SurfaceDetector"
-	surface_detector.enabled = false
-	surface_detector.light_mask = 0
-	surface_detector.visibility_layer = 0
-
-	add_child(collision_detector)
-	add_child(surface_detector)
 
 func _notification(what: int) -> void:
 	match what:
@@ -117,122 +80,147 @@ func _notification(what: int) -> void:
 					current_world = parent
 					return
 
-func _get_current_collider() -> YumeCharacter:
-	var physics_frames: int = Engine.get_physics_frames()
 
-	if collisions_last_checked == physics_frames:
-		for current_collision_shape: CollisionShape2D in current_collisions:
-			var current_collision_shape_parent: YumeCharacter = \
-					current_collision_shape.get_parent()
-
-			if collision_mask & current_collision_shape_parent.collision_layer \
-					and not current_collision_shape.disabled:
-
-				for collision_shape: CollisionShape2D in collision_shapes:
-					var target_origin: Vector2 = (
-							current_world.wrap_around_world(
-							collision_shape.global_transform.origin + \
-							target_position) - \
-							collision_shape.global_transform.origin \
-							if current_world else target_position
-					)
-
-					var shape: Shape2D = collision_shape.shape
-					var current_shape: Shape2D = current_collision_shape.shape
-					var target_transform := \
-							Transform2D(collision_shape.global_transform)
-
-					target_transform.origin += target_origin
-
-					if not shape.collide_and_get_contacts(target_transform,
-							current_shape,
-							current_collision_shape.global_transform) \
-							.is_empty():
-
-						return current_collision_shape_parent
-	else:
-		current_collisions.clear()
-		collisions_last_checked = physics_frames
-
-	return null
-
-func _move() -> void:
+func _move(motion: Vector2, ground_result: Dictionary) -> void:
 	var tween: Tween = create_tween()
 
 	tween.tween_method(
 			func (value: Vector2) -> void:
 				position = value.round()
-	, position, position + target_position, 0.25 / speed)
+	, position, position + motion, 0.25 / speed)
 
-	for collision_shape: CollisionShape2D in collision_shapes:
-		collision_shape.position += target_position
+	for i: int in get_shape_owners():
+		var shape_owner: Object = shape_owner_get_owner(i)
+		shape_owner.position += motion
 
 		tween.parallel()
 
-		tween.tween_property(collision_shape, "position",
-				-target_position, 0.25 / speed).as_relative()
+		tween.tween_property(shape_owner, "position",
+				-motion, 0.25 / speed).as_relative()
 
 	await tween.finished
 
-func _update_detectors(direction: Direction) -> void:
-	collision_detector.collision_mask = collision_mask
-	surface_detector.collision_mask = collision_mask >> 1
-	target_position = DIRECTIONS[direction] * tile_size
 
-	if current_world:
-		collision_detector.global_position = current_world.wrap_around_world(
-			global_position + target_position) - target_position
-	else:
-		collision_detector.global_position = global_position
+func collide(offset_and_motion: PackedVector2Array,
+		mask: int = collision_mask) -> Dictionary:
 
-	collision_detector.target_position = target_position
-	collision_detector.force_raycast_update()
-	surface_detector.global_position = collision_detector.global_position
-	surface_detector.target_position = target_position
-	surface_detector.force_raycast_update()
-	var ground: Object = surface_detector.get_collider()
+	# Check collisions for each collision shape individually.
+	for i: int in get_shape_owners():
+		var shape_owner: Object = shape_owner_get_owner(i)
 
-	if ground is TileMapLayer and can_use_stairs:
-		var current_tile: Vector2i = ground.local_to_map(global_position + target_position)
+		var target_position: Vector2 = (
+				shape_owner.global_position + offset_and_motion[1])
 
 		if current_world:
-			current_tile = ground.local_to_map(current_world.wrap_around_world(global_position + target_position))
+			target_position = current_world.wrap_around_world(target_position)
 
-		var tile_data: TileData = ground.get_cell_tile_data(current_tile)
+		Game.collision_network.validate_tile(target_position)
 
-		if tile_data:
-			if tile_data.has_custom_data("stair"):
-				match tile_data.get_custom_data("stair"):
-					# \-shaped stairs; horizontal movement.
-					1, 5 when direction & HORIZONTAL:
-						target_position += Vector2(0.0, target_position.x)
-						_update_detector_positions(Vector2(0.0, target_position.x))
+		var collider: CollisionObject2D = Game.collision_network.collide(
+				self, target_position, mask)
 
-					# /-shaped stairs; horizontal movement.
-					2, 6 when direction & HORIZONTAL:
-						target_position -= Vector2(0.0, target_position.x)
-						_update_detector_positions(-Vector2(0.0, target_position.x))
+		if collider:
+			return { "collider": collider }
 
-					# \-shaped stairs; vertical movement.
-					3, 5 when direction & VERTICAL:
-						target_position += Vector2(target_position.y, 0.0)
-						_update_detector_positions(Vector2(target_position.y, 0.0))
+	return collide_ray(offset_and_motion, mask)
 
-					# /-shaped stairs; vertical movement.
-					4, 6 when direction & VERTICAL:
-						target_position -= Vector2(target_position.y, 0.0)
-						_update_detector_positions(-Vector2(target_position.y, 0.0))
 
-		collision_detector.force_raycast_update()
-		surface_detector.force_raycast_update()
+func collide_point(motion: Vector2, mask: int = collision_mask) -> Dictionary:
+	var parameters := PhysicsPointQueryParameters2D.new()
+	parameters.collision_mask = mask
+	parameters.exclude = [get_rid()]
 
-func _update_detector_positions(target_vector: Vector2) -> void:
-	if current_world:
-		collision_detector.global_position = current_world.wrap_around_world(global_position + target_position + target_vector) - target_position
-	else:
-		collision_detector.global_position = global_position + target_vector
+	var space_state: PhysicsDirectSpaceState2D = (
+			get_world_2d().direct_space_state)
 
-	surface_detector.global_position = collision_detector.global_position
+	# Check collisions for each collision shape individually.
+	for i: int in get_shape_owners():
+		var shape_owner: Object = shape_owner_get_owner(i)
+
+		if current_world:
+			parameters.position = (current_world.wrap_around_world(
+					shape_owner.global_position + motion))
+
+		else:
+			parameters.position = shape_owner.global_position + motion
+
+		var result: Array[Dictionary] = space_state.intersect_point(
+				parameters, 1)
+
+		if result:
+			result[0]["position"] = parameters.position
+			return result[0]
+
+	return {}
+
+
+func collide_ray(offset_and_motion: PackedVector2Array,
+		mask: int = collision_mask) -> Dictionary:
+
+	var offset: Vector2 = offset_and_motion[0]
+	var motion: Vector2 = offset_and_motion[1]
+	var parameters := PhysicsRayQueryParameters2D.new()
+	parameters.collision_mask = mask
+	parameters.exclude = [get_rid()]
+	parameters.hit_from_inside = true
+
+	var space_state: PhysicsDirectSpaceState2D = (
+			get_world_2d().direct_space_state)
+
+	# Check collisions for each collision shape individually.
+	for i: int in get_shape_owners():
+		var result: Dictionary = {}
+		var shape_owner: Object = shape_owner_get_owner(i)
+		var to: Vector2 = shape_owner.global_position + motion
+		parameters.from = shape_owner.global_position + offset
+
+		if current_world:
+			# Wrap the ray to ensure that `parameters.from` is within bounds.
+			parameters.from = current_world.wrap_around_world(parameters.from)
+			to = parameters.from + motion - offset
+
+			# Check if ray is intersecting with bounds.
+			var intersection: Variant = (
+					current_world.intersect_segment_with_bounds(
+					parameters.from, to)
+			)
+
+			if intersection == null:
+				parameters.to = to
+				result = space_state.intersect_ray(parameters)
+
+				if result:
+					return result
+
+			# If ray is intersecting with bounds, break it down into two parts.
+			# First part: within bounds, second part: out of bounds. Then wrap
+			# the second part and check for collisions for each part.
+			else:
+				parameters.to = intersection
+				result = space_state.intersect_ray(parameters)
+
+				if result:
+					return result
+
+				# Hack for `@GlobalScope.wrap`'s `max` exclusiveness.
+				parameters.from = current_world.wrap_around_world(
+						intersection + motion) - motion
+
+				parameters.to = current_world.wrap_around_world(to)
+				result = space_state.intersect_ray(parameters)
+
+				if result:
+					return result
+
+		else:
+			parameters.to = to
+			result = space_state.intersect_ray(parameters)
+
+			if result:
+				return result
+
+	return {}
+
 
 func face(what: Vector2) -> Direction:
 	var closest: Vector2 = global_position
@@ -259,66 +247,112 @@ func face(what: Vector2) -> Direction:
 	else:
 		return Direction.LEFT
 
-func move(direction: Direction, respect_collisions: bool = true) -> void:
-	if respect_collisions:
-		_update_detectors(direction)
-		var collider: Object = collision_detector.get_collider()
 
-		if collider:
+func get_offset_and_motion(direction: Direction) -> PackedVector2Array:
+	var offset := Vector2.ZERO
+	var motion: Vector2 = DIRECTIONS[direction] * tile_size
+
+	if not can_use_stairs:
+		return [offset, motion]
+
+	var result: Dictionary = collide_point(motion, collision_mask >> 1)
+
+	if result:
+		var ground: Object = result.collider
+
+		if ground is TileMapLayer:
+			var current_tile: Vector2i = ground.local_to_map(result.position)
+			var tile_data: TileData = ground.get_cell_tile_data(current_tile)
+
+			if tile_data:
+				if tile_data.has_custom_data("stair"):
+					match tile_data.get_custom_data("stair"):
+						# \-shaped stairs; horizontal movement.
+						1, 5 when direction & HORIZONTAL:
+							motion.y += motion.x
+							offset += Vector2(0.0, motion.x)
+
+						# /-shaped stairs; horizontal movement.
+						2, 6 when direction & HORIZONTAL:
+							motion.y -= motion.x
+							offset += Vector2(0.0, -motion.x)
+
+						# \-shaped stairs; vertical movement.
+						3, 5 when direction & VERTICAL:
+							motion.x += motion.y
+							offset += Vector2(motion.y, 0.0)
+
+						# /-shaped stairs; vertical movement.
+						4, 6 when direction & VERTICAL:
+							motion.x -= motion.y
+							offset += Vector2(-motion.y, 0.0)
+
+	return [offset, motion]
+
+
+func move(direction: Direction,
+		offset_and_motion: PackedVector2Array = get_offset_and_motion(
+		direction), respect_collisions: bool = true) -> void:
+
+	var motion: Vector2 = offset_and_motion[1]
+	var result: Dictionary = {}
+
+	if respect_collisions:
+		result = collide(offset_and_motion)
+
+		if result:
+			var collider: Object = result.collider
+
 			if collider is YumeInteractable:
 				collider.body_touched.emit(self)
 
 			return
 
-		var ground: Object = surface_detector.get_collider()
+		result = collide_point(motion, collision_mask >> 1)
 
-		if ground:
+		if result:
+			var ground: Object = result.collider
+
 			if ground is YumeInteractable:
 				ground.body_stepped_on.emit.call_deferred(self)
 
 		elif not can_move_in_vacuum:
 			return
 
-		var current_collider: YumeCharacter = _get_current_collider()
-
-		if current_collider:
-			current_collider.body_touched.emit(self)
-			return
-
-	for collision_shape: CollisionShape2D in collision_shapes:
-		current_collisions.append(collision_shape)
-
-	wrap_around_world()
+	Game.collision_network.free_tile(self, global_position)
+	Game.collision_network.occupy_tile(self, wrap_around_world(motion) + motion)
 	is_busy = true
 	moving = direction
-	await _move()
+	await _move(motion, result)
 	is_busy = false
 	moving = Direction.NULL
 	moved.emit()
 
-func is_colliding(direction: Direction) -> bool:
-	_update_detectors(direction)
 
-	if collision_detector.is_colliding():
+func is_colliding(offset_and_motion: PackedVector2Array) -> bool:
+	if collide(offset_and_motion):
 		return true
 
-	if not (surface_detector.is_colliding() or can_move_in_vacuum):
-		return true
-
-	if _get_current_collider():
-		return true
+	if not can_move_in_vacuum:
+		if collide_point(offset_and_motion[1], collision_mask >> 1):
+			return true
 
 	return false
 
-func wrap_around_world() -> void:
+
+func wrap_around_world(motion: Vector2) -> Vector2:
 	if current_world:
 		var wrapped_position: Vector2 = current_world.wrap_around_world(
-				global_position + target_position) - target_position
+				global_position + motion) - motion
 
 		if global_position != wrapped_position:
 			var previous_position: Vector2 = global_position
 			global_position = wrapped_position
 			wrapped.emit(previous_position)
+
+		return wrapped_position
+
+	return global_position
 
 func get_next_direction(direction: Direction) -> Direction:
 	match direction:

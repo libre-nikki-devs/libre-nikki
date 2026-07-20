@@ -16,14 +16,19 @@
 
 extends YumeCharacter
 
-func _init() -> void:
-	super()
-	body_touched.connect(_on_body_touched)
 
-func _on_body_touched(body: Node2D):
-	if body is YumeCharacter and not is_busy:
-		var direction: Direction = body.face(global_position)
+func _ready() -> void:
+	body_touched.connect(
+			func (body: Node2D) -> void:
+				if body is YumeCharacter and not is_busy:
+					var direction: Direction = body.face(global_position)
 
-		if not is_colliding(direction):
-			move(direction)
-			body.move(direction)
+					var offset_and_motion: PackedVector2Array = (
+							get_offset_and_motion(direction))
+
+					if not is_colliding(offset_and_motion):
+						move(direction, offset_and_motion, false)
+
+						body.move(direction, body.get_offset_and_motion(
+								direction), false)
+	)

@@ -78,7 +78,8 @@ func _force_animation_update() -> void:
 
 	sprite.animation = Direction.find_key(facing).to_lower() + effect_name
 
-func _move() -> void:
+
+func _move(motion: Vector2, ground_result: Dictionary) -> void:
 	var animation_name: StringName = Effect.find_key(
 			equipped_effect).capitalize().path_join(
 			Direction.find_key(facing).to_lower())
@@ -89,7 +90,8 @@ func _move() -> void:
 	animation_player.play(animation_name, -1.0, speed)
 	animation_player.seek(0.125)
 
-	await super()
+	await super(motion, ground_result)
+
 
 ## Perform an action.
 func act() -> void:
