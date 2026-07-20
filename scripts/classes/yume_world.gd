@@ -316,16 +316,19 @@ func intersect_segment_with_bounds(from: Vector2, to: Vector2) -> Variant:
 	return null
 
 
-func wrap_around_world(value: Vector2) -> Vector2:
+func wrap_vector_around_bounds(vector: Vector2) -> Vector2:
 	if bounds.has_area():
 		match loop:
 			"All Sides":
-				return Vector2(wrap(value.x, bounds.position.x, bounds.end.x), wrap(value.y, bounds.position.y, bounds.end.y))
+				return Vector2(wrapf(vector.x, bounds.position.x, bounds.end.x),
+						wrapf(vector.y, bounds.position.y, bounds.end.y))
 
 			"Horizontally":
-				return Vector2(wrap(value.x, bounds.position.x, bounds.end.x), value.y)
+				return Vector2(wrapf(vector.x, bounds.position.x, bounds.end.x),
+						vector.y)
 
 			"Vertically":
-				return Vector2(value.x, wrap(value.y, bounds.position.y, bounds.end.y))
+				return Vector2(vector.x, wrapf(vector.y, bounds.position.y,
+						bounds.end.y))
 
-	return value
+	return vector

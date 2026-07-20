@@ -112,7 +112,8 @@ func collide(offset_and_motion: PackedVector2Array,
 				shape_owner.global_position + offset_and_motion[1])
 
 		if current_world:
-			target_position = current_world.wrap_around_world(target_position)
+			target_position = current_world.wrap_vector_around_bounds(
+					target_position)
 
 		Game.collision_network.validate_tile(target_position)
 
@@ -138,7 +139,7 @@ func collide_point(motion: Vector2, mask: int = collision_mask) -> Dictionary:
 		var shape_owner: Object = shape_owner_get_owner(i)
 
 		if current_world:
-			parameters.position = (current_world.wrap_around_world(
+			parameters.position = (current_world.wrap_vector_around_bounds(
 					shape_owner.global_position + motion))
 
 		else:
@@ -176,7 +177,9 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 
 		if current_world:
 			# Wrap the ray to ensure that `parameters.from` is within bounds.
-			parameters.from = current_world.wrap_around_world(parameters.from)
+			parameters.from = current_world.wrap_vector_around_bounds(
+					parameters.from)
+
 			to = parameters.from + motion - offset
 
 			# Check if ray is intersecting with bounds.
@@ -203,10 +206,10 @@ func collide_ray(offset_and_motion: PackedVector2Array,
 					return result
 
 				# Hack for `@GlobalScope.wrap`'s `max` exclusiveness.
-				parameters.from = current_world.wrap_around_world(
+				parameters.from = current_world.wrap_vector_around_bounds(
 						intersection + motion) - motion
 
-				parameters.to = current_world.wrap_around_world(to)
+				parameters.to = current_world.wrap_vector_around_bounds(to)
 				result = space_state.intersect_ray(parameters)
 
 				if result:
@@ -350,8 +353,8 @@ func is_colliding(offset_and_motion: PackedVector2Array) -> bool:
 
 func wrap_around_world(motion: Vector2) -> Vector2:
 	if current_world:
-		var wrapped_position: Vector2 = current_world.wrap_around_world(
-				global_position + motion) - motion
+		var wrapped_position: Vector2 = (current_world
+				.wrap_vector_around_bounds(global_position + motion) - motion)
 
 		if global_position != wrapped_position:
 			var previous_position: Vector2 = global_position
