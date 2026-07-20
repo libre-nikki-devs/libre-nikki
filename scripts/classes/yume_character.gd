@@ -236,13 +236,21 @@ func face(what: Vector2) -> Direction:
 				distance = duplicate_distance
 				closest = global_position + duplicate_position
 
-	var closest_angle: float = closest.angle_to_point(what)
+	var closest_angle: float = snappedf(closest.angle_to_point(what), 0.05)
 
-	if closest_angle >= -0.25 * PI and closest_angle <= 0.25 * PI:
+	if (closest_angle >= snappedf(-0.25 * PI, 0.05) and
+			closest_angle <= snappedf(0.25 * PI, 0.05)):
+
 		return Direction.RIGHT
-	elif closest_angle > 0.25 * PI and closest_angle < 0.75 * PI:
+
+	elif (closest_angle > snappedf(0.25 * PI, 0.05) and
+			closest_angle < snappedf(0.75 * PI, 0.05)):
+
 		return Direction.DOWN
-	elif closest_angle > -0.75 * PI and closest_angle < -0.25 * PI:
+
+	elif (closest_angle > snappedf(-0.75 * PI, 0.05) and
+			closest_angle < snappedf(-0.25 * PI, 0.05)):
+
 		return Direction.UP
 	else:
 		return Direction.LEFT
