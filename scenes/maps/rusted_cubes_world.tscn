@@ -34,7 +34,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_4squo")
 }],
-"loop": false,
+"loop": 0,
 "name": &"open",
 "speed": 8.0
 }]
