@@ -13,15 +13,17 @@
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w8v1i"]
 texture = ExtResource("2_jrd6r")
+0:0/next_alternative_id = 2
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:0/1 = 1
+0:0/1/modulate = Color(1, 1, 1, 0)
+0:0/1/physics_layer_1/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_2k5aw"]
 physics_layer_0/collision_layer = 1
-custom_data_layer_0/name = "surface"
-custom_data_layer_0/type = 2
-custom_data_layer_1/name = "stair"
-custom_data_layer_1/type = 2
+physics_layer_1/collision_layer = 4
+physics_layer_1/collision_mask = 4
 sources/0 = SubResource("TileSetAtlasSource_w8v1i")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1cd63"]
@@ -127,9 +129,8 @@ centered = false
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1620149099]
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAD6/wAAAAAAAAAAAAAGAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAD0/wAAAAAAAAAAAAD6//r/AAAAAAAAAAAAAPr/AAAAAAAAAAAMAPr/AAAAAAAAAAD0//r/AAAAAAAAAAAAAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAAMAAYAAAAAAAAAAAD6/wYAAAAAAAAAAAD0/wYAAAAAAAAAAAAMAPT/AAAAAAAAAAAGAPT/AAAAAAAAAAAAAPT/AAAAAAAAAAD6//T/AAAAAAAAAAD0//T/AAAAAAAAAAAAAAwAAAAAAAAAAAAGAAwAAAAAAAAAAAAMAAwAAAAAAAAAAAD6/wwAAAAAAAAAAAD0/wwAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAD6/wAAAAAAAAAAAAAGAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAD0/wAAAAAAAAAAAAD6//r/AAAAAAAAAAAAAPr/AAAAAAAAAAAMAPr/AAAAAAAAAAD0//r/AAAAAAAAAAAAAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAAMAAYAAAAAAAAAAAD6/wYAAAAAAAAAAAD0/wYAAAAAAAAAAAAMAPT/AAAAAAAAAAAGAPT/AAAAAAAAAAAAAPT/AAAAAAAAAAD6//T/AAAAAAAAAAD0//T/AAAAAAAAAAAAAAwAAAAAAAAAAAAGAAwAAAAAAAAAAAAMAAwAAAAAAAAAAAD6/wwAAAAAAAAAAAD0/wwAAAAAAAAAAAAAAAEAAAAAAAAAAQAGAPv/AAAAAAAAAQAHAPr/AAAAAAAAAQAGAPn/AAAAAAAAAQAFAPr/AAAAAAAAAQA=")
 tile_set = SubResource("TileSet_2k5aw")
-physics_quadrant_size = 1
 
 [node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=786083454]
 z_index = 1
@@ -165,7 +166,7 @@ shape = SubResource("RectangleShape2D_yuqbu")
 z_index = 1
 position = Vector2(-136, -136)
 collision_layer = 2
-collision_mask = 2
+collision_mask = 6
 
 [node name="Bike" type="CharacterBody2D" parent="." unique_id=1089679781]
 z_index = 1
@@ -222,6 +223,7 @@ metadata/_custom_type_script = "uid://c4kernc5sdtfb"
 shape = SubResource("RectangleShape2D_4ua7i")
 
 [connection signal="opened" from="Door" to="." method="_on_door_opened"]
+[connection signal="body_interacted" from="Debugtsuki" to="." method="_on_debugtsuki_body_interacted"]
 [connection signal="body_interacted" from="Bike" to="." method="_on_bike_body_interacted"]
 [connection signal="body_interacted" from="Coin" to="." method="_on_coin_body_interacted"]
 [connection signal="body_interacted" from="VendingMachine" to="." method="_on_vending_machine_body_interacted"]

@@ -3,14 +3,25 @@ extends YumeWorld
 
 @onready var player: YumePlayer = $Sakutsuki
 
+@onready var debugtsuki: YumeHumanoid = $Debugtsuki
+
 @onready var coin: YumeInteractable = get_node_or_null(^"Coin")
 
+var follower: Script = preload(
+		"res://scripts/character_states/follower.gd")
+
+var wanderer: Script = preload(
+		"res://scripts/character_states/wanderer.gd")
 
 func _init() -> void:
 	super()
 	process_mode = Node.PROCESS_MODE_DISABLED
 
 func _ready() -> void:
+	if debugtsuki.state_script == follower:
+		if not debugtsuki.state.get(&"followee"):
+			debugtsuki.state_script = wanderer
+
 	if Game.current_scene_load_state != Game.SceneLoadState.FROM_SAVE_FILE:
 		match Game.persistent_data.previous_scene:
 			"res://scenes/maps/rusted_cubes_world.tscn":
@@ -53,6 +64,15 @@ func _on_bike_body_interacted(body: Node2D) -> void:
 	if body is YumePlayer:
 		body.grant_effect(YumePlayer.Effect.BIKE)
 		body.equip(YumePlayer.Effect.BIKE)
+
+
+func _on_debugtsuki_body_interacted(body: Node2D) -> void:
+	if debugtsuki.state_script == follower:
+		debugtsuki.state_script = wanderer
+	else:
+		debugtsuki.state_script = follower
+		debugtsuki.state.wait_time = 0.0
+		debugtsuki.state.followee = body
 
 
 func _on_coin_body_interacted(body: Node2D) -> void:
