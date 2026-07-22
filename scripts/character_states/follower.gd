@@ -14,35 +14,33 @@
 # You should have received a copy of the GNU General Public License along with
 # Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends YumeHumanoid
+extends YumeCharacterState
+## A simple, non-playable character that follows something.
 
 
-@onready var animation_player := $AnimationPlayer
+## Node to follow.
+var followee: Node2D = null
 
-@onready var sprite := $AnimatedSprite2D
+## Amount of time (in seconds) to wait before attempting to move.
+var wait_time: float = 2.0
 
-
-func _ready() -> void:
-	body_interacted.connect(
-			func (body: Node2D) -> void:
-				if not is_busy:
-					facing = face(body.global_position)
-	)
-
-func _force_animation_update() -> void:
-	if not is_node_ready():
-		await ready
-
-	sprite.animation = Direction.find_key(facing).to_lower()
+var wait_timer: float = randf_range(0.0, wait_time)
 
 
-func _move(motion: Vector2, ground_result: Dictionary) -> void:
-	var animation_name: StringName = Direction.find_key(facing).to_lower()
+func _physics_process(delta: float) -> void:
+	wait_timer += delta
 
-	if last_step:
-		animation_name += &"2"
+	if wait_timer >= wait_time:
+		wait_timer = 0.0
+		_move_loop()
 
-	animation_player.play(animation_name, -1.0, speed)
-	animation_player.seek(0.125)
 
-	await super(motion, ground_result)
+func _move_loop():
+	if followee and not character.is_busy:
+		var direction: YumeCharacter.Direction = character.face(
+				followee.global_position)
+
+		if character is YumeHumanoid:
+			character.facing = direction
+
+		character.move(direction)

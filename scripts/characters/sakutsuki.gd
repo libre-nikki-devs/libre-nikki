@@ -42,30 +42,6 @@ func _ready() -> void:
 					cancel_key_hold_time = 0.0
 	)
 
-func _physics_process(delta: float) -> void:
-	if not is_busy:
-		if current_movement_keys.size() > 0:
-			var direction: Direction = MOVEMENT_KEYS[current_movement_keys[-1]]
-
-			# Do not move when calling opposite movement events (eg. pressing
-			# both 'up' and 'down' keys at once).
-			if current_movement_keys.size() > 1:
-				if direction & HORIZONTAL:
-					if MOVEMENT_KEYS[current_movement_keys[-2]] & HORIZONTAL:
-						return
-
-				if direction & VERTICAL:
-					if MOVEMENT_KEYS[current_movement_keys[-2]] & VERTICAL:
-						return
-
-			if is_sitting:
-				#look(direction)
-				pass
-			else:
-				if facing != direction:
-						facing = direction
-
-				move(direction)
 
 func _force_animation_update() -> void:
 	if not is_node_ready():

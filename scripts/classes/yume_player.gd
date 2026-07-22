@@ -55,8 +55,11 @@ signal cancel_key_held()
 ## Emitted when the character equips an effect.
 signal equipped(effect: Effect)
 
+
 func _init() -> void:
+	super()
 	set_process(true)
+
 
 func _notification(what: int) -> void:
 	match what:
@@ -107,19 +110,8 @@ func _notification(what: int) -> void:
 			current_movement_keys.clear()
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept") and not is_busy:
-		interact()
-
-	if event.is_action_pressed("ui_go_back"):
-		if is_busy:
-			if moving:
-				if not menu_queued:
-					menu_queued = true
-					await moved
-					Game.open_menu(menu_path, { "player": self })
-					menu_queued = false
-		else:
-			Game.open_menu(menu_path, { "player": self })
+	if state:
+		state._input(event)
 
 	if event.is_action_pressed("mapshot") and OS.is_debug_build() and current_world:
 		var mapshot: Image = await Game.take_mapshot(current_world)

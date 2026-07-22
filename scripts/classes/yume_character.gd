@@ -37,6 +37,14 @@ const DIRECTIONS: Dictionary[Direction, Vector2] = {
 ## make sure to set it to false once the sequence is done.
 @export var is_busy: bool = false
 
+var state := YumeCharacterState.new()
+
+@export var state_script: Script:
+	set(value):
+		state.set_script(value)
+		state.character = self
+		state_script = value
+
 @export_group("Movement")
 
 ## Character's movement speed.
@@ -63,6 +71,10 @@ signal moved
 signal wrapped(previous_position: Vector2)
 
 
+func _init() -> void:
+	set_physics_process(true)
+
+
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_PARENTED:
@@ -79,6 +91,10 @@ func _notification(what: int) -> void:
 				if parent is YumeWorld:
 					current_world = parent
 					return
+
+		NOTIFICATION_PHYSICS_PROCESS:
+			if state and not is_busy:
+				state._physics_process(get_process_delta_time())
 
 
 func _move(motion: Vector2, ground_result: Dictionary) -> void:

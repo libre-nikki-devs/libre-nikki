@@ -14,47 +14,46 @@
 # You should have received a copy of the GNU General Public License along with
 # Libre Nikki. If not, see <https://www.gnu.org/licenses/>.
 
-extends YumeHumanoid
-
+extends YumeCharacterState
 ## A simple, non-playable character that walks around aimlessly.
+
 
 ## Amount of time (in seconds) to wait before attempting to move a
 ## randomly-picked direction.
-@export var wait_time: float = 2.0
+var wait_time: float = 2.0
 
 var wait_timer: float = randf_range(0.0, wait_time)
 
-signal waited
-
-func _ready() -> void:
-	_move_loop()
 
 func _physics_process(delta: float) -> void:
 	wait_timer += delta
 
 	if wait_timer >= wait_time:
 		wait_timer = 0.0
-		waited.emit()
+		_move_loop()
+
 
 func _move_loop():
-	while true:
-		var available_directions: Array[Direction] = [Direction.LEFT,
-				Direction.DOWN, Direction.UP, Direction.RIGHT]
+	var available_directions: Array[YumeCharacter.Direction] = [
+			YumeCharacter.Direction.LEFT,
+			YumeCharacter.Direction.DOWN,
+			YumeCharacter.Direction.UP,
+			YumeCharacter.Direction.RIGHT]
 
-		await waited
+	if not character.is_busy:
+		var picked_direction: YumeCharacter.Direction
 
-		if not is_busy:
-			var picked_direction: Direction
+		while not available_directions.is_empty():
+			picked_direction = available_directions.pick_random()
 
-			while not available_directions.is_empty():
-				picked_direction = available_directions.pick_random()
+			var offset_and_motion: PackedVector2Array = (
+					character.get_offset_and_motion(picked_direction))
 
-				var offset_and_motion: PackedVector2Array = (
-						get_offset_and_motion(picked_direction))
+			if character.is_colliding(offset_and_motion):
+				available_directions.erase(picked_direction)
+			else:
+				if character is YumeHumanoid:
+					character.facing = picked_direction
 
-				if is_colliding(offset_and_motion):
-					available_directions.erase(picked_direction)
-				else:
-					facing = picked_direction
-					move(picked_direction, offset_and_motion, false)
-					break
+				character.move(picked_direction, offset_and_motion, false)
+				break

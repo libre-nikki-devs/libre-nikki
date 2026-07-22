@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://catbsi51pb1aq"]
 
 [ext_resource type="Script" uid="uid://dhrwgs612gf2w" path="res://scripts/characters/debugtsuki.gd" id="1_g35pp"]
+[ext_resource type="Script" uid="uid://bled5gjd4tv4a" path="res://scripts/character_states/wanderer.gd" id="2_rom2o"]
 [ext_resource type="SpriteFrames" uid="uid://322p67u26b32" path="res://resources/spritesheets/debugtsuki.tres" id="2_yhhfb"]
 
 [sub_resource type="Animation" id="Animation_qqr8a"]
@@ -873,6 +874,7 @@ size = Vector2(16, 16)
 [node name="Debugtsuki" type="CharacterBody2D" unique_id=2006970519]
 y_sort_enabled = true
 script = ExtResource("1_g35pp")
+state_script = ExtResource("2_rom2o")
 metadata/persistent_properties = [&"can_move_in_vacuum", &"collision_layer", &"collision_mask", &"facing", &"global_position", &"last_step", &"name", &"speed", &"wait_time", &"wait_timer", &"z_index"]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=572411031]
