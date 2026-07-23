@@ -120,6 +120,11 @@ func _move(motion: Vector2, ground_result: Dictionary) -> void:
 func collide(offset_and_motion: PackedVector2Array,
 		mask: int = collision_mask) -> Dictionary:
 
+	var result: Dictionary = collide_ray(offset_and_motion, mask)
+
+	if result:
+		return result
+
 	# Check collisions for each collision shape individually.
 	for i: int in get_shape_owners():
 		var shape_owner: Object = shape_owner_get_owner(i)
@@ -139,8 +144,7 @@ func collide(offset_and_motion: PackedVector2Array,
 		if collider:
 			return { "collider": collider }
 
-	return collide_ray(offset_and_motion, mask)
-
+	return {}
 
 func collide_point(motion: Vector2, mask: int = collision_mask) -> Dictionary:
 	var parameters := PhysicsPointQueryParameters2D.new()

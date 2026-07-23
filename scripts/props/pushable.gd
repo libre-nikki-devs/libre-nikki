@@ -26,9 +26,17 @@ func _ready() -> void:
 					var offset_and_motion: PackedVector2Array = (
 							get_offset_and_motion(direction))
 
-					if not is_colliding(offset_and_motion):
-						move(direction, offset_and_motion, false)
+					var body_offset_and_motion: PackedVector2Array = (
+							body.get_offset_and_motion(direction))
 
-						body.move(direction, body.get_offset_and_motion(
-								direction), false)
-	)
+					var body_result: Dictionary = body.collide(
+							body_offset_and_motion)
+
+					if not (is_colliding(offset_and_motion) and
+							body_result.has(&"collider")):
+
+						if body_result.collider != self:
+							return
+
+						move(direction, offset_and_motion, false)
+						body.move(direction, body_offset_and_motion), false)
