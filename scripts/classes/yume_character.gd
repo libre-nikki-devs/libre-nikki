@@ -93,8 +93,8 @@ func _notification(what: int) -> void:
 					return
 
 		NOTIFICATION_PHYSICS_PROCESS:
-			if state and not is_busy:
-				state._physics_process(get_process_delta_time())
+			if state:
+				state._physics_process(get_physics_process_delta_time())
 
 
 func _move(motion: Vector2, ground_result: Dictionary) -> void:

@@ -18,6 +18,9 @@ extends YumeCharacterState
 
 
 func _physics_process(delta: float) -> void:
+	if character.is_busy:
+		return
+
 	if character.current_movement_keys.size() <= 0:
 		return
 
