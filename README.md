@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+> Libre Nikki has moved away its repository from Github to Codeberg.
+>
+> Newer releases can be found at:
+> <https://codeberg.org/libre-nikki-devs/libre-nikki>.
+
 # Libre Nikki
 
 Libre Nikki is a surreal walking simulator running on Godot Engine, heavily
